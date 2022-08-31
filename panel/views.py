@@ -14,9 +14,9 @@ def login_panel(request):
         if user is not None:
             if user.is_staff:
                 login(request, user)
-                return redirect('dashboard_index')
+                return redirect('panel_index')
             else:
-                messages.info(request, "Erreur")
+                messages.info(request, "Erreur! Vous n'êtes pas autorisé.")
         else:
             messages.info(request, "Nom d'utilisateur ou mot de passe incorrect!")
 
