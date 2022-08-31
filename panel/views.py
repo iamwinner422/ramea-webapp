@@ -26,3 +26,7 @@ def login_panel(request):
 def logout_panel(request):
     logout(request)
     return redirect('logout_panel')
+
+
+def index(request):
+    pass
