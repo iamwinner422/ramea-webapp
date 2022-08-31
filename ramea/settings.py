@@ -64,6 +64,8 @@ INSTALLED_APPS = [
     'prestation',
     'prestations_panel',
     'ventes_panel',
+    'panel',
+    'requestings',
 ]
 
 MIDDLEWARE = [
