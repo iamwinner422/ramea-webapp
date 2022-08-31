@@ -1,0 +1,44 @@
+{% extends 'reports/base.html' %}
+
+{% block title %}Liste des gérants{% endblock title %}
+
+
+{% block body %}
+<div class="header">
+    <p class="nom-org">{{org.nom}}<p>
+    <p class="mail-org">E-mail: {{org.mail}}</p>
+    {% if org.telephone_s %}
+        <p class="tel-org">Tel: {{org.telephone_p}} / {{org.telephone_s}}</p>
+    {% else %}
+        <p class="tel-org">Tel: {{org.telephone_p}}</p>
+    {% endif %}
+    <hr>
+</div>
+<div class="page">
+    <div class="container" align="center">
+        <table>
+            <h3 class="title">Liste des gérants</h3>
+            <thead>
+                <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col" align="left">Nom</th>
+                    <th scope="col" align="left">Prénoms</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col" align="left">Point de vente</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for gerant in lst_gerant %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td align="left">{{gerant.user.last_name}}</td>
+                    <td align="left">{{gerant.user.first_name}}</td>
+                    <td>{{gerant.telephone}}</td>
+                    <td align="left">{{gerant.point_vente}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

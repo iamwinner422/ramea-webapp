@@ -1,0 +1,101 @@
+{% extends "dashboard_user/base.html" %}
+{% load static %}
+{% block title %}Détails de {{serv.nom}}{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard_user/inclusions/sidebar.html" %}
+ 
+  <!-- Page Content  -->
+    <div id="content">
+        {% include "dashboard_user/inclusions/header.html" %}
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">{{serv.nom}}</h2>
+            </div>
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <div class="row gy-4">
+                        <div class="col-lg-9 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Informations générales</h4>
+                            </header><br>
+                            <div class="component">
+                                <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="3"><img src="{% static 'assets/img/service.png' %}" alt="{{serv.nom}}" class="img-fluid"  height="100" width="100"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Point</b>: <a href="{% url 'details_point_user' %}" class="liens">{{point_vente}}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Catégorie</b>: {{serv.categorie}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Autres</h4>
+                            </header><br>
+                            <section id="counts" class="counts">  
+                                <div class="row gy-4">
+                                    <div class="col-lg-12 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-heart lico" style="color: #ee6c20;"></i>
+                                            <div>
+                                                {% if nb_prest %}
+                                                <span>{{nb_prest}}</span>
+                                                {% if nb_prest <= 1 %}
+                                                    <p style="font-size: 13px;">Prestation</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Prestations</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Prestation</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>  
+                        </div>
+
+                        <div class="col-lg-6 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Dernières prestations</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_prest %}
+                                <table class="table table-responsive table-striped">
+                                    <tbody>
+                                    {% for prest in  lst_prest %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{prest.client}}</td>
+                                            <td>{{prest.total_prestation|floatformat:-2}}</td>
+                                            <td>{{prest.date_prestation|date:'d/m/Y'}}</td>
+                                            <td><a href="{% url 'details_prestation' prest.id %}" title=""><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                       </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock body %}

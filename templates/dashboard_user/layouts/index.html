@@ -1,0 +1,518 @@
+{% extends "dashboard_user/base.html" %} {% load static %} 
+{% block title %}Dashboard{% endblock title %} {% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard_user/inclusions/sidebar.html" %}
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard_user/inclusions/header.html" %}
+    <section id="counts" class="counts">
+      <div class="container" data-aos="fade-up">
+        <h2 class="titre">Aperçu</h2>
+        <div class="row gy-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="count-box">
+              <i class="bi bi-people lico" style="color: #ee6c20"></i>
+              <div>
+                {% if nb_clt %}
+                <span>{{nb_clt}}</span>
+                {% if nb_clt <= 1 %}
+                <p>Client</p>
+                {% else %}
+                <p>Clients</p>
+                {% endif %} {% else %}
+                <span>--</span>
+                <p>Client</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="count-box">
+              <i class="bi bi-archive lico" style="color: #15be56"></i>
+              <div>
+                {% if nb_prod %}
+                <span>{{nb_prod}}</span>
+                {% if nb_prod <= 1 %}
+                <p>Produit</p>
+                {% else %}
+                <p>Produits</p>
+                {% endif %} {% else %}
+                <span>--</span>
+                <p>Produit</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="count-box">
+              <i class="bi bi-graph-up lico" style="color: #bb0852"></i>
+              <div>
+                {% if nb_vte %}
+                <span>{{nb_vte}}</span>
+                {% if nb_vente <= 1 %}
+                <p>Vente</p>
+                {% else %}
+                <p>Ventes</p>
+                {% endif %} {% else %}
+                <span>--</span>
+                <p>Vente</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6">
+            <div class="count-box">
+              <i class="bi bi-heart lico" style="color: #2db6fa"></i>
+              <div>
+                {% if nb_serv %}
+                <span>{{nb_serv}}</span>
+                {% if nb_serv <= 1 %}
+                <p>Service</p>
+                {% else %}
+                <p>Services</p>
+                {% endif %} {% else %}
+                <span>--</span>
+                <p>Service</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="line"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-7">
+          <section class="component pb-4" style="max-height: 563px">
+            <header class="section-header">
+              <p id="labelform">Ventes</p>
+            </header>
+            <canvas id="myChart" width="100%" height="100%"></canvas>
+            <script src="{% static 'assets/js/chart.min.js' %}"></script>
+            <script>
+              var lbl = {{lbl_vte|safe}};
+              var data = {{data_vte|safe}};
+              var ctx = document.getElementById("myChart").getContext("2d");
+              var myChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                  labels: lbl,
+                  datasets: [
+                    {
+                      label: "Ventes",
+                      data: data,
+                      backgroundColor: [
+                        "rgba(255, 99, 132, 0.2)",
+                        "rgba(54, 162, 235, 0.2)",
+                        "rgba(255, 206, 86, 0.2)",
+                        "rgba(75, 192, 192, 0.2)",
+                        "rgba(153, 102, 255, 0.2)",
+                        "rgba(255, 159, 64, 0.2)",
+                      ],
+                      borderColor: [
+                        "rgba(255, 99, 132, 1)",
+                        "rgba(54, 162, 235, 1)",
+                        "rgba(255, 206, 86, 1)",
+                        "rgba(75, 192, 192, 1)",
+                        "rgba(153, 102, 255, 1)",
+                        "rgba(255, 159, 64, 1)",
+                      ],
+                      borderWidth: 1,
+                    },
+                  ],
+                },
+                options: {
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                    },
+                    title: {
+                      display: true,
+                        text: '0{{nb_vte_1}} dernières ventes',
+                    }
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                    },
+                  },
+                },
+              });
+            </script>
+          </section>
+        </div>
+        <div class="col-lg-5">
+          <div id="topproduct">
+            <section class="component" style="max-height: 563px">
+              <header class="section-header">
+                <p id="labelform">Produit les plus vendus</p>
+              </header>
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                  <a
+                    class="nav-link active"
+                    id="pills-home-tab"
+                    data-toggle="pill"
+                    href="#pills-home"
+                    role="tab"
+                    aria-controls="pills-home"
+                    aria-selected="true"
+                    ><i class="bi bi-list"></i
+                  ></a>
+                </li>
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    id="pills-profile-tab"
+                    data-toggle="pill"
+                    href="#pills-profile"
+                    role="tab"
+                    aria-controls="pills-profile"
+                    aria-selected="false"
+                    ><i class="bi bi-pie-chart"></i
+                  ></a>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div
+                  class="tab-pane fade show active"
+                  id="pills-home"
+                  role="tabpanel"
+                  aria-labelledby="pills-home-tab"
+                >
+                  <div class="container containeurs">
+                    {% if most_sell %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for val in most_sell %}
+                        <tr>
+                          <th scope="row">{{forloop.counter}}</th>
+                          <td>{{val.designation}}</td>
+                          <td align="right">{{val.qte}}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                    <br />
+                    <p class="alert alert-info text-center">
+                      Aucun classement disponible pour le moment.
+                    </p>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div
+                  class="tab-pane fade"
+                  id="pills-profile"
+                  role="tabpanel"
+                  aria-labelledby="pills-profile-tab"
+                >
+                  <canvas id="chartMost" width="100%" height="100%"></canvas>
+                  <script>
+                    var lbl = {{lbl_most_sell|safe}};
+                    var data = {{data_most_sell|safe}};
+                    var ctx = document.getElementById("chartMost").getContext("2d");
+                    var myChart = new Chart(ctx, {
+                      type: "pie",
+                      data: {
+                        labels: lbl,
+                        datasets: [
+                          {
+                            label: "Ventes",
+                            data: data,
+                            backgroundColor: [
+                              "rgba(255, 99, 132, 0.2)",
+                              "rgba(54, 162, 235, 0.2)",
+                              "rgba(255, 206, 86, 0.2)",
+                              "rgba(75, 192, 192, 0.2)",
+                              "rgba(153, 102, 255, 0.2)",
+                              "rgba(255, 159, 64, 0.2)",
+                            ],
+                            borderColor: [
+                              "rgba(255, 99, 132, 1)",
+                              "rgba(54, 162, 235, 1)",
+                              "rgba(255, 206, 86, 1)",
+                              "rgba(75, 192, 192, 1)",
+                              "rgba(153, 102, 255, 1)",
+                              "rgba(255, 159, 64, 1)",
+                            ],
+                            borderWidth: 1,
+                          },
+                        ],
+                      },
+                      options: {
+                        responsive: true,
+                        plugins: {
+                          legend: {
+                            position: 'bottom',
+                          },
+                          title: {
+                            display: true,
+                              text: 'classement',
+                          }
+                        },
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                          },
+                        },
+                      },
+                    });
+                  </script>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <div class="line"></div>
+      <div class="row">
+        <div class="col-lg-6">
+          <section class="component mb-4">
+            <header class="section-header">
+              <p id="labelform">Cinq(5) derniers produits</p>
+            </header>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="pills-list-tab" data-toggle="pill" href="#pills-list" role="tab"aria-controls="pills-home" aria-selected="true"><i class="bi bi-list"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-chart-tab" data-toggle="pill" href="#pills-chart" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="bi bi-pie-chart"></i></a>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <div
+                class="tab-pane fade show active"
+                id="pills-list"
+                role="tabpanel"
+                aria-labelledby="pills-list-tab"
+              >
+                <div class="container containeurs">
+                  {% if lst_prod %}
+                  <table class="table table-responsive table-striped">
+                    <tbody>
+                      {% for prod in lst_prod %} {% load app_filter %}
+                      <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{prod.designation}}</td>
+                        <td align="right">
+                          {{point_vente|filter_prod:prod.id}}
+                        </td>
+                        <td>
+                          <a
+                            href="{% url 'details_produit_gerant' prod.id %}"
+                            title="Détails de {{prod.designation}}"
+                            ><i class="bi bi-info-circle info"></i
+                          ></a>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                  {% else %}
+                  <br />
+                  <p class="alert alert-info text-center">
+                    Aucun produit disponible pour le moment.
+                  </p>
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">
+                <div>
+                  <canvas id="chartProd" width="100%" height="100%"></canvas>
+                  <script>
+                    var lbl = {{lbl_prod|safe}};
+                    var data = {{data_prod|safe}};
+                    var ctx = document.getElementById("chartProd").getContext("2d");
+                    var myChart = new Chart(ctx, {
+                      type: "doughnut",
+                      data: {
+                        labels: lbl,
+                        datasets: [
+                          {
+                            label: "Quantité",
+                            data: data,
+                            backgroundColor: [
+                              "rgba(255, 99, 132, 0.2)",
+                              "rgba(54, 162, 235, 0.2)",
+                              "rgba(255, 206, 86, 0.2)",
+                              "rgba(75, 192, 192, 0.2)",
+                              "rgba(153, 102, 255, 0.2)",
+                              "rgba(255, 159, 64, 0.2)",
+                            ],
+                            borderColor: [
+                              "rgba(255, 99, 132, 1)",
+                              "rgba(54, 162, 235, 1)",
+                              "rgba(255, 206, 86, 1)",
+                              "rgba(75, 192, 192, 1)",
+                              "rgba(153, 102, 255, 1)",
+                              "rgba(255, 159, 64, 1)",
+                            ],
+                            borderWidth: 1,
+                          },
+                        ],
+                      },
+                      options: {
+                        responsive: true,
+                        plugins: {
+                          legend: {
+                            position: 'bottom',
+                          },
+                          title: {
+                            display: true,
+                              text: 'Quantités',
+                          }
+                        },
+                        scales: {
+                          y: {
+                            beginAtZero: true,
+                          },
+                        },
+                      },
+                    });
+                  </script>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div class="col-lg-6">
+          <section class="component">
+            <header class="section-header">
+              <p id="labelform">Cinq(5) derniers services</p>
+            </header>
+            <div>
+              {% if lst_serv %}
+              <table class="table table-responsive table-striped">
+                <tbody>
+                  {% for serv in lst_serv %}
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{serv.nom}}</td>
+                    <td align="right"></td>
+                    <td>
+                      <a
+                        href="{% url 'details_service_user' serv.id %}"
+                        title="Détails de {{serv.nom}}"
+                        ><i class="bi bi-info-circle info"></i
+                      ></a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% else %}
+              <br />
+              <p class="alert alert-info text-center">Aucun service disponible pour le moment.</p>
+              {% endif %}
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="row">
+        <div class="col-lg-5">
+          <section class="component mb-4">
+            <header class="section-header">
+              <p id="labelform">Top (05) Cinq clients</p>
+            </header>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="pills-nb-tab" data-toggle="pill" href="#pills-nb" role="tab"aria-controls="pills-home" aria-selected="true">Nbre Achat</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-montant-tab" data-toggle="pill" href="#pills-montant" role="tab" aria-controls="pills-profile" aria-selected="false">Montant Achat</a>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-nb" role="tabpanel" aria-labelledby="pills-nb-tab">
+                <div class="containeurs">
+                  {% if top_clt_nb %}
+                  <table class="table table-responsive table-striped">
+                    <tbody>
+                    {% for clt in top_clt_nb %}
+                    <tr>
+                      <th scope="row">{{forloop.counter}}</th>
+                      <td>{{clt.nom}} {{clt.prenoms}}</td>
+                      <td>{{clt.nb}}</td>
+                      <td><a href="{% url 'detail_client_user' clt.id %}" title="Détails de {{clt.nom}} {{clt.prenoms}}"><i class="bi bi-info-circle info"></i> </a></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                  {% else %}
+                  <br />
+                  <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="tab-pane fade" id="pills-montant" role="tabpanel" aria-labelledby="pills-montant-tab">
+                <div class="containeurs">
+                  {% if top_clt_montant %}
+                  <table class="table table-responsive table-striped">
+                    <tbody>
+                    {% for clt in top_clt_montant %}
+                    <tr>
+                      <th scope="row">{{forloop.counter}}</th>
+                      <td>{{clt.nom}} {{clt.prenoms}}</td>
+                      <td>{{clt.montant|floatformat:-2}} FCFA</td>
+                      <td><a href="{% url 'detail_client_user' clt.id %}" title="Détails de {{clt.nom}} {{clt.prenoms}}"><i class="bi bi-info-circle info"></i> </a></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                  {% else %}
+                  <br />
+                  <p class="alert alert-info text-center">Aucun service disponible pour le moment.</p>
+                  {% endif %}
+                </div>
+              </div>
+          </section>
+        </div>
+        <div class="col-lg-7">
+          <section class="component">
+            <header class="section-header">
+              <p id="labelform">Dernières prestations</p>
+            </header>
+            <div class="containeurs">
+              {% if lst_prest %}
+              <table class="table table-responsive table-striped">
+                <tbody>
+                  {% for prest in lst_prest %}
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{prest.client}}</td>
+                    <td>{{prest.total_prestation|floatformat:-2}} FCFA</td>
+                    <td>{{prest.date_prestation|date:"d/m/Y"}}</td>
+                    <td><a href="{% url 'details_prestation' prest.id %}" title="Détails"><i class="bi bi-info-circle info"></i> </a></td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+              {% else %}
+                <br />
+                <p class="alert alert-info text-center">Aucun prestation disponible pour le moment.</p>
+              {% endif %}
+                
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+  </div>
+  {% endblock body %}
+</div>

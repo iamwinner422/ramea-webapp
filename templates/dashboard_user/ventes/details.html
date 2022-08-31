@@ -1,0 +1,95 @@
+{% extends "dashboard_user/base.html" %} 
+{% load static %} 
+{% block title %}Details de la vente{% endblock title %} 
+
+{% block body %}
+<div class="wrapper">
+    <!-- Sidebar  -->
+    {% include "dashboard_user/inclusions/sidebar.html" %}
+    <!-- Page Content  -->
+    <div id="content">
+        {% include "dashboard_user/inclusions/header.html" %}
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">Ventes #{{vente.id}}</h2>
+            </div>
+            <div class="container-fluid">
+                <div class="mb-3" align="right">
+                    <a href="{% url 'print_facture' vente.id %}" class="btn btn-primary float-right"><i class="bi bi-download dispo">&nbsp;</i>Télécharger</a>
+                </div>
+                <div class="row gy-4">
+                    <div class="col-lg-6 col-md-6" >
+                        <h5 class="">Client: <b style="color: #4154f1;">{{vente.client}}</b></h5>
+                    </div>
+                    <div class="col-lg-6 col-md-6" ></div>
+                    <div class="col-lg-12 col-md-12" >
+                        <br>
+                        <h5 class="text-muted mb-3">Liste des produits</h5>                        
+                        <div class="containeurs">
+                            {% if lst_prod %}
+                            <table class="table table-responsive table-striped mb-4">
+                                <thead class="thead">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Désignation</th>
+                                        <th scope="col">Qte commandée</th>
+                                        <th scope="col">Prix unitaire</th>
+                                        <th scope="col" style="text-align: right;">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>   
+                                    {% for prod in lst_prod %}
+                                    {% load app_filter %}
+                                    {% load mathfilters %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{prod.designation}}</td>
+                                            <td>{{prod.produitvente__qte_cmdee}}</td>
+                                            <td>{{prod.prix_unitaire|floatformat:-2}} FCFA</td>
+                                            <td align="right">{{prod.produitvente__qte_cmdee|mul:prod.prix_unitaire|floatformat:-2}} FCFA</td>
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucun produit disponible pour le moment.</p>  
+                            {% endif %}
+                        <h5 class="text-muted mb-3" style="text-align: right;">Total: {{vente.montant_brut|floatformat:-2}} FCFA</h5>
+                        </div>        
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                       <div class="">
+                            <h6>Reduction: {{vente.taux_remise}}%</h6> 
+                            <h6>Montant de la reduction: {{vente.remise|floatformat:-2}} FCFA</h6>
+                            
+                            {% if vente.net_ccial > 0 %}
+                                <h6>Net Commercial: {{vente.net_ccial|floatformat:-2}} FCFA</h6>
+                            {% else %}
+                                <h6>Net Commercial: {{vente.montant_brut|floatformat:-2}} FCFA</h6>
+                            {% endif %}
+                       </div>
+                            
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <h6>Taux de la TVA: {{vente.taux_taxe}}%</h6>
+                        <h6>Montant de la TVA: {{vente.taxe|floatformat:-2}} FCFA</h6>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <h5>Net à Payer: <b style="color: #4154f1;">{{vente.montant_net|floatformat:-2}} FCFA</b></h5>
+                    </div>
+                    <div class="col-lg-6 col-md-6"></div>
+                    <div class="col-lg-6 col-md-6">
+                        <p class="text-muta" style="text-align: left;">Par {{vente.gerant}}</p>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="container">
+                            <p class="text-muta" style="text-align: right;">{{vente.date_vente|date:"d F Y"}} à {{vente.date_vente|date:"G\hi"}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock body%}

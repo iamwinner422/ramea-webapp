@@ -1,0 +1,220 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Produits{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+    
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Produits</h2>
+          <br>
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                  <a href="{% url 'export_pdf_prod' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                  <a href="{% url 'export_xls_prod' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="container-fluid">
+                <form action="" method="get" class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Recherche" name="query">
+                  <button class="btn btn-search" type="submit">Rechercher</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Liste</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Nouveau</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Historique</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div class="">
+                <header class="section-header">
+                  <p class="stitre text-uppercase" style="font-size: 25px;">Mes produits</p>
+                </header>
+                
+
+                {% if lst_prod %}
+                  <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for prod in lst_prod %}
+                        <div class="col-lg-3 col-6">
+                          <div class="card">
+                            <div class="example-elements">
+                              {% for qte in prod.quantitepoint_set.all %}
+                                {% if qte.qte_stock <= 5 %}
+                                  <span data-tooltip="La quantité est à un état critique: {{qte.qte_stock}} dans {{qte.point}}" data-tooltip-location="bottom"><i class="bi bi-exclamation-circle text-danger"></i></span>
+                                {% elif qte.qte_stock <= 15 %}
+                                  <span data-tooltip="La quantité est à un état d'alerte: {{qte.qte_stock}} dans {{qte.point}}" data-tooltip-location="bottom"><i class="bi bi-exclamation-triangle text-warning"></i></span>
+                                {% else %}
+                                  <span data-tooltip="Rien à signaler dans {{qte.point}}: {{qte.qte_stock}}" data-tooltip-location="bottom"><i class="bi bi-check-circle text-success"></i></span>
+                                {% endif %}
+                              {% endfor %}
+                            </div>
+
+                            {% if prod.image %}
+                              <img src="{{prod.image.url}}" class="card-img-top img-fluid" alt="{{prod.designation}}">
+                            {% else %}
+                              <img src="{% static 'assets/img/default.png' %}" alt="{{prod.designation}}" class="card-img-top img-fluid">
+                            {% endif %}
+                              
+                            <div class="card-body">
+                              <h6 class="prod-cat text-muted">{{prod.categorie}}</h6>
+                              <h5 class="card-title">{{prod.designation|truncatechars:25}}</h5>
+                              <p class="prod-infos">{{prod.prix_unitaire|floatformat:-2}} <b>FCFA</b></p>
+                              <div class="" align="center">
+                                <a href="{% url 'details_prod' prod.id %}" class="" title="Détails de {{prod.designation}}"><i class="bi bi-info-circle info"></i></a>&nbsp;
+                                <a href="{% url 'update_prod' prod.id %}" class="" title="Modifier {{prod.designation}}"><i class="bi bi-pencil-square edit"></i></a>&nbsp;
+                                <a href="{% url 'delete_prod' prod.id %}" class="" title="Supprimer {{prod.designation}}"><i class="bi bi-trash delete"></i></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <br>
+                  <p class="alert alert-info text-center">Aucun produit disponible pour le moment.</p>
+                {% endif %}
+                
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+              <div class="">
+                <div class="row gy-4">
+                    <div class="col-lg-7">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;" enctype="multipart/form-data">
+                            <header class="section-header">
+                                <p class="text-center stitre">Ajouter un produit</p>
+                            </header>
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="col-md-12">
+                                  {{form.designation}}
+                                  {% for error in form.designation.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-6 ">
+                                  {{formQtePoint.qte_stock}}
+                                  {% for error in formQtePoint.qte_stock.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}  
+                                </div>
+                                <div class="col-md-6 ">
+                                  {{form.prix_unitaire}}
+                                  {% for error in form.prix_unitaire.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.categorie}}
+                                  {% for error in form.categorie.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.point_vente}}
+                                  {% for error in form.point_vente.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.image}}
+                                  {% for error in form.image.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="w-100">Ajouter le produit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-5 h-100 align-self-center">
+                      <img src="{% static 'assets/img/7.png' %}" alt="store" class="img-fluid">
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+              <div class="container-fluid">
+                <header class="section-header">
+                  <p class="stitre text-uppercase" style="font-size: 25px;">Historique du stock</p>
+                  <div class="">
+                    {% if lst_histo_prod %}
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6">
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                          <div class="btn-group me-2">
+                            <a href="{% url 'histo_pdf_prod' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                            <a href="{% url 'histo_xls_prod' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </header>
+                <div class="containeurs">
+                  <br> 
+                  {% if lst_histo_prod %}
+                  <table class="table table-responsive">
+                      <thead class="thead">
+                          <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Désignation</th>
+                              <th scope="col">Quantité ajoutée</th>
+                              <th scope="col">Quantité en stock</th>
+                              <th scope="col">Date d'ajout</th>
+                              <th scope="col">Point de vente</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for histo in  lst_histo_prod %}
+                             {% load app_filter %}
+                            <tr>
+                              <th scope="row">{{forloop.counter}}</th>
+                              <td>{{histo.produit.designation}}</td>
+                              <td>{{histo.qte}}</td>
+                              <td>{{histo.point.nom|filter_prod:histo.produit.id}}</td>
+                              <td>{{histo.date_ajout}}</td>
+                              <td>{{histo.point}}</td>
+                            </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+                  {% else %}
+                  <br>
+                  <p class="alert alert-info text-center">Aucune historique disponible pour le moment.</p>
+                  {% endif %}
+                      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+</div>
+
+{% endblock body %}
+    

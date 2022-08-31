@@ -1,0 +1,62 @@
+<nav id="sidebar" class="">
+    <div class="sidebar-header">
+        <h3>Ramea</h3>
+    </div>
+    <ul class="list-unstyled">
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-4 text-muted">
+          <span>Général</span>
+        </h6>
+        <li class="">
+            <a href="{% url 'dashboard_index' %}" class="disop"><i class="ri-dashboard-line dispo"></i>Dashboard</a>
+        </li>
+        <li>
+            <a href="{% url 'index_points' %}" class="disop"><i class="ri-store-2-line dispo"></i>Points de vente</a>
+        </li>
+        <li>
+          <a href="{% url 'index_clients_panel' %}" class="disop"><i class="ri-contacts-line dispo"></i>Clients</a>
+      </li>
+        <li>
+          <a href="{% url 'index_categories' %}" class="disop"><i class="ri-stack-line dispo"></i>Catégories</a>
+        </li>
+        <li>
+          <a href="{% url 'index_produits' %}" class="disop"><i class="ri-archive-line dispo"></i>Produits</a>
+        </li>
+        <li>
+          <a href="{% url 'index_services' %}" class="disop"><i class="ri-service-line dispo"></i>Services</a>
+        </li>
+        <li>
+          <a href="{% url 'index_gerants' %}" class="disop"><i class="ri-group-line dispo"></i>Vendeurs</a>
+        </li>
+        <li>
+          <a href="{% url 'index_prestation_pnl' %}" class="disop"><i class="ri-hand-coin-line dispo"></i>Prestations</a>
+        </li>
+        <li>
+          <a href="{% url 'index_vente_pnl' %}" class="disop"><i class="ri-shopping-cart-2-line dispo"></i>Ventes</a>
+        </li>
+        <!--<li>
+          <a href="" class="disop"><i class="ri-file-chart-line dispo"></i>Rapports</a>
+        </li>-->
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Autres</span>
+        </h6>
+    </ul>
+
+    <ul class="list-unstyled">
+      <li>
+          <a href="#option" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle disop"><b><i class="ri-user-line dispo"></i>{{request.user}}</b></a>
+          <ul class="collapse list-unstyled" id="option">
+              <li><a href="{% url 'update_admin' %}" class="disop"><i class="ri-pencil-line"></i>&nbsp;Mes informations</a></li>
+              <li><a href="{% url 'logout_admin' %}" class="disop"><i class="ri-login-circle-line"></i>&nbsp;Déconnexion</a></li>
+          </ul>
+      </li>
+      <li>
+        <a href="{% url 'list_admin' %}" class="disop"><i class="ri-admin-line dispo"></i>Gestionnaires</a>
+      </li>
+      <li>
+        <a href="#org" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle disop"><b><i class="ri-building-line dispo"></i>{{org.nom}}</b></a>
+        <ul class="collapse list-unstyled" id="org">
+          <li><a href="{% url 'update_org' %}" class="disop"><i class="ri-pencil-line"></i>&nbsp;Editer</a></li>
+        </ul>
+      </li>
+    </ul>
+</nav>

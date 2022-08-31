@@ -1,0 +1,118 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Détails de {{prod.designation}}{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+ 
+  <!-- Page Content  -->
+    <div id="content">
+        {% include "dashboard/inclusions/header.html" %}
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">{{prod.designation}}</h2>
+            </div>
+            <div class="container-fluid">
+                <div>
+                    <div class="row gy-4">
+                        <div class="col-lg-8 col-md-6 col-sm-12">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Informations générales</h4>
+                            </header><br>
+                            <div class="component">
+                                <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            <a href="{% url 'update_stock_prod' prod.id %}" title="Entrée en stock"><i class="bi bi-plus-circle-dotted primary"></i></a>
+                                            {% if prod.image %}
+                                            <td rowspan="6"><img src="{{prod.image.url}}" alt="{{prod.nom}}" class="img-fluid" height="250" width="250"></td>
+                                            {% else %}
+                                            <td rowspan="6"><img src="{% static 'assets/img/default.png' %}" alt="{{clt.nom}}" class="img-fluid"  height="150" width="150"></td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td><b>Disponible dans</b>: {% for pt in prod.point_vente.all %} <a href="{% url 'details_point' pt.pk %}" class="liens">{{pt|truncatechars:15}}</a> {% endfor %}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Catégorie</b>: {{prod.categorie}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Qtés respectives</b>:{% for qte in prod.quantitepoint_set.all %} {{qte.qte_stock}} {% endfor %}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Prix</b>: {{prod.prix_unitaire|floatformat:-2}} FCFA</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Ajouté le</b>: {{prod.date_add|date:"d F Y"}} à {{prod.date_add|date:"G\hi"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Autres</h4>
+                            </header><br>
+                            <section id="counts" class="counts">  
+                                <div class="row gy-4">
+                                    <div class="col-lg-12 col-md-12">
+                                        <div class="count-box">
+                                            <i class="bi bi-cart-check lico" style="color: #4154f1;"></i>
+                                            <div>
+                                                {% if qte_vendue %}
+                                                <span>{{qte_vendue}}</span>
+                                                {% if qte_vendue <= 1 %}
+                                                    <p style="font-size: 13px;">Quantité vendue</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Quantités vendues</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Quantité vendue</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    
+                                </div>
+                            </section>  
+                        </div>
+
+                        <div class="col-lg-6 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Dernières ventes</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_vte %}
+                                <table class="table table-responsive">
+                                    <tbody>
+                                    {% for vte in  lst_vte %}
+                                        {% load app_filter %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{vte.client}}</td>
+                                            <td>{{prod|filter_qte_cmdee:vte.id}}</td>
+                                            <td>{{vte.date_vente|date:'d/m/Y'}}</td>
+                                            <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                       </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock body %}

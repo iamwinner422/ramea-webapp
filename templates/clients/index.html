@@ -1,0 +1,209 @@
+{% extends "dashboard_user/base.html" %}
+{% load static %}
+{% block title %}Clients {% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard_user/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard_user/inclusions/header.html" %}
+
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Clients</h2>
+          <br>
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                  <a href="{% url 'export_pdf_client' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                  <a href="{% url 'export_xls_client' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="container-fluid">
+                <form action="" method="get" class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Recherche" name="query">
+                  <button class="btn btn-search" type="submit">Rechercher</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div> 
+        <div class="container-fluid">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Liste</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Nouveau</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Classement</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div class="container-fluid">
+                <header class="section-header">
+                  <p class="stitre text-uppercase" style="font-size: 25px;">Liste des clients</p>
+                </header>
+                {% if lst_clt %}
+                  <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for clt in lst_clt %}
+                      <div class="col-lg-3 col-6">
+                        <div class="card">
+                          {% if clt.image %}
+                            <img src="{{clt.image.url}}" alt="{{clt.nom}}" class="img-fluid" height="30" width="30">
+                          {% else %}
+                            <img src="{% static 'assets/img/default_clt.png' %}" alt="{{clt.nom}}" class="img-fluid card-img-top">
+                          {% endif %}
+                          <div class="card-body">
+                            <h6 class="prod-cat text-muted">{{clt.adr_phisique}}</h6>
+                            <h5 class="card-title">{{clt.nom}} {{clt.prenoms}}</h5>
+                            <p class="prod-infos">{{clt.telephone_p}}</p>
+                            <div class="" align="center">
+                              <a href="{% url 'detail_client_user' clt.id %}" class=""><i class="bi bi-info-circle info"></i></a>&nbsp;
+                              <a href="{% url 'update_client' clt.id %}" class=""><i class="bi bi-pencil-square edit"></i></a>&nbsp;
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                  <br>
+                  <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+              <div>
+                <div class="row gy-4 m-auto">
+                    <div class="col-lg-8">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;" enctype="multipart/form-data">
+                          <center><img src="{% static 'assets/img/default_clt.png' %}" alt="{{clt.nom}}" class="img-fluid" height="45" width="45"></center>  
+                          <header class="section-header">
+                                <p class="text-center stitre">Ajouter un client</p>
+                            </header>
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="col-md-6">
+                                  {{form.nom}}
+                                  {% for error in form.nom.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-6">
+                                  {{form.prenoms}}
+                                  {% for error in form.prenoms.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{form.adr_mail}}
+                                    {% for error in form.adr_mail.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{form.adr_phisique}}
+                                    {% for error in form.adr_phisique.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-6">
+                                  {{form.telephone_p}}
+                                  {% for error in form.telephone_p.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-6">
+                                  {{form.telephone_s}}
+                                  {% for error in form.telephone_s.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="id_image" style="font-size: 14px; margin-left:1%; color:#333;">Photo</label>
+                                    {{form.image}}
+                                    {% for error in form.image.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                  </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="w-100">Ajouter le client</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+              <div class="row gy-4">
+                <div class="col-lg-6 col-md-6">
+                  <section class="component" style="max-height: 563px">
+                    <header class="section-header">
+                      <p id="labelform">Par nombre d'achat</p>
+                    </header>
+                    <div>
+                      {% if top_clt_nb %}
+                      <table class="table table-responsive table-striped">
+                        <tbody>
+                        {% for clt in top_clt_nb %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{clt.nom}} {{clt.prenoms}}</td>
+                            <td>{{clt.nb}}</td>
+                          <td><a href="{% url 'detail_client_user' clt.id %}" title="Détails de {{clt.nom}} {{clt.prenoms}}"><i class="bi bi-info-circle info"></i> </a></td>
+                          </tr>
+                        {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                      <br />
+                      <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                      {% endif %}
+                    </div>
+                  </section>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                  <section class="component" style="max-height: 563px">
+                    <header class="section-header">
+                      <p id="labelform">Par montant d'achat</p>
+                    </header>
+                    <div>
+                      {% if top_clt_montant %}
+                      <table class="table table-responsive table-striped">
+                        <tbody>
+                          {% for clt in top_clt_montant %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{clt.nom}} {{clt.prenoms}}</td>
+                            <td>{{clt.montant|floatformat:-2}} FCFA</td>
+                            <td><a href="{% url 'detail_client_user' clt.id %}" title="Détails de {{clt.nom}} {{clt.prenoms}}"><i class="bi bi-info-circle info"></i> </a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                      <br />
+                      <p class="alert alert-info text-center">Aucun service disponible pour le moment.</p>
+                      {% endif %}
+                    </div>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+</div>
+{% endblock body %}
+    

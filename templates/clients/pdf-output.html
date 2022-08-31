@@ -1,0 +1,44 @@
+{% extends 'reports/base.html' %}
+
+{% block title %}Liste des clients{% endblock title %}
+
+
+{% block body %}
+<div class="header">
+    <p class="nom-org">{{pt.nom}}<p>
+    <p class="mail-org">Adresse: {{pt.adresse}}</p>
+    {% if pt.telephone %}
+        <p class="tel-org">Tel: {{pt.telephone}}</p>
+    {% endif %}
+    <hr>
+</div>
+<div class="page">
+    <div class="container" align="center">
+        <table>
+            <h3 class="title">Liste des clients</h3>
+            <thead>
+                <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col" align="left" style="width: 16%;">Nom</th>
+                    <th scope="col" align="left" style="width: 18%;"">Prénoms</th>
+                    <th scope="col" style="width: 13%;">Téléphone</th>
+                    <th scope="col" align="left">Adresse e-mail</th>
+                    <th scope="col" align="left">Adresse</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for clt in lst_clt %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td align="left">{{clt.nom}}</td>
+                    <td align="left">{{clt.prenoms}}</td>
+                    <td>{{clt.telephone_p}}</td>
+                    <td align="left">{{clt.adr_mail}}</td>
+                    <td align="left">{{clt.adr_phisique}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

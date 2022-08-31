@@ -1,0 +1,171 @@
+{% extends "dashboard_user/base.html" %}
+{% load static %}
+{% block title %}Détails de {{prod.designation}}{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard_user/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+    <div id="content">
+        {% include "dashboard_user/inclusions/header.html" %}
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">{{prod.designation}}</h2>
+            </div>
+            <div class="container-fluid">
+                <div>
+                    <div class="row gy-4">
+                        <div class="col-lg-8 col-md-6 col-sm-12">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Informations générales</h4>
+                            </header><br>
+                            <div class="component">
+                                <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            {% if prod.image %}
+                                            <td rowspan="5"><img src="{{prod.image.url}}" alt="{{prod.nom}}" class="img-fluid" height="170" width="170"></td>
+                                            {% else %}
+                                            <td rowspan="5"><img src="{% static 'assets/img/default.png' %}" alt="{{clt.nom}}" class="img-fluid"  height="170" width="170"></td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td><b>Point</b>: <a href="{% url 'details_point_user' %}" class="liens">{{point_vente}}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Catégorie</b>: {{prod.categorie}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Quantité</b>: {{qte.qte_stock}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Prix</b>: {{prod.prix_unitaire|floatformat:-2}} FCFA</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Autres</h4>
+                            </header><br>
+                            <section id="counts" class="counts">  
+                                <div class="row gy-4">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-cart-check lico" style="color: #4154f1;"></i>
+                                            <div>
+                                                {% if nb_vte %}
+                                                <span>{{nb_vte}}</span>
+                                                {% if nb_vte <= 1 %}
+                                                    <p style="font-size: 13px;">Vente</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Ventes</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Vente</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>  
+                        </div>
+
+                        <div class="col-lg-6 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Dernières ventes</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_vte %}
+                                <table class="table table-responsive table-striped">
+                                    <tbody>
+                                    {% for vte in  lst_vte %}
+                                        {% load app_filter %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{vte.client}}</td>
+                                            <td>{{prod|filter_qte_cmdee:vte.id}}</td>
+                                            <td>{{vte.date_vente|date:'d/m/Y'}}</td>
+                                            <td><a href="{% url 'details_vente_gerant' vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                       </div>
+
+                       <div class="col-lg-6 col-md-6">
+                        <header class="section-header">
+                            <h4 class="text-right stitre" style="color: #555;">Sorties en stock</h4>
+                        </header><br>
+                        <canvas id="chartHisto" width="100%" height="100%"></canvas>
+                        <script src="{% static 'assets/js/chart.min.js' %}"></script>
+                        <script>
+                            var lbl = {{lbl_histo|safe}};
+                            var data = {{data_histo|safe}};
+                            var ctx = document.getElementById("chartHisto").getContext("2d");
+                            var myChart = new Chart(ctx, {
+                              type: "pie",
+                              data: {
+                                labels: lbl,
+                                datasets: [
+                                  {
+                                    label: "Quantité",
+                                    data: data,
+                                    backgroundColor: [
+                                      "rgba(255, 99, 132, 0.2)",
+                                      "rgba(54, 162, 235, 0.2)",
+                                      "rgba(255, 206, 86, 0.2)",
+                                      "rgba(75, 192, 192, 0.2)",
+                                      "rgba(153, 102, 255, 0.2)",
+                                      "rgba(255, 159, 64, 0.2)",
+                                    ],
+                                    borderColor: [
+                                      "rgba(255, 99, 132, 1)",
+                                      "rgba(54, 162, 235, 1)",
+                                      "rgba(255, 206, 86, 1)",
+                                      "rgba(75, 192, 192, 1)",
+                                      "rgba(153, 102, 255, 1)",
+                                      "rgba(255, 159, 64, 1)",
+                                    ],
+                                    borderWidth: 1,
+                                  },
+                                ],
+                              },
+                              options: {
+                                responsive: true,
+                                plugins: {
+                                  legend: {
+                                    position: 'bottom',
+                                  },
+                                  title: {
+                                    display: true,
+                                      text: 'Quantités',
+                                  }
+                                },
+                                scales: {
+                                  y: {
+                                    beginAtZero: true,
+                                  },
+                                },
+                              },
+                            });
+                          </script>
+                       </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock body %}

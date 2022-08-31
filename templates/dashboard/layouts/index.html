@@ -1,0 +1,465 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Panel{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+  <!-- Page Content  -->
+  <div id="content">
+
+    {% include "dashboard/inclusions/header.html" %}
+      <section id="counts" class="counts">
+        <div class="container" data-aos="fade-up">
+          <h2 class="titre">Aperçu</h2>
+          <div class="row gy-4">
+            <div class="col-lg-3 col-md-6">
+              <div class="count-box">
+                <i class="bi bi-shop lico" style="color: #4154f1;"></i>
+                <div>
+                  {% if nb_point %}
+                    <span>{{nb_point}}</span>
+                  {% else %}
+                    <span>--</span>
+                  {% endif %}
+                  <p>Points de vente</p>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-lg-3 col-md-6">
+              <div class="count-box">
+                <i class="bi bi-people lico" style="color: #ee6c20;"></i>
+                <div>
+                  {% if nb_gerant %}
+                    <span>{{nb_gerant}}</span>
+                    {% if nb_gerant <= 1 %}
+                      <p>Gérant</p>
+                    {% else %}
+                      <p>Vendeurs</p>
+                    {% endif %}
+                  {% else %}
+                    <span>--</span>
+                    <p>Vendeur</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-lg-3 col-md-6">
+              <div class="count-box">
+                <i class="bi bi-archive lico" style="color: #15be56;"></i>
+                <div>
+                  {% if nb_prod %}
+                    <span>{{nb_prod}}</span>
+                    {% if nb_prod <= 1 %}
+                      <p>Produit</p>
+                    {% else %}
+                      <p>Produits</p>
+                    {% endif %}
+                  {% else %}
+                    <span>--</span>
+                    <p>Produit</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-lg-3 col-md-6">
+              <div class="count-box">
+                <i class="bi bi-graph-up lico" style="color: #bb0852;"></i>
+                <div>
+                  {% if nb_vte %}
+                    <span>{{nb_vte}}</span>
+                    {% if nb_vente <= 1 %}
+                      <p>Vente</p>
+                      {% else %}
+                      <p>Ventes</p>
+                    {% endif %}
+                  {% else %}
+                    <span>--</span>
+                    <p>Vente</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="row gy-4">
+            <div class="col-lg-3 col-md-6">
+              <div class="count-box">
+                <i class="bi bi-heart lico" style="color: #2db6fa;"></i>
+                <div>
+                  {% if nb_serv %}
+                    <span>{{nb_serv}}</span>
+                    {% if nb_serv <= 1 %}
+                      <p>Service</p>
+                      {% else %}
+                      <p>Services</p>
+                    {% endif %}
+                  {% else %}
+                    <span>--</span>
+                    <p>Service</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="count-box">
+                <i class="bi bi-heart lico" style="color: #55c19c;"></i>
+                <div>
+                  {% if nb_prest %}
+                    <span>{{nb_prest}}</span>
+                    {% if nb_prest <= 1 %}
+                      <p>Prestation</p>
+                      {% else %}
+                      <p>Prestations</p>
+                    {% endif %}
+                  {% else %}
+                    <span>--</span>
+                    <p>Prestation</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>    
+          </div>
+        </div>
+      </section>
+      <div class="line"></div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-6">
+            <section class="component">
+              <header class="section-header">
+                <p id="labelform">Top cinq (5) points de vente (Ventes)</p>
+              </header>
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="pills-day-tab" data-toggle="pill" href="#pills-day" role="tab" aria-controls="pills-day" aria-selected="true">Ajourd'hui</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-mois-tab" data-toggle="pill" href="#pills-mois" role="tab" aria-controls="pills-mois" aria-selected="false">Mois</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active mb-4" id="pills-day" role="tabpanel" aria-labelledby="pills-day-tab">
+                  <div class="container-fluid">
+                    {% if top_pdv_j %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for pdv in top_pdv_j %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{pdv.nom}}</td>
+                            <td>{{pdv.chiffre|floatformat:-2}} FCFA</td>
+                            <td><a href="{% url 'details_point' pdv.id %}" title="Détails de {{pdv.nom}}"><i class="bi bi-info-circle info"></i></a></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                      <br>
+                      <p class="alert alert-info text-center">Aucun classement disponible pour le moment.</p>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="pills-mois" role="tabpanel" aria-labelledby="pills-mois-tab">
+                  <div class="container-fluid">
+                    {% if top_pdv_m %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for pdv in top_pdv_m %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{pdv.nom}}</td>
+                            <td>{{pdv.chiffre|floatformat:-2}} FCFA</td>
+                            <td><a href="{% url 'details_point' pdv.id %}" title="Détails de {{pdv.nom}}"><i class="bi bi-info-circle info"></i></a></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                      <br>
+                      <p class="alert alert-info text-center">Aucun classement disponible pour le moment.</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </section>
+            <br>
+          </div>
+          <div class="col-lg-6">
+            <div id="topproduct">
+              <section class="component">
+                <header class="section-header">
+                  <p id="labelform">Produit les plus vendus</p>
+                </header>
+                <ul class="nav nav-pills mb-3" id="pills-tab1" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="pills-day1-tab" data-toggle="pill" href="#pills-day1" role="tab" aria-controls="pills-day1" aria-selected="true">Ajourd'hui</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="pills-mois1-tab" data-toggle="pill" href="#pills-mois1" role="tab" aria-controls="pills-mois1" aria-selected="false">Mois</a>
+                  </li>
+                </ul>
+                <div class="tab-content containeurs" id="pills-tabContent">
+                  <div class="tab-pane fade show active mb-4" id="pills-day1" role="tabpanel" aria-labelledby="pills-day1-tab">
+                    <div class="">
+                      {% if most_sell_d %}
+                      <table class="table table-responsive table-striped">
+                        <tbody>
+                          {% for prod in most_sell_d %}
+                            <tr>
+                              <th scope="row">{{forloop.counter}}</th>
+                              <td>{{prod.designation}}</td>
+                              <td>{{prod.ventes__point_vente|truncatechars:15}}</td>
+                              <td>{{prod.qte}}</td>
+                              <td><a href="{% url 'details_prod' prod.id %}"title="Détails de {{prod.designation}}"><i class="bi bi-info-circle info"></i></a></td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                        <br>  
+                        <p class="alert alert-info text-center">Aucun produit disponible pour le moment.</p>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="pills-mois1" role="tabpanel" aria-labelledby="pills-mois1-tab">
+                    <div class="">
+                      {% if most_sell_m %}
+                      <table class="table table-responsive table-striped">
+                        <tbody>
+                          {% for prod in most_sell_m %}
+                            <tr>
+                              <th scope="row">{{forloop.counter}}</th>
+                              <td>{{prod.designation}}</td>
+                              <td>{{prod.ventes__point_vente__nom|truncatechars:15}}</td>
+                              <td>{{prod.qte}}</td>
+                              <td><a href="{% url 'details_prod' prod.id %}"title="Détails de {{prod.designation}}"><i class="bi bi-info-circle info"></i></a></td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                        <br>  
+                        <p class="alert alert-info text-center">Aucun produit disponible pour le moment.</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <br>
+            </div>
+          </div>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <section class="component">
+              <header class="section-header">
+                <p id="labelform">Top des vendeurs/Mois</p>
+              </header>
+              <ul class="nav nav-pills mb-3" id="pills-tab2" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="pills-vente1-tab" data-toggle="pill" href="#pills-vente1" role="tab" aria-controls="pills-vente1" aria-selected="true">Ventes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-prest1-tab" data-toggle="pill" href="#pills-prest1" role="tab" aria-controls="pills-prest1" aria-selected="false">Prestations</a>
+                </li>
+              </ul>
+              <div class="tab-content containeurs" id="pills-tabContent">
+                <div class="tab-pane fade show active mb-4" id="pills-vente1" role="tabpanel" aria-labelledby="pills-vente1-tab">
+                  <div class="">         
+                    {% if top_vendeur_m_p %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for vdr in top_vendeur_m_p %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{vdr.user__last_name}} {{vdr.user__first_name}}</td>
+                            <td>{{vdr.ventes__point_vente__nom|truncatechars:15}}</td>
+                            <td>{{vdr.nb}}</td>
+                            <td><a href="{% url 'details_gerant' vdr.id %}" title="Détails de {{vdr.user__last_name}} {{vdr.user__first_name}}"><i class="bi bi-info-circle info"></i></a>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                      <br>  
+                      <p class="alert alert-info text-center">Aucun vendeur disponible pour le moment.</p>
+                    {% endif %} 
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-prest1" role="tabpanel" aria-labelledby="pills-prest1-tab">
+                  <div class="">         
+                    {% if top_vendeur_m_s %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for vdr in top_vendeur_m_s %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{vdr.user__last_name}} {{vdr.user__first_name}}</td>
+                            <td>{{vdr.prestations__point_vente__nom|truncatechars:15}}</td>
+                            <td>{{vdr.nb}}</td>
+                            <td><a href="{% url 'details_gerant' vdr.id %}" title="Détails de {{vdr.user__last_name}} {{vdr.user__first_name}}"><i class="bi bi-info-circle info"></i></a></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                      <br>  
+                      <p class="alert alert-info text-center">Aucun vendeur disponible pour le moment.</p>
+                    {% endif %} 
+                  </div>
+                </div>
+              </div>
+            </section>
+            <br>
+          </div>
+          <div class="col-lg-6">
+            <section class="component">
+              <header class="section-header">
+                <p id="labelform">Top des clients</p>
+              </header>
+              <ul class="nav nav-pills mb-3" id="pills-tab3" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="pills-vente2-tab" data-toggle="pill" href="#pills-vente2" role="tab" aria-controls="pills-vente2" aria-selected="true">Achats</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-prest2-tab" data-toggle="pill" href="#pills-prest2" role="tab" aria-controls="pills-prest2" aria-selected="false">Prestations</a>
+                </li>
+              </ul>
+              <div class="tab-content containeurs" id="pills-tabContent">
+                <div class="tab-pane fade show active mb-4" id="pills-vente2" role="tabpanel" aria-labelledby="pills-vente2-tab">
+                  <div class="">
+                    {% if top_clt_vente %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for clt in top_clt_vente %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{clt.nom}} {{clt.prenoms|truncatechars:5}}</td>
+                            <td>{{clt.montant|floatformat:-2}} FCFA</td>
+                            <td>{{clt.point_vente__nom|truncatechars:10}}</td>
+                            <td><a href="{% url 'details_client' clt.id %}"title="Détails de {{clt.nom}} {{clt.prenoms}}"><i class="bi bi-info-circle info"></i></a></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                      <br>  
+                      <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-prest2" role="tabpanel" aria-labelledby="pills-prest2-tab">
+                  <div>
+                    {% if top_clt_prest %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for clt in top_clt_prest %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{clt.nom}} {{clt.prenoms|truncatechars:5}}</td>
+                            <td>{{clt.montant|floatformat:-2}} FCFA</td>
+                            <td>{{clt.point_vente__nom|truncatechars:11}}</td>
+                            <td><a href="{% url 'details_client' clt.id %}"title="Détails de {{clt.nom}} {{clt.prenoms}}"><i class="bi bi-info-circle info"></i></a></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                      <br>  
+                      <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </section>
+            <br>
+          </div>
+        </div>
+      
+        <div class="line"></div>
+        
+        <div class="row">
+          <div class="col-lg-6">
+            <section class="component">
+              <header class="section-header">
+                <p id="labelform">Top des services</p>
+              </header>
+              <ul class="nav nav-pills mb-3" id="pills-tab4" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="pills-day3-tab" data-toggle="pill" href="#pills-day3" role="tab" aria-controls="pills-day3" aria-selected="true">Ajourd'hui</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-mois3-tab" data-toggle="pill" href="#pills-mois3" role="tab" aria-controls="pills-mois3" aria-selected="false">Mois</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active mb-4" id="pills-day3" role="tabpanel" aria-labelledby="pills-day-tab3">
+                  <div class="">
+                    {% if top_serv_j %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for serv in top_serv_j %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{serv.nom}}</td>
+                            <td>{{serv.prestations__point_vente__nom|truncatechars:11}}</td>
+                            <td>{{serv.nb}}</td>
+                            <td><a href="" title="Détails de {{serv.nom}}"><i class="bi bi-info-circle info"></i></a></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                      <br>  
+                      <p class="alert alert-info text-center">Aucun service disponible pour le moment.</p>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-mois3" role="tabpanel" aria-labelledby="pills-mois3-tab">
+                  <div class="">
+                    {% if top_serv_m %}
+                    <table class="table table-responsive table-striped">
+                      <tbody>
+                        {% for serv in top_serv_m %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{serv.nom}}</td>
+                            <td>{{serv.prestations__point_vente__nom|truncatechars:14}}</td>
+                            <td>{{serv.nb}}</td>
+                            <td><a href="{% url 'details_service' serv.id %}" title="Détails de {{serv.nom}}"><i class="bi bi-info-circle info"></i></a></td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                      <br>  
+                      <p class="alert alert-info text-center">Aucun service disponible pour le moment.</p>
+                    {% endif %}
+                  </div>
+                </div>
+
+              </div>
+            </section>
+            <br>
+          </div>
+        </div>
+
+        <div class="line"></div>
+  </div>
+</div>
+{% endblock body %}
+    

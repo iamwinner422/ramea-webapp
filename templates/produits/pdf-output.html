@@ -1,0 +1,38 @@
+{% extends 'reports/base.html' %} {% block title %}Liste des produits{% endblock title %} {% block body %}
+<div class="header">
+    <p class="nom-org">{{org.nom}}
+        <p>
+            <p class="mail-org">E-mail: {{org.mail}}</p>
+            {% if org.telephone_s %}
+            <p class="tel-org">Tel: {{org.telephone_p}} / {{org.telephone_s}}</p>
+            {% else %}
+            <p class="tel-org">Tel: {{org.telephone_p}}</p>
+            {% endif %}
+            <hr>
+</div>
+<div class="page">
+    <div class="container" align="center">
+        <table>
+            <h3 class="title">Liste des produits</h3>
+            <thead>
+                <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col" align="left">Désignation</th>
+                    <th scope="col">Prix unitaire</th>
+                    <th scope="col" align="left">Catégories</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for prod in lst_prod %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td align="left">{{prod.designation}}</td>
+                    <td>{{prod.prix_unitaire|floatformat:-2}} FCFA</td>
+                    <td align="left">{{prod.categorie}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

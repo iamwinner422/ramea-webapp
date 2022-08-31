@@ -1,0 +1,42 @@
+{% extends 'reports/base.html' %}
+
+{% block title %}Liste des Points de vente{% endblock title %}
+
+
+{% block body %}
+<div class="header">
+    <p class="nom-org">{{org.nom}}<p>
+    <p class="mail-org">E-mail: {{org.mail}}</p>
+    {% if org.telephone_s %}
+        <p class="tel-org">Tel: {{org.telephone_p}} / {{org.telephone_s}}</p>
+    {% else %}
+        <p class="tel-org">Tel: {{org.telephone_p}}</p>
+    {% endif %}
+    <hr>
+</div>
+<div class="page">
+    <div class="container" align="center">
+        <table>
+            <h3 class="title">Liste des Points de vente</h3>
+            <thead>
+                <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col" align="left">Nom du point</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col" align="left">Adresse</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pt in lst_pt %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td align="left">{{pt.nom}}</td>
+                    <td>{{pt.telephone_point}}</td>
+                    <td align="left">{{pt.adresse}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

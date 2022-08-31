@@ -1,0 +1,40 @@
+{% extends 'reports/base.html' %}
+
+{% block title %}Liste des services{% endblock title %}
+
+
+{% block body %}
+<div class="header">
+    <p class="nom-org">{{org.nom}}<p>
+    <p class="mail-org">E-mail: {{org.mail}}</p>
+    {% if org.telephone_s %}
+        <p class="tel-org">Tel: {{org.telephone_p}} / {{org.telephone_s}}</p>
+    {% else %}
+        <p class="tel-org">Tel: {{org.telephone_p}}</p>
+    {% endif %}
+    <hr>
+</div>
+<div class="page">
+    <div class="container" align="center">
+        <table>
+            <h3 class="title">Liste des services</h3>
+            <thead>
+                <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col">Nom du service</th>
+                    <th scope="col">Catégorie du service</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for serv in lst_serv %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td>{{serv.nom}}</td>
+                    <td>{{serv.categorie}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

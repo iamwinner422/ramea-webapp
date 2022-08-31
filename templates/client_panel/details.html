@@ -1,0 +1,167 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Détails de {{clt.nom}} {{clt.prenoms}} {% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+    <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">{{clt.nom}} {{clt.prenoms}}</h2>
+            </div>
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <div class="row gy-4">
+                        <div class="col-lg-7 col-md-7">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Informations générales</h4>
+                            </header><br>
+                            <div class="component">
+                                <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            {% if clt.image %}
+                                            <td rowspan="6"><img src="{{clt.image.url}}" alt="{{clt.nom}}" class="img-fluid" height="150" width="150"></td>
+                                            {% else %}
+                                            <td rowspan="6"><img src="{% static 'assets/img/default_clt.png' %}" alt="{{clt.nom}}" class="img-fluid"  height="150" width="150"></td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td><b>E-mail</b>: {{clt.adr_mail}}</td>   
+                                        </tr>
+                                        <tr>
+                                            {% if clt.telephone_s %}
+                                                
+                                                {% if telephone_s != "None" %}
+                                                <td><b>Téléphone</b>: {{clt.telephone_p}}</td>
+                                                {% else %}
+                                                <td><b>Téléphones</b>: {{clt.telephone_p}} / {{clt.telephone_s}}</td>
+                                                {% endif %}
+                                                    
+                                            {% else %}
+                                            <td><b>Téléphone</b>: {{clt.telephone_p}}</td>   
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            <td><b>Adresse</b>: {{clt.adr_phisique}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Point de vente</b>: <a href="{% url 'details_point' clt.point_vente.id %}" class="liens">{{clt.point_vente}}</a> </td> 
+                                        </tr>
+                                        <tr>
+                                            <td><b>Ajouté par</b>: <a href="{% url 'details_gerant' clt.gerant.id %}" class="text-uppercase liens" style="color:#4154f1">{{clt.gerant}}</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5 col-md-5">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Autres</h4>
+                            </header><br>
+                            <section id="counts" class="counts">  
+                                <div class="row gy-4">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-archive lico" style="color: #4154f1;"></i>
+                                            <div>
+                                                {% if nb_vte %}
+                                                <span>{{nb_vte}}</span>
+                                                {% if nb_vte <= 1 %}
+                                                    <p style="font-size: 13px;">Achat</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Achats</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Achat</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-heart lico" style="color: #ee6c20;"></i>
+                                            <div>
+                                                {% if nb_prest %}
+                                                <span>{{nb_prest}}</span>
+                                                {% if nb_prest <= 1 %}
+                                                    <p style="font-size: 13px;">Service reçu</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Services reçus</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Service reçu</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>  
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Derniers achats</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_vte %}
+                                <table class="table table-responsive table-striped">
+                                    <tbody>
+                                    {% for vte in  lst_vte %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                                            <td>{{vte.gerant}}</td>
+                                            <td>{{vte.date_vente|date:'d/m/Y'}}</td>
+                                            <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6">
+                            <header class="section-header">
+                            <h4 class="text-right stitre" style="color: #555;">Dernières prestations</h4>
+                        </header><br>
+                        <div class="container containeurs">
+                            {% if lst_prest %}
+                                <table class="table table-responsive table-striped">
+                                    <tbody>
+                                    {% for prest in  lst_prest %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{prest.total_prestation|floatformat:-2}} FCFA</td>
+                                            <td>{{prest.gerant}}</td>
+                                            <td>{{prest.date_vente|date:'d/m/Y'}}</td>
+                                            <td><a href="{% url 'details_prestation_pnl' prest.point_vente.id prest.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                            <td><a href="{% url 'retirer_prestation' prest.point_vente.id prest.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>   
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock body %}

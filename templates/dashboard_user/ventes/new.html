@@ -1,0 +1,492 @@
+{% extends "dashboard_user/base.html" %} 
+{% load static %} 
+{% block title%}Nouvelle vente{% endblock title %} 
+{% block body %}
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <script type="text/javascript">
+        var lst_prod = [];
+    </script>
+    {% include "dashboard_user/inclusions/sidebar.html" %}
+    <!-- Page Content  -->
+    <div id="content">
+        {% include "dashboard_user/inclusions/header.html" %}
+
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">Nouvelle Vente</h2>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div>
+                            <div class="row gy-4">
+                                <div class="col-lg-12">
+                                    <form action="" method="" class="php-email-form" style="padding-top: 12%" id="formProd">
+                                        {% csrf_token %}
+                                        <div class="row gy-4">
+                                            <div class="col-md-12">
+                                                {{form.produit}} 
+                                                {% for error in form.produit.errors %}
+                                                    <span class="text-danger" style=" font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <p id="prixProd" class="card-title" style="text-align: left">
+                                                            Prix:--
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p id="qteProd" class="card-title" style="text-align: left">
+                                                            Qte en stock: --
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        {{formP.qte_cmdee}} {% for error in form.produit.errors %}
+                                                        <span class="text-danger" style=" font-size: 13px; font-weight: lighter; margin-top: 7px;margin-left: 13px;">{{error}}</span> {% endfor %}
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <p id="prixTotal" class="card-title" style="text-align: left">
+                                                            Total: 0 FCFA
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 text-center">
+                                                <button type="button" class="w-100" name="ajoutProd">Ajouter le produit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <section>
+                            <br />
+                            <h3 class="text-muted">
+                                Panier <i class="lbadge" id="nbProd">0</i>
+                            </h3>
+                        </section>
+                        <div class="row">
+                            <div class="col-lg-12" style="height: 260px; overflow: auto">
+                                <div id="panier">
+                                    <p class="alert alert-info text-center mt-5">
+                                        Aucun produit dans le panier.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid mt-4">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 mb-5">
+                        <div class="">
+                            <div class="row gy-4">
+                                <div class="col-lg-12">
+                                    <form action="" method="" class="php-email-form" style="padding-top: 12%" id="formAutres">
+                                        <h4 id="montant_brut" class="card-title mb-4" style="text-align: left; font-size: 16px; font-weight: 700;">Montant brut: 0 FCFA</h4>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-5">
+                                                    <input type="number" name="taux_reduction" id="taux_reduction" placeholder="Réduction" class="form-control" />
+                                                </div>
+                                                <div class="col-7">
+                                                    <p class="card-title" style="text-align: left" id="montant_reduction">Montant: 0 FCFA</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h2 id="net_commercial" class="card-title mt-4 mb-4" style="text-align: left; font-size: 16px; font-weight: 700;">Net Commercial: 0 FCFA</h2>
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-5">
+                                                    <input type="text" name="taux_tva" value="18%" id="taux_tva" placeholder="Taux de TVA" class="form-control" disabled />
+                                                </div>
+                                                <div class="col-7">
+                                                    <p class="card-title" style="text-align: left" id="montant_taxe">Montant: 0 FCFA</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <h2 id="montant_net" class="card-title mt-4 mb-4" style="text-align: left; font-size: 16px; font-weight: 700;">Net à Payer: 0 FCFA</h2>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                        <div class="">
+                            <form action="" method="" class="php-email-form" style="padding-top: 12%" id="formClient">
+                                <h3 class="text-muted">Clients</h3>
+                                <div class="row">
+                                    <div class="col-lg-12 mt-3">
+                                        {{form.client}} {% for error in form.client.errors %}
+                                        <span class="text-danger" style=" font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span> {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="mt-5">
+                                    <button type="button" class="btn btn-primary w-100" id="btn-valider" name="btn-valider" style="height: 50px;">Valider</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'assets/js/jquery-3.5.1.min.js'%}"></script>
+<script>
+    var _prix;
+    var _qte;
+    var _designation;
+    var boxQte = document.getElementById("qte_cmdee");
+    var ptotal = document.getElementById("prixTotal");
+    var montant_brut = 0;
+    var montant_reduction = 0;
+    var net_commercial = 0;
+    var montant_taxe = 0;
+    var montant_net = 0;
+    var id = 0;
+    var tReductionN = 0;
+    $("#formProd select[name='produit']").on("change", function() {
+        var prix = document.getElementById("prixProd");
+        var qte = document.getElementById("qteProd");
+        var $this = $(this);
+        id = $this.val();
+        var elm;
+        if ($this.val() != "") {
+            boxQte.disabled = false;
+
+            function getInfo(leId) {
+                $.ajax({
+                    method: "GET",
+                    url: '{% url "get_info_prod" id=123 %}'.replace(
+                        /123/,
+                        leId.toString()
+                    ),
+                    dataType: "json",
+                    success: function(data, status) {
+                        console.log("SUCCESS:");
+                        elm = data;
+                        _prix = elm[0].prix_unitaire;
+                        _qte = elm[1].qte_stock;
+                        _designation = elm[0].designation;
+                        prix.innerHTML = "Prix: " + _prix + " FCFA";
+                        qte.innerHTML = "Qte en stock: " + _qte;
+                        //console.log(elm[1].qte_stock);
+                    },
+                    error: function(response) {
+                        console.log("Something went wrong awoo ");
+                    },
+                });
+            }
+
+            getInfo($this.val());
+        } else {
+            $("#formProd select[name='produit']").find(".after").nextAll().remove();
+            prix.innerHTML = "Prix: --";
+            qte.innerHTML = "Qte en stock: --";
+            boxQte.disabled = true;
+            ptotal.innerHTML = "Total: 0 FCFA";
+        }
+    });
+    //BOX QTE COMMANDEE AU CHANGEMENT
+    $("#formProd input[name='qte_cmdee']").on("input", function() {
+        var qte = document.getElementById("qte_cmdee").value;
+        var total = 0;
+        if ($.isNumeric(qte)) {
+            total = parseInt(_prix * qte);
+            ptotal.innerHTML = "Total: " + total + " FCFA";
+        } else {
+            ptotal.innerHTML = "Total: 0 FCFA";
+        }
+    });
+    // CODE DU BOUTON AJOUTER LE PRODUIT
+    $("#formProd button[name='ajoutProd']").on("click", function() {
+        var qte = document.getElementById("qte_cmdee").value;
+        var prix = document.getElementById("prixProd");
+        var qte1 = document.getElementById("qteProd");
+        //var id_produit = 
+        //CONTROL
+        if ($.isNumeric(qte)) {
+            if (qte <= 0 || qte > _qte) {
+                alert("Erreur de quantité.");
+            } else {
+                var leTotal = _prix * qte;
+                montant_brut += leTotal;
+                //CREATION DE L'OBJET 
+                var new_prod = {
+                    id: id,
+                    designation: _designation,
+                    prix: _prix,
+                    qte_cmdee: qte,
+                    prix_total: leTotal,
+                };
+                //RECUPERATION DES INFOS SUR LE PRODUIT
+                function getInfo(leId) {
+                    $.ajax({
+                        method: "GET",
+                        url: '{% url "get_info_prod" id=123 %}'.replace(
+                            /123/,
+                            leId.toString()
+                        ),
+                        dataType: "json",
+                        success: function(data, status) {
+                            console.log("SUCCESS:");
+                            elm = data;
+                            _prix = elm[0].prix_unitaire;
+                            _qte = elm[1].qte_stock;
+                            _designation = elm[0].designation;
+                            prix.innerHTML = "Prix: " + _prix + " FCFA";
+                            qte1.innerHTML = "Qte en stock: " + _qte;
+                            //console.log(elm[1].qte_stock);
+                        },
+                        error: function(response) {
+                            console.log("Something went wrong awoo ");
+                        },
+                    });
+                }
+                ////ON VA ENLEVER LA QUANTITE COMMANDE
+                $.ajax({
+                    method: "GET",
+                    url: '{% url "sus_prod_qte" id=123 %}'.replace(/123/, id.toString()),
+                    data: {
+                        qte: qte,
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        getInfo(id);
+                    },
+                    error: function(response) {
+                        console.log("Something went wrong awoo ");
+                    },
+                });
+                montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                document.getElementById('montant_taxe').innerHTML = "Montant " + montant_taxe + " FCFA";
+                //MONTANT NET
+                montant_net = montant_brut + montant_taxe;
+                document.getElementById('montant_net').innerHTML = "Net à Payer: " + montant_net + " FCFA";
+
+                lst_prod.push(new_prod); //INSERTION DANS LE TABLEAU
+
+
+                function affichePanier() {
+                    if (lst_prod.length >= 1) {
+                        //CREATION DU TABLEAU DES PRODUITS/PANIER
+
+
+                        var tble = document.createElement("table");
+                        tble.setAttribute("class", "table table-responsive mt-1");
+                        var tbdy = document.createElement("tbody");
+
+                        lst_prod.forEach(function(prod, index) {
+                            var tr = document.createElement("tr");
+                            var td = document.createElement("td");
+                            var td1 = document.createElement("td");
+                            var td2 = document.createElement("td");
+                            var td3 = document.createElement("td");
+                            var td4 = document.createElement("td");
+                            td3.setAttribute('style', 'text-align:right;');
+                            td2.setAttribute('style', 'text-align:right;');
+                            td1.setAttribute('style', 'text-align:center;');
+                            var icone = document.createElement("i");
+                            icone.setAttribute("class", "bi bi-x-circle delete"); //BUTTON SUPPRIMER
+                            //SUPESSION D'UN ELEMENT
+                            icone.onclick = function() {
+
+                                montant_brut -= lst_prod[index]['prix_total'];
+                                document.getElementById("montant_brut").innerHTML = "Montant brut: " + montant_brut + " FCFA";
+                                document.getElementById('net_commercial').innerHTML = "Net Commercial: " + montant_brut + " FCFA";
+
+                                montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                                document.getElementById('montant_taxe').innerHTML = "Montant " + montant_taxe + " FCFA";
+
+                                montant_net = montant_brut + montant_taxe;
+                                document.getElementById('montant_net').innerHTML = "Net à Payer: " + montant_net + " FCFA";
+                                //console.log(lst_prod[index]['prix_total']);
+                                nId = lst_prod[index]['id'];
+
+                                function getInfo(leId) {
+                                    $.ajax({
+                                        method: "GET",
+                                        url: '{% url "get_info_prod" id=123 %}'.replace(
+                                            /123/,
+                                            leId.toString()
+                                        ),
+                                        dataType: "json",
+                                        success: function(data, status) {
+                                            console.log("SUCCESS:");
+                                            elm = data;
+                                            _prix = elm[0].prix_unitaire;
+                                            _qte = elm[1].qte_stock;
+                                            _designation = elm[0].designation;
+                                            document.getElementById("prixProd").innerHTML = "Prix: " + _prix + " FCFA";
+                                            document.getElementById("qteProd").innerHTML = "Qte en stock: " + _qte;
+                                            //console.log(elm[1].qte_stock);
+                                        },
+                                        error: function(response) {
+                                            console.log("Something went wrong awoo ");
+                                        },
+                                    });
+                                }
+                                //RAJOUT DE LA QUANTITE
+                                $.ajax({
+                                    method: "GET",
+                                    url: '{% url "add_prod_qte" id=123 %}'.replace(/123/, nId.toString()),
+                                    data: {
+                                        qte: qte,
+                                    },
+                                    success: function(data) {
+                                        console.log(data);
+                                        getInfo(nId);
+                                    },
+                                    error: function(response) {
+                                        console.log("Something went wrong awoo ");
+                                    },
+                                });
+
+                                lst_prod.splice(index, 1); //SUPPRESSION
+                                //NOUVEAU MONTANT BRUT
+                                affichePanier(); //RAPPEL DE LA FONCTION
+                                document.getElementById("nbProd").innerHTML = lst_prod.length;
+
+                            };
+                            //montant_brut += prod['prix_total'];
+                            //console.log(montant_brut);
+                            //
+                            td.appendChild(document.createTextNode(prod["designation"]));
+                            td1.appendChild(document.createTextNode(prod["qte_cmdee"]));
+                            td2.appendChild(document.createTextNode(prod["prix"]));
+                            td3.appendChild(document.createTextNode(prod["prix_total"]));
+                            td4.append(icone);
+                            tr.appendChild(td);
+                            tr.appendChild(td1);
+                            tr.appendChild(td2);
+                            tr.appendChild(td3);
+                            tr.appendChild(td4);
+                            tbdy.appendChild(tr);
+                        });
+
+                        tble.appendChild(tbdy);
+
+                        var p = document.createElement("p");
+
+                        document.getElementById("panier").innerHTML = "";
+                        document.getElementById("panier").appendChild(tble);
+                        document.getElementById("panier").appendChild(p);
+                        //MONTANT BRUT
+                        document.getElementById("montant_brut").innerHTML = "Montant brut: " + montant_brut + " FCFA";
+                        document.getElementById('net_commercial').innerHTML = "Net Commercial: " + montant_brut + " FCFA";
+                    } else {
+                        document.getElementById("panier").innerHTML =
+                            "<p class='alert alert-info text-center mt-5'>Aucun produit dans le panier.</p>";
+                    }
+                }
+
+                affichePanier(); //AFFICHAGE DU PANIER
+
+                document.getElementById("nbProd").innerHTML = lst_prod.length; //NOMBRE D'ELEMENT DANS LE PANIER
+
+                document.getElementById("qte_cmdee").value = "";
+                ptotal.innerHTML = "Total: 0 FCFA";
+            }
+        } else {
+            alert("La quantité saisie est invalide.");
+        }
+    });
+
+    //BOX TAUX DE REDUCTION
+    $("#formAutres input[name='taux_reduction']").on("input", function() {
+        var tReduction = document.getElementById("taux_reduction").value;
+        if ($.isNumeric(tReduction)) {
+            tReductionN = parseInt(tReduction);
+            if (tReductionN > 0) {
+                montant_reduction = parseInt((montant_brut * tReductionN) / 100); //CALCUL DE LA REDUCTION
+                net_commercial = montant_brut - montant_reduction; //NET COMMERCIAL
+
+                document.getElementById('montant_reduction').innerHTML = "Montant: " + montant_reduction + " FCFA";
+                document.getElementById('net_commercial').innerHTML = "Net Commercial: " + net_commercial + " FCFA";
+                //TAXE
+                montant_taxe = 0;
+                montant_taxe = parseFloat((net_commercial * 18) / 100); //CALCUL DE LA TVA
+                montant_net = net_commercial + montant_taxe //NET A PAYER 
+                document.getElementById('montant_net').innerHTML = "Net à Payer: " + montant_net + " FCFA";
+                document.getElementById('montant_taxe').innerHTML = "Montant: " + montant_taxe + " FCFA";
+            } else {
+                document.getElementById('montant_reduction').innerHTML = "Montant: 0 FCFA";
+                document.getElementById('net_commercial').innerHTML = "Net Commercial: " + montant_brut + " FCFA";
+                //CALCUL DE LA NOUVELLE TAXE
+                montant_taxe = 0;
+                montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                document.getElementById('montant_taxe').innerHTML = "Montant: " + montant_taxe + " FCFA";
+                //NOUVEAU MONTANT NET
+                montant_net = montant_brut + montant_taxe;
+                document.getElementById('montant_net').innerHTML = "Net à Payer: " + montant_net + " FCFA";
+            }
+        } else {
+            document.getElementById('montant_reduction').innerHTML = "Montant: 0 FCFA";
+            document.getElementById('net_commercial').innerHTML = "Net Commercial: " + montant_brut + " FCFA";
+
+            montant_taxe = 0;
+            montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+            document.getElementById('montant_taxe').innerHTML = "Montant: " + montant_taxe + " FCFA";
+
+            montant_net = montant_brut + montant_taxe;
+            document.getElementById('montant_net').innerHTML = "Net à Payer: " + montant_net + " FCFA";
+        }
+
+    });
+
+    //CODE DU BOUTTON VALIDER
+    $("#formClient button[name='btn-valider']").on("click", function(e) {
+        //VERIFICATION DU PANIER
+        if (lst_prod.length > 0) {
+            //VERIFICATION SI UN CLIENT EST SELECTIONNE
+            //console.log(lst_prod.length);
+            var client = document.getElementById("selectClient").value;
+            if (client != "") {
+                e.preventDefault();
+
+                nList = JSON.stringify(lst_prod);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "nouvelle_vte" %}',
+                    data: {
+                        panier: nList,
+                        id_client: client,
+                        montant_brut: montant_brut,
+                        montant_net: montant_net,
+                        taux_taxe: 18,
+                        net_commercial: net_commercial,
+                        montant_taxe: montant_taxe,
+                        montant_reduction: montant_reduction,
+                        taux_remise: tReductionN,
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    },
+                    success: function(data) {
+                        //console.log(data);
+                        document.location.replace("{% url 'index_ventes' %}")
+                    },
+                    error: function(response) {
+                        console.log("Something went wrong awoo ");
+                    },
+                });
+            } else {
+                alert("Veuillez sélectionner un client")
+            }
+        } else {
+            alert("Aucun produit dans le panier. Réesayer!")
+        }
+    });
+</script>
+{% endblock body %}

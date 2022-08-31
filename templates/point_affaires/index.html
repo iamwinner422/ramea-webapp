@@ -1,0 +1,180 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Points d'affaires{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+    
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Points de vente</h2>
+          <br>
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                  <a href="{% url 'export_pdf_point' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                  <a href="{% url 'export_xls_point' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="container-fluid">
+                <form action="" method="get" class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Recherche" name="query">
+                  <button class="btn btn-search" type="submit">Rechercher</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+
+        <div class="">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Liste</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Nouveau</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div class="">
+                <header class="section-header">
+                  <p class="stitre text-uppercase" style="font-size: 25px;">Mes points de vente</p>
+                </header>
+                {% if lst_point %}
+                  <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for pt in lst_point %}
+                      <div class="col-lg-3 col-6">
+                        <div class="card">
+                          <img src="{% static 'assets/img/store.png' %}" alt="{{pt.nom}}" class="card-img-top img-fluid">
+                          <div class="card-body">
+                            <h6 class="prod-cat text-muted">{{pt.adresse|truncatechars:25}}</h6>
+                            <h5 class="card-title">{{pt.nom|truncatechars:35}}</h5>
+                            <p class="prod-infos">{{pt.telephone_point}}</p>
+                            <div class="" align="center">
+                              <a href="{% url 'details_point' pt.pk %}" class=""><i class="bi bi-info-circle info"></i></a>&nbsp;
+                              <a href="{% url 'update_point' pt.pk %}" class=""><i class="bi bi-pencil-square edit"></i></a>&nbsp;
+                              <a href="{% url 'delete_point' pt.pk %}" class=""><i class="bi bi-trash delete"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <br>
+                  <p class="alert alert-info text-center">Aucun point d'affaires disponible pour le moment.</p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+              <div class="">
+                <div class="row gy-4">
+                    <div class="col-lg-7 col-md-7">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;">
+                            <header class="section-header">
+                                <p class="text-center stitre">Ajouter un point d'affaire</p>
+                            </header>
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="col-md-12">
+                                  {{form.nom}}
+                                  {% for error in form.nom.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.telephone_point}}
+                                  {% for error in form.telephone_point.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.adresse}}
+                                  {% for error in form.adresse.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+
+                                <header class="section-header"><br>
+                                  <p class="text-center stitre">Ajouter un gérant au point de vente</p>
+                                </header>
+
+                                <div class="col-md-6 ">
+                                  {{form_gerant.last_name}}
+                                  {% for error in form.last_name.errors %}
+                                      <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-md-6 ">
+                                  {{form_gerant.first_name}}
+                                  {% for error in form.first_name.errors %}
+                                      <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-md-6">
+                                  {{form_gerant.username}}
+                                  {% for error in form.username.errors %}
+                                  <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-md-6">
+                                  {{profile_form.telephone}}
+                                  {% for error in profile_form.telephone.errors %}
+                                  <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-md-6 ">
+                                  {{form_gerant.password1}}
+                                  {% for error in form.password1.errors %}
+                                      <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-md-6 ">
+                                  {{form_gerant.password2}}
+                                  {% for error in form.password2.errors %}
+                                      <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                              </div>
+                              <div class="col-md-12 text-center">
+                                <button type="submit" class="w-100">Ajouter le point</button>
+                              </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-5 col-md-5 h-100 align-self-center">
+                      <img src="{% static 'assets/img/5.png' %}" alt="store" class="img-fluid">
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+</div>
+<script>
+  var form_fields = document.getElementsByTagName('input')
+  form_fields[5].placeholder='Nom';
+  form_fields[6].placeholder='Prénoms';
+  form_fields[7].placeholder='Nom d\'utilisateur';
+  form_fields[8].placeholder='Téléphone';
+  form_fields[9].placeholder = 'Mot de passe';
+  form_fields[10].placeholder = 'Confirmer le mot de passe';
+  for (var field in form_fields){	
+      form_fields[field].className += ' form-control'
+  }
+</script>
+
+{% endblock body %}
+    

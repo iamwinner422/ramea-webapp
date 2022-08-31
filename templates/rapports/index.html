@@ -1,0 +1,183 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Rapports{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+    
+    <section class="component pb-5">
+        <div class="section-header pb-1">
+          <h2 class="titre-section">Rapports</h2>
+          <br>
+        </div>
+        <div class="container-fluid">
+          <div>
+            <h3 class="pb-2 text-danger">PDF</h3>
+          </div>
+          <div class="row gy-4">
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-success btn-rap">
+              <p class="rap-title"><i class="bi bi-cart3"></i> <b>Ventes</b></p>
+              <details class="">
+                <summary class="text-left tri"></summary>
+                <div class="d-flex">
+                  <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>      
+                  <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                  <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                </div>
+              </details>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-primary btn-rap">
+                <p class="rap-title"><i class="bi bi-archive"></i> <b>Produits</b></p>
+                <details class="">
+                  <summary class="text-left tri"></summary>
+                  <div class="d-flex">
+                    <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>
+                    <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                    <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-warning btn-rap">
+                <p class="rap-title"><i class="bi bi-heart"></i> <b>Services</b></p>
+                <details class="">
+                  <summary class="text-left tri"></summary>
+                  <div class="d-flex">
+                    <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>
+                    <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                    <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-danger btn-rap">
+                <p class="rap-title"><i class="bi bi-people"></i> <b>Gérants</b></p>
+                <details class="">
+                  <summary class="text-left tri"></summary>
+                  <div class="d-flex">
+                    <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>
+                    <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                    <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                  </div>
+                </details>
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-dark btn-rap">
+              <p class="rap-title"><i class="bi bi-person"></i> <b>Clients</b></p>
+              <details class="">
+                <summary class="text-left tri"></summary>
+                <div class="d-flex">
+                  <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>
+                  <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                  <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                </div>
+              </details>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <br>
+        <hr>
+        <div class="container-fluid">
+          <div>
+            <h3 class="pb-2 text-success">XLS</h3>
+          </div>
+          <div class="row gy-4">
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-success btn-rap">
+              <p class="rap-title"><i class="bi bi-cart3"></i> <b>Ventes</b></p>
+              <details class="">
+                <summary class="text-left tri"></summary>
+                <div class="d-flex">
+                  {% if nb_point_day == 0 %} 
+                    <a href="" class="elm-rap" title="Du jour: {{nb_point_day}}"><i class="ri-calendar-2-line"></i></a>
+                  {% else %}
+                    <p class="elm-rap" title="Du jour: {{nb_point_day}}" disabled><i class="ri-calendar-2-line"></i></p>
+                  {% endif %}
+                  <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                  <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                </div>
+              </details>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-primary btn-rap">
+                <p class="rap-title"><i class="bi bi-archive"></i> <b>Produits</b></p>
+                <details class="">
+                  <summary class="text-left tri"></summary>
+                  <div class="d-flex">
+                    <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>
+                    <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                    <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-warning btn-rap">
+                <p class="rap-title"><i class="bi bi-heart"></i> <b>Services</b></p>
+                <details class="">
+                  <summary class="text-left tri"></summary>
+                  <div class="d-flex">
+                    <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>
+                    <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                    <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-danger btn-rap">
+                <p class="rap-title"><i class="bi bi-people"></i> <b>Gérants</b></p>
+                <details class="">
+                  <summary class="text-left tri"></summary>
+                  <div class="d-flex">
+                    <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>
+                    <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                    <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+              <div class="btn btn-dark btn-rap">
+              <p class="rap-title"><i class="bi bi-person"></i> <b>Clients</b></p>
+              <details class="">
+                <summary class="text-left tri"></summary>
+                <div class="d-flex">
+                  <p class="elm-rap" title="Du jour"><i class="ri-calendar-2-line"></i></p>
+                  <p class="elm-rap" title="Du mois"><i class="ri-calendar-event-line"></i></p>
+                  <p class="elm-rap" title="Tout"><i class="ri-calendar-todo-line"></i></p>
+                </div>
+              </details>
+              </div>
+            </div>   
+
+          </div>
+        </div>
+    </section>
+  </div>
+</div>
+
+{% endblock body %}
+    

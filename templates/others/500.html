@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="Ramea CRM " name="description" />
+    <meta content="CRM, Gestion" name="keywords" />
+    <title>Erreur 404 - Ramea</title>
+    <link href="{% static 'assets/img/logo.png' %}" rel="icon" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h2>Erreur interne du serveur</h2>
+        <h1>500</h1>
+        <p>Quelque chose s'est mal passé. Nos équipes s'en occupent.</p>
+    </div>
+    <style type="text/css">
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: "Nunito", sans-serif;
+            min-height: 100vh;
+            background: url("{% static 'assets/img/hero-bg.png' %}") top center no-repeat;
+            background-size: cover;
+        }
+        .container{
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center;
+            color: #333;
+        }
+        .container h1{
+            color: #012970;
+            font-size: 140px;
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: 12px;
+        }
+    </style>
+</body>
+</html>

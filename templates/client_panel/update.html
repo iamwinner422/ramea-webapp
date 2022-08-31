@@ -1,0 +1,93 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Modification d'un client{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Clients</h2>
+        </div>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="row gy-4">
+                    <div class="col-lg-7">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;" enctype="multipart/form-data">
+                            <center><img src="{% static 'assets/img/default_clt.png' %}" alt="{{clt.nom}}" class="img-fluid" height="45" width="45"></center><header class="section-header">
+                                <p class="text-center stitre">Modifier le client <b>{{client.nom}}</b> {{clt.prenoms}}</p>
+                            </header>
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="col-md-6">
+                                  {{form.nom}}
+                                  {% for error in form.nom.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-6">
+                                  {{form.prenoms}}
+                                  {% for error in form.prenoms.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{form.adr_mail}}
+                                    {% for error in form.adr_mail.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12">
+                                    {{form.adr_phisique}}
+                                    {% for error in form.adr_phisique.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-6">
+                                  {{form.telephone_p}}
+                                  {% for error in form.telephone_p.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-6">
+                                  {{form.telephone_s}}
+                                  {% for error in form.telephone_s.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="id_image" style="font-size: 14px; margin-left:1%; color:#333;">Photo</label>
+                                    {{form.image}}
+                                    {% for error in form.image.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                  </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="w-100">Modifier le client</button>
+                                </div>
+                            </div>
+                             
+                        </form>
+                    </div>
+                    <div class="col-lg-5 h-100 align-self-center" align="center">
+                    {% if clt.image %}
+                        <img src="{{clt.image.url}}" alt="{{clt.nom}}" class="img-fluid">
+                    {%else%}
+                        <img src="{% static 'assets/img/default_clt.png' %}" alt="{{clt.nom}}" class="img-fluid">
+                    {% endif %}
+                    </div>  
+                </div>
+            </div>
+             
+        </div>
+    </section>
+  </div>
+</div>
+{% endblock body %}
+    

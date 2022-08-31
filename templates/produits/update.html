@@ -1,0 +1,81 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Modification d'un produit{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Produits</h2>
+        </div>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="row gy-4">
+                    <div class="col-lg-7">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;" enctype="multipart/form-data">
+                            <header class="section-header">
+                                <p class="text-center stitre">Modifier le produit <b>{{prod.designation}}</b></p>
+                            </header>
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="row gy-4">
+                                    <div class="col-md-12">
+                                      {{form.designation}}
+                                      {% for error in form.designation.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                      {% endfor %}
+                                    </div>
+                                    <div class="col-md-6 ">
+                                      {{form.prix_unitaire}}
+                                      {% for error in form.prix_unitaire.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                      {% endfor %}
+                                    </div>
+                                    <div class="col-md-6 ">
+                                      {{form.categorie}}
+                                      {% for error in form.categorie.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                      {% endfor %}
+                                    </div>
+                                    <div class="col-md-12 ">
+                                      {{form.point_vente}}
+                                      {% for error in form.point_vente.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                      {% endfor %}
+                                    </div>
+                                    <div class="col-md-12 ">
+                                      {{form.image}}
+                                      {% for error in form.image.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                      {% endfor %}
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        <button type="submit" class="w-100">Modifier le produit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-5 h-100 align-self-center" align="center">
+                    {% if prod.image %}
+                        <img src="{{prod.image.url}}" alt="{{prod.nom}}" class="img-fluid">
+                    {%else%}
+                        <img src="{% static 'assets/img/default.png' %}" alt="{{prod.nom}}" class="img-fluid">
+                    {% endif %}
+                    </div>  
+                </div>
+            </div>
+             
+        </div>
+    </section>
+  </div>
+</div>
+{% endblock body %}
+    

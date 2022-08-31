@@ -1,0 +1,53 @@
+<nav id="sidebar" class="">
+    <div class="sidebar-header">
+        <h4 class="nom-point">{{point_vente.nom}}</h4>
+    </div>
+    <ul class="list-unstyled">
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-4 text-muted">
+          <span>Général</span>
+        </h6>
+        <li class="">
+            <a href="{% url 'user_dashboard_index' %}" class="disop"><i class="ri-dashboard-line dispo"></i>Dashboard</a>
+        </li>
+        <li>
+            <a href="{% url 'index_clients' %}" class="disop"><i class="ri-group-line dispo"></i>Clients</a>
+        </li>
+        <li>
+          <a href="{% url 'index_prod_gerant' %}" class="disop"><i class="ri-archive-line dispo"></i>Produits</a>
+        </li>
+        <li>
+          <a href="{% url 'index_serv_gerant' %}" class="disop"><i class="ri-service-line dispo"></i>Services</a>
+        </li>
+        <li>
+          <a href="#prest" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle disop"><i class="ri-hand-coin-line dispo"></i>Prestations</a>
+          <ul class="collapse list-unstyled" id="prest">
+            <li><a href="{% url 'index_prestations' %}" class="disop"><i class="ri-file-list-line"></i>&nbsp;Liste</a></li>
+               <li><a href="{% url 'new_prestation' %}" class="disop"><i class="ri-add-circle-line"></i>&nbsp;Nouvelle</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#op" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle disop"><i class="ri-shopping-cart-2-line dispo"></i>Ventes</a>
+          <ul class="collapse list-unstyled" id="op">
+            <li><a href="{% url 'index_ventes' %}" class="disop"><i class="ri-file-list-line"></i>&nbsp;Liste</a></li>
+              <li><a href="{% url 'new_vente' %}" class="disop"><i class="ri-add-circle-line"></i>&nbsp;Nouvelle</a></li>
+          </ul>
+        </li>
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+          <span>Autres</span>
+        </h6>
+    </ul>
+
+    <ul class="list-unstyled">
+      <li>
+          <a href="#option" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle disop"><b><i class="ri-user-line dispo"></i>{{request.user}}</b></a>
+          <ul class="collapse list-unstyled" id="option">
+              <li><a href="{% url 'details_gerant_user' %}" class="disop"><i class="ri-dashboard-2-line"></i>&nbsp;Mon profil</a></li>
+              <li><a href="{% url 'update_gerant' %}" class="disop"><i class="ri-pencil-line"></i>&nbsp;Mes informations</a></li>
+              <li><a href="{% url 'logout_gerant' %}" class="disop"><i class="ri-login-circle-line"></i>&nbsp;Déconnexion</a></li>
+          </ul>
+      </li>
+      <li>
+        <a href="{% url 'details_point_user' %}" class="disop"><i class="ri-store-2-line dispo"></i>{{point_vente.nom}}</a>
+      </li>
+    </ul>
+</nav>

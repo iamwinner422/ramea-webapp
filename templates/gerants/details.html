@@ -1,0 +1,201 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Détails de {{gerant.user.last_name}} {{gerant.user.first_name}}{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+    <div id="content">
+        {% include "dashboard/inclusions/header.html" %}
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">{{gerant.user.last_name}} {{gerant.user.first_name}}</h2>
+            </div>
+            <div class="container-fluid">
+                <div class="">
+                    <div class="row gy-4">
+                        <div class="col-lg-9 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Informations générales</h4>
+                            </header><br>
+                            <div class="component">
+                                <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="6"><img src="{% static 'assets/img/gerant.png' %}" alt="{{gerant.user.last_name}} {{gerant.user.first_name}}" class="img-fluid"  height="150" width="150"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Nom d'utilisateur</b>: {{gerant.user.username}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Téléphone</b>: {{gerant.telephone}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Point de vente</b>: <a href="{% url 'details_point' gerant.point_vente.id %}" class="liens">{{gerant.point_vente}}</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Ajouté le</b>: {{gerant.user.date_joined|date:"d F Y"}} à {{gerant.user.date_joined|date:"G\hi"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Dernière connexion</b>: {{gerant.user.last_login|date:"d F Y"}} à {{gerant.user.last_login|date:"G\hi"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-3 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Autres</h4>
+                            </header><br>
+                            <section id="counts" class="counts">  
+                                <div class="row gy-4">
+                                    <div class="col-lg-12 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-cart-check lico" style="color: #4154f1;"></i>
+                                            <div>
+                                                {% if nb_vte %}
+                                                <span>{{nb_vte}}</span>
+                                                {% if nb_vte <= 1 %}
+                                                    <p style="font-size: 13px;">Vente</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Ventes</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Vente</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="col-lg-12 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-heart lico" style="color: #ee6c20;"></i>
+                                            <div>
+                                                {% if nb_prest %}
+                                                <span>{{nb_prest}}</span>
+                                                {% if nb_prest <= 1 %}
+                                                    <p style="font-size: 13px;">Service presté</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Services prestés</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Service presté</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-person-plus lico" style="color: #e3687d;"></i>
+                                            <div>
+                                                {% if nb_clt %}
+                                                <span>{{nb_clt}}</span>
+                                                {% if nb_clt <= 1 %}
+                                                    <p style="font-size: 13px;">Client ajouté</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Client ajoutés</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Client ajouté</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>  
+                        </div>
+
+                        <div class="col-lg-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Clients ajoutés</h4>
+                            </header><br>
+                            <div class="containeurs">
+                                {% if lst_clt %}
+                                    <table class="table table-responsive table-striped">
+                                        <tbody>
+                                        {% for clt in lst_clt %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{clt.nom}}</td>
+                                            <td>{{clt.prenoms}}</td>
+                                            <td>{{clt.telephone_p}}</td>
+                                            <td><a href="{% url 'details_client' clt.id %}" title="Détails de {{clt.nom}} {{clt.prenoms}}"><i class="bi bi-info-circle info"></i> </a></td> 
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <br>
+                                    <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Ventes</h4>
+                            </header><br>
+                            <div class="containeurs">
+                                {% if lst_vte %}
+                                    <table class="table table-responsive table-striped">
+                                        <tbody>
+                                        {% for vte in lst_vte %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{vte.client}}</td>
+                                            <td>{{vte.montant_net|floatformat:-2}}</td>
+                                            <td>{{vte.date_vente|date:'d/m/Y'}}</td>
+                                            <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <br>
+                                    <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Services prestés</h4>
+                            </header><br>
+                            <div class="containeurs">
+                                {% if lst_prest %}
+                                    <table class="table table-responsive table-striped">
+                                        <tbody>
+                                        {% for prest in lst_prest %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{prest.client}}</td>
+                                            <td>{{prest.total_prestation|floatformat:-2}}</td>
+                                            <td>{{prest.date_prestation|date:'d/m/Y'}}</td>
+                                            <td><a href="{% url 'details_prestation_pnl' prest.point_vente.id prest.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <br>
+                                    <p class="alert alert-info text-center">Aucun service disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock body %}

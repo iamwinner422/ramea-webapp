@@ -1,0 +1,294 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Détails de {{admin.user.last_name}} {{admin.user.first_name}}{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+    <div id="content">
+        {% include "dashboard/inclusions/header.html" %}
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">{{admin.user.last_name}} {{admin.user.first_name}}</h2>
+            </div>
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <div class="row gy-4">
+                        <div class="col-lg-7 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Informations générales</h4>
+                            </header><br>
+                            <div class="component">
+                                <table class="table table-responsive">
+                                    <tbody>
+                                        <tr>
+                                            <td rowspan="5"><img src="{% static 'assets/img/admin.png' %}" alt="{{admin.user.last_name}} {{admin.user.first_name}}" class="img-fluid"  height="120" width="120"></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Nom d'utilisateur</b>: {{admin.user.username}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>E-mail</b>: {{admin.user.email}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Téléphone</b>: {{admin.telephone}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Crée le</b>: {{admin.user.date_joined|date:"d F Y"}} à {{admin.user.date_joined|date:"G\hi"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                            <section id="counts" class="counts">  
+                                <div class="row gy-4">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                        <i class="bi bi-shop lico" style="color: #2db6fa;"></i>
+                                        <div>
+                                            {% if nb_point %}
+                                            <span>{{nb_point}}</span>
+                                            {% if nb_point <= 1 %}
+                                                <p style="font-size: 13px;">Point ajouté</p>
+                                                {% else %}
+                                                <p style="font-size: 13px;">Points ajoutés</p>
+                                            {% endif %}
+                                            {% else %}
+                                            <span>--</span>
+                                            <p style="font-size: 13px;">Point ajouté</p>
+                                            {% endif %}
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                        <i class="bi bi-layers lico" style="color: #bb0852;"></i>
+                                        <div>
+                                            {% if nb_cat %}
+                                            <span>{{nb_cat}}</span>
+                                            {% if nb_cat <= 1 %}
+                                                <p style="font-size: 13px;">Catégorie ajoutée</p>
+                                                {% else %}
+                                                <p style="font-size: 13px;">Catégories ajoutées</p>
+                                            {% endif %}
+                                            {% else %}
+                                            <span>--</span>
+                                            <p style="font-size: 13px;">Catégorie ajoutée</p>
+                                            {% endif %}
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>
+
+                        </div>
+                        
+                        <div class="col-lg-5 col-md-6">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Autres</h4>
+                            </header><br>
+                            <section id="counts" class="counts">  
+                                <div class="row gy-4">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-archive lico" style="color: #4154f1;"></i>
+                                            <div>
+                                                {% if nb_prod %}
+                                                <span>{{nb_prod}}</span>
+                                                {% if nb_prod <= 1 %}
+                                                    <p style="font-size: 13px;">Produit ajouté</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Produits ajoutés</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Produit ajouté</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-heart lico" style="color: #15be56;"></i>
+                                            <div>
+                                                {% if nb_serv %}
+                                                <span>{{nb_serv}}</span>
+                                                {% if nb_serv <= 1 %}
+                                                    <p style="font-size: 13px;">Service ajouté</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Services ajoutés</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Service ajouté</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="count-box">
+                                            <i class="bi bi-person-plus lico" style="color: #ee6c20;"></i>
+                                            <div>
+                                                {% if nb_gerant %}
+                                                <span>{{nb_gerant}}</span>
+                                                {% if nb_gerant <= 1 %}
+                                                    <p style="font-size: 13px;">Gérant ajouté</p>
+                                                {% else %}
+                                                    <p style="font-size: 13px;">Gérants ajoutés</p>
+                                                {% endif %}
+                                                {% else %}
+                                                <span>--</span>
+                                                <p style="font-size: 13px;">Gérant ajouté</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </section>  
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="container-fluid">
+                    <div class="row gy-4">
+                        <div class="col-lg-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Point de ventes ajoutés</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_point %}
+                                    <table class="table table-responsive table-striped">
+                                        <tbody>
+                                        {% for pt in lst_point %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{pt.nom}}</td>
+                                            <td><a href="{% url 'details_point' pt.id %}" title="Détails de {{pt.nom}}"><i class="bi bi-info-circle info"></i> </a></td> 
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <br>
+                                    <p class="alert alert-info text-center">Aucun point disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Catégories ajoutées</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_cat %}
+                                    <table class="table table-responsive table-striped">
+                                        <tbody>
+                                        {% for cat in lst_cat %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{cat.nom}}</td>
+                                            <td>{{cat.typecategorie}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <br>
+                                    <p class="alert alert-info text-center">Aucune catégorie disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Produits ajoutés</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_prod %}
+                                    <table class="table table-responsive table-striped">
+                                        <tbody>
+                                        {% for prod in lst_prod %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{prod.designation}}</td>
+                                            <td>{{prod.quantite}}</td>
+                                            <td>{{prod.prix_unitaire|floatformat:-2}}</td>
+                                            <td><a href="{% url 'details_prod' prod.id %}"><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <br>
+                                    <p class="alert alert-info text-center">Aucun Produit disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Services ajoutés</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_serv %}
+                                    <table class="table table-responsive table-striped">
+                                        <tbody>
+                                        {% for serv in lst_serv %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{serv.nom}}</td>
+                                            <td>{{serv.categorie}}</td>
+                                            <td><a href="{% url 'details_service' serv.id %}"><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <br>
+                                    <p class="alert alert-info text-center">Aucun service disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Gérants ajoutés</h4>
+                            </header><br>
+                            <div class="container containeurs">
+                                {% if lst_gerant %}
+                                    <table class="table table-responsive table-striped">
+                                        <tbody>
+                                        {% for gerant in lst_gerant %}
+                                        <tr>
+                                            <th scope="row">{{forloop.counter}}</th>
+                                            <td>{{gerant.user.last_name}}</td>
+                                            <td>{{gerant.user.first_name}}</td>
+                                            <td>{{gerant.telephone}}</td>
+                                            <td><a href="{% url 'details_gerant' gerant.id %}"><i class="bi bi-info-circle info"></i></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <br>
+                                    <p class="alert alert-info text-center">Aucun gérant disponible pour le moment.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock body %}

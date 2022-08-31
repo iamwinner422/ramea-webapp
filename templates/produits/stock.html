@@ -1,0 +1,117 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Entrée en stock{% endblock title %}
+
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+    
+    <section class="component pb-5">
+      <div class="section-header pb-5">
+        <h2 class="titre-section">Entrée en stock</h2>
+    </div>
+    <div class="container-fluid">
+        <div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-3" style="max-width: 540px; height: auto;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            
+                            {% if prod.image %}
+                                <img src="{{prod.image.url}}" class="img-fluid img-dispo" alt="{{prod.designation}}">
+                            {% else %}
+                                <img src="{% static 'assets/img/default.png' %}" alt="{{prod.designation}}" class="img-fluid">
+                            {% endif %}
+                                
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <h2 class="card-title-2">{{prod.designation}}</h2>
+                              <p class="prod-cat-2"><b>Quantité en stock</b>: {% for qte in prod.quantitepoint_set.all %} <a href="{% url 'details_point' qte.point.pk %}" class="liens">{{qte.point|truncatechars:15}}</a>: <b>{{qte.qte_stock}}</b> {% endfor %}</p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="col-lg-6">
+                    <form action="" method="post" class="php-email-form" style="padding-top: 12%;">
+                        {% csrf_token %}
+                        <div class="row gy-4">
+                            <div class="col-md-12">
+                                {{form.point}}
+                                {% for error in form.point.errors %}
+                                  <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                {% endfor %}
+                              </div>
+                            <div class="col-md-12">
+                              {{form.qte}}
+                              {% for error in form.qte.errors %}
+                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                              {% endfor %}
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="w-100">Ajouter la quantité</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="">
+        <br><br>
+        <header class="section-header">
+            <p class="stitre" style="font-size: 25px;">Historique du stock pour <b class="text-uppercase">{{prod.designation}}</b></p>
+        </header>
+        <div class="row gy-4">
+            <div class="col-lg-9">
+                    <br>
+                    {% if lst_histo_prod %}
+                    <table class="table table-responsive">
+                        <thead class="thead">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Qté ajoutée</th>
+                                <th scope="col">Qté en stock</th>
+                                <th scope="col">Date d'ajout</th>
+                                <th scope="col">Point de vente</th>
+                                <th scope="col">Par</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for histo in  lst_histo_prod%}
+                                {% load app_filter %}
+                              <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{histo.qte}}</td>
+                                <td>{{histo.point.nom|filter_prod:prod.id}}</td>
+                                <td>{{histo.date_ajout}}</td>
+                                <td>{{histo.point}}</td>
+                                <td>{{histo.admin}}</td>
+                              </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <br>
+                    <p class="alert alert-info text-center">Aucune historique disponible pour le moment.</p>
+                    {% endif %}
+                        
+                </div>
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+    </div>
+  </section>
+  </div>
+</div>
+{% endblock body %}
+    

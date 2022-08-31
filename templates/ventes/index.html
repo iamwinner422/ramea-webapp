@@ -1,0 +1,186 @@
+{% extends "dashboard/base.html" %} {% load static %} {% block title %}Ventes{% endblock title %} {% block body %}
+<div class="wrapper">
+    <!-- Sidebar  -->
+    {% include "dashboard/inclusions/sidebar.html" %}
+    <!-- Page Content  -->
+    <div id="content">
+        {% include "dashboard/inclusions/header.html" %}
+
+        <section class="component pb-5">
+            <div class="section-header pb-5">
+                <h2 class="titre-section">Ventes</h2>
+            </div>
+            <div class="container-fluid">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" id="pills-day-tab" data-toggle="pill" href="#pills-day" role="tab" aria-controls="pills-day" aria-selected="true">Ajourd'hui</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="pills-mois-tab" data-toggle="pill" href="#pills-mois" role="tab" aria-controls="pills-mois" aria-selected="false">Mois</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="pills-year-tab" data-toggle="pill" href="#pills-year" role="tab" aria-controls="pills-year" aria-selected="false">Année</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="false">Tout</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active mb-4" id="pills-day" role="tabpanel" aria-labelledby="pills-day-tab">
+                        <div class="container-fluid">
+                            {% if lst_vte_j %}
+                            <table class="table table-responsive table-striped">
+                                <thead class="thead">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Client</th>
+                                        <th scope="col">Montant Brut</th>
+                                        <th scope="col">Net Cciale</th>
+                                        <th scope="col">TVA</th>
+                                        <th scope="col">Net à Payer</th>
+                                        <th scope="colg">Date</th>
+                                        <th scope="colg" colspan="2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for vte in lst_vte_j %}
+                                    <tr>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td>{{vte.client}}</td>
+                                        <td>{{vte.montant_brut|floatformat:-2}} FCFA</td>
+                                        <td>{{vte.net_ccial|floatformat:-2}} FCFA </td>
+                                        <td>{{vte.taxe|floatformat:-2}} FCFA </td>
+                                        <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                                        <td>{{vte.date_vente|date:"d/m/Y"}}</td> 
+                                        <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        <td><a href="{% url 'retirer_vente_v' vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-mois" role="tabpanel" aria-labelledby="pills-mois-tab">
+                        <div class="container-fluid">
+                            {% if lst_vte_m %}
+                            <table class="table table-responsive table-striped">
+                                <thead class="thead">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Client</th>
+                                        <th scope="col">Montant Brut</th>
+                                        <th scope="col">Net Cciale</th>
+                                        <th scope="col">TVA</th>
+                                        <th scope="col">Net à Payer</th>
+                                        <th scope="colg">Date</th>
+                                        <th scope="colg"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for vte in lst_vte_m %}
+                                    <tr>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td>{{vte.client}}</td>
+                                        <td>{{vte.montant_brut|floatformat:-2}} FCFA</td>
+                                        <td>{{vte.net_ccial|floatformat:-2}} FCFA </td>
+                                        <td>{{vte.taxe|floatformat:-2}} FCFA </td>
+                                        <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                                        <td>{{vte.date_vente|date:"d/m/Y"}}</td> 
+                                        <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        <td><a href="{% url 'retirer_vente_v' vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-year" role="tabpanel" aria-labelledby="pills-year-tab">
+                        <div class="container-fluid">
+                            {% if lst_vte_a %}
+                            <table class="table table-responsive table-striped">
+                                <thead class="thead">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Client</th>
+                                        <th scope="col">Montant Brut</th>
+                                        <th scope="col">Net Cciale</th>
+                                        <th scope="col">TVA</th>
+                                        <th scope="col">Net à Payer</th>
+                                        <th scope="colg">Date</th>
+                                        <th scope="colg" colspan="2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for vte in lst_vte_a %}
+                                    <tr>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td>{{vte.client}}</td>
+                                        <td>{{vte.montant_brut|floatformat:-2}} FCFA</td>
+                                        <td>{{vte.net_ccial|floatformat:-2}} FCFA </td>
+                                        <td>{{vte.taxe|floatformat:-2}} FCFA </td>
+                                        <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                                        <td>{{vte.date_vente|date:"d/m/Y"}}</td> 
+                                        <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        <td><a href="{% url 'retirer_vente_v' vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+                        <div class="container-fluid">
+                            {% if lst_vte %}
+                            <table class="table table-responsive table-striped">
+                                <thead class="thead">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Client</th>
+                                        <th scope="col">Montant Brut</th>
+                                        <th scope="col">Net Cciale</th>
+                                        <th scope="col">TVA</th>
+                                        <th scope="col">Net à Payer</th>
+                                        <th scope="colg">Date</th>
+                                        <th scope="colg" colspan="2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for vte in lst_vte %}
+                                    <tr>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td>{{vte.client}}</td>
+                                        <td>{{vte.montant_brut|floatformat:-2}} FCFA</td>
+                                        <td>{{vte.net_ccial|floatformat:-2}} FCFA </td>
+                                        <td>{{vte.taxe|floatformat:-2}} FCFA </td>
+                                        <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                                        <td>{{vte.date_vente|date:"d/m/Y"}}</td> 
+                                        <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        <td><a href="{% url 'retirer_vente_v' vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock body %}

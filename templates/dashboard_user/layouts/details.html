@@ -1,0 +1,313 @@
+{% extends "dashboard_user/base.html" %}
+{% load static %}
+{% block title %}Détails de {{pt.nom}}{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard_user/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard_user/inclusions/header.html" %}
+
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">{{pt.nom}}</h2>
+        </div>
+        <div>
+            <div class="container-fluid">
+                <div class="row gy-4">
+                   <div class="col-lg-6 col-md-6">
+                        <div class="gauche-point">
+                            <header class="section-header">
+                                <h4 class="text-left stitre" style="color: #555;">Informations générales</h4>
+                            </header><br>
+                            <section id="counts" class="counts">
+                                
+                                  <div class="row gy-4">
+                                    <div class="col-lg-6 col-md-6">
+                                      <div class="count-box">
+                                        <i class="bi bi-archive lico" style="color: #4154f1;"></i>
+                                        <div>
+                                            {% if nb_vte %}
+                                            <span>{{nb_vte}}</span>
+                                            {% if nb_vte <= 1 %}
+                                              <p style="font-size: 13px;">Ventes</p>
+                                            {% else %}
+                                              <p style="font-size: 13px;">Ventes</p>
+                                            {% endif %}
+                                          {% else %}
+                                            <span>--</span>
+                                            <p style="font-size: 13px;">Produit vendu</p>
+                                          {% endif %}
+                                        </div>
+                                      </div>
+                                    </div>
+                          
+                                    <div class="col-lg-6 col-md-6">
+                                      <div class="count-box">
+                                        <i class="bi bi-heart lico" style="color: #ee6c20;"></i>
+                                        <div>
+                                          {% if nb_gerant %}
+                                            <span>{{nb_gerant}}</span>
+                                            {% if nb_gerant <= 1 %}
+                                              <p style="font-size: 13px;">Service presté</p>
+                                            {% else %}
+                                              <p style="font-size: 13px;">Services prestés</p>
+                                            {% endif %}
+                                          {% else %}
+                                            <span>--</span>
+                                            <p style="font-size: 13px;">Service presté</p>
+                                          {% endif %}
+                                        </div>
+                                      </div>
+                                    </div>
+                          
+                                    <div class="col-lg-6 col-md-6">
+                                      <div class="count-box">
+                                        <i class="bi bi-person-lines-fill lico" style="color: #15be56;"></i>
+                                        <div>
+                                          {% if nb_clt %}
+                                            <span>{{nb_clt}}</span>
+                                            {% if nb_clt <= 1 %}
+                                              <p style="font-size: 13px;">Client</p>
+                                            {% else %}
+                                              <p style="font-size: 13px;">Clients</p>
+                                            {% endif %}
+                                          {% else %}
+                                            <span>--</span>
+                                            <p style="font-size: 13px;">Client</p>
+                                          {% endif %}
+                                        </div>
+                                      </div>
+                                    </div>
+                          
+                                    <div class="col-lg-6 col-md-6">
+                                      <div class="count-box">
+                                        <i class="bi bi-people lico" style="color: #bb0852;"></i>
+                                        <div>
+                                          {% if nb_user %}
+                                            <span>{{nb_user}}</span>
+                                            {% if nb_user <= 1 %}
+                                              <p style="font-size: 13px;">Gérant</p>
+                                              {% else %}
+                                              <p style="font-size: 13px;">Gérants</p>
+                                            {% endif %}
+                                          {% else %}
+                                            <span>--</span>
+                                            <p style="font-size: 13px;">Gérant</p>
+                                          {% endif %}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <br>
+                                  <div class="row gy-4">
+                                    <div class="col-lg-6 col-md-6">
+                                      <div class="count-box">
+                                        <i class="bi bi-heart lico" style="color: #2db6fa;"></i>
+                                        <div>
+                                          {% if nb_serv %}
+                                            <span>{{nb_serv}}</span>
+                                            {% if nb_serv <= 1 %}
+                                              <p style="font-size: 13px;">Service disponible</p>
+                                              {% else %}
+                                              <p style="font-size: 13px;">Services disponibles</p>
+                                            {% endif %}
+                                          {% else %}
+                                            <span>--</span>
+                                            <p style="font-size: 13px;">Services disponibles</p>
+                                          {% endif %}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="count-box">
+                                          <i class="bi bi-archive lico" style="color: #e3687d;"></i>
+                                          <div>
+                                              {% if nb_prod %}
+                                              <span>{{nb_prod}}</span>
+                                              {% if nb_prod <= 1 %}
+                                                <p style="font-size: 13px;">Produit disponible</p>
+                                              {% else %}
+                                                <p style="font-size: 13px;">Produits disponibles</p>
+                                              {% endif %}
+                                            {% else %}
+                                              <span>--</span>
+                                              <p style="font-size: 13px;">Produit disponible</p>
+                                            {% endif %}
+                                          </div>
+                                        </div>
+                                      </div>
+                                  </div>
+                                
+                              </section>
+                        </div>
+                   </div>
+                   
+                   <div class="col-lg-6 col-md-6">
+                        <header class="section-header">
+                            <h4 class="text-right stitre" style="color: #555;">Produits disponibles</h4>
+                        </header><br>
+                        <div class="container containeurs">
+                            {% if lst_prod %}
+                            <table class="table table-responsive table-striped">
+                                <tbody>
+                                {% for prod in  lst_prod %}
+                                    <tr>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td>{{prod.designation}}</td>
+                                        <td>{{prod.quantite}}</td>
+                                        <td>{{prod.prix_unitaire|floatformat:-2}}</td>
+                                        <td><a href="{% url 'details_produit_gerant' prod.id %}" title="Détails de {{prod.designation}}"><i class="bi bi-info-circle info"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <br>
+                            <p class="alert alert-info text-center">Aucun produit disponible pour le moment.</p>
+                            {% endif %}
+                        </div>
+                   </div>
+                   
+                   <div class="col-lg-6 col-md-6">
+                    <br>
+                      <header class="section-header">
+                        <h4 class="text-right stitre" style="color: #555;">Services disponibles</h4>
+                      </header>
+                      <div class="container containeurs">    
+                        {% if lst_serv %}
+                        <table class="table table-responsive table-striped">
+                          <tbody>
+                            {% for serv in lst_serv %}
+                              <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{serv.nom}}</td>
+                                <td>{{serv.categorie}}</td>
+                                <td><a href="{% url 'details_service_user' serv.id %}" title="Détails de {{serv.nom}}"><i class="bi bi-info-circle info"></i></a></td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                        </table>
+                        {% else %}
+                          <br>
+                          <p class="alert alert-info text-center">Aucun service disponible pour le moment.</p>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                      <br>
+                      <header class="section-header">
+                        <h4 class="text-right stitre" style="color: #555;">Vendeurs</h4>
+                      </header>
+                      <div class="container containeurs">
+                        {% if lst_user %}
+                        <table class="table table-responsive table-striped">
+                          <tbody>
+                            {% for user in lst_user %}
+                              <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{user.user.last_name}}</td>
+                                <td>{{user.user.first_name}}</td>
+                                <td>{{user.telephone}}</td> 
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                        </table>
+                        {% else %}
+                          <br>
+                          <p class="alert alert-info text-center">Aucun gérant disponible pour le moment.</p>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                      <br>
+                      <header class="section-header">
+                        <h4 class="text-right stitre" style="color: #555;">Clients</h4>
+                      </header>
+                      <div class="container containeurs">
+                        {% if lst_clt %}
+                        <table class="table table-responsive table-striped">
+                          <tbody>
+                            {% for clt in lst_clt %}
+                              <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{clt.nom}}</td>
+                                <td>{{clt.prenoms}}</td>
+                                <td>{{clt.telephone_p}}</td>
+                                <td><a href="{% url 'detail_client_user' clt.id %}" title="Détails de {{clt.nom}} {{clt.prenoms}}"><i class="bi bi-info-circle info"></i> </a></td> 
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                        </table>
+                        {% else %}
+                          <br>
+                          <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                      <br>
+                      <header class="section-header">
+                        <h4 class="text-right stitre" style="color: #555;">Ventes</h4>
+                      </header>
+                      <div class="container containeurs">
+                        {% if lst_vte %}
+                        <table class="table table-responsive table-striped">
+                          <tbody>
+                            {% for vte in lst_vte %}
+                              <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{vte.client}}</td>
+                                <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                                <td><a href="{% url 'details_vente_gerant' vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                        </table>
+                        {% else %}
+                          <br>
+                          <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                        {% endif %}
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                      <header class="section-header">
+                          <h4 class="text-right stitre" style="color: #555;">Prestations</h4>
+                      </header><br>
+                      <div class="container containeurs">
+                          {% if lst_prest %}
+                          <table class="table table-responsive table-striped">
+                              <tbody>
+                              {% for prest in  lst_prest %}
+                                  <tr>
+                                      <th scope="row">{{forloop.counter}}</th>
+                                      <td>{{prest.client}}</td>
+                                      <td>{{prest.total_prestation|floatformat:-2}}</td>
+                                      <td>{{prest.date_prestation|date:'d/m/Y'}}</td>
+                                      <td><a href="{% url 'details_prestation' prest.id %}" title=""><i class="bi bi-info-circle info"></i></a></td>
+                                  </tr>
+                              {% endfor %}
+                              </tbody>
+                          </table>
+                          {% else %}
+                          <br>
+                          <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                          {% endif %}
+                      </div>
+                  </div>
+                </div>
+            </div>      
+        </div>
+    </section>
+  </div>
+</div>
+{% endblock body %}
+    

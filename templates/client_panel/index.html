@@ -1,0 +1,84 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Clients {% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Clients</h2>
+          <br>
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                  <a href="{% url 'export_pdf_panel' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                  <a href="{% url 'export_xls_panel' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="container-fluid">
+                <form action="" method="get" class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Recherche" name="query">
+                  <button class="btn btn-search" type="submit">Rechercher</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-fluid">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Liste</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div class="container-fluid">
+                <header class="section-header">
+                  <p class="stitre text-uppercase" style="font-size: 25px;">Mes clients</p>
+                </header>
+                {% if lst_clt %}
+                  <div class="row row-cols-1 row-cols-md-3 g-4">
+                    {% for clt in lst_clt %}
+                      <div class="col-lg-3 col-6">
+                        <div class="card">
+                          {% if clt.image %}
+                            <img src="{{clt.image.url}}" alt="{{clt.nom}}" class="img-fluid card-img-top" height="30" width="30">
+                          {% else %}
+                            <img src="{% static 'assets/img/default_clt.png' %}" alt="{{clt.nom}}" class="img-fluid card-img-top">
+                          {% endif %}
+                          <div class="card-body">
+                            <h6 class="prod-cat text-muted">{{clt.adr_phisique|truncatechars:25}}</h6>
+                            <h5 class="card-title">{{clt.nom}} {{clt.prenoms}}</h5>
+                            <p class="prod-infos">{{clt.telephone_p}}</p>
+                            <div class="" align="center">
+                              <a href="{% url 'details_client' clt.id %}" class=""><i class="bi bi-info-circle info"></i></a>&nbsp;
+                              <a href="{% url 'update_client_panel' clt.id %}" class=""><i class="bi bi-pencil-square edit"></i></a>&nbsp;
+                              <a href="{% url 'delete_client' clt.id %}" class=""><i class="bi bi-trash delete"></i></a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                  <br>
+                  <p class="alert alert-info text-center">Aucun client disponible pour le moment.</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+</div>
+{% endblock body%}

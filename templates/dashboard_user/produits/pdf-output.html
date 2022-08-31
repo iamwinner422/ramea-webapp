@@ -1,0 +1,42 @@
+{% extends 'reports/base.html' %}
+
+{% block title %}Liste des produits{% endblock title %}
+
+
+{% block body %}
+<div class="header">
+    <p class="nom-org">{{pt.nom}}<p>
+    <p class="mail-org">Adresse: {{pt.adresse}}</p>
+    {% if pt.telephone %}
+        <p class="tel-org">Tel: {{pt.telephone}}</p>
+    {% endif %}
+    <hr>
+</div>
+<div class="page">
+    <div class="container" align="center">
+        <table>
+            <h3 class="title">Liste des produits</h3>
+            <thead>
+                <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col" align="left">Désignation</th>
+                    <th scope="col">Qté Stock</th>
+                    <th scope="col">Prix unitaire</th>
+                    <th scope="col" align="left">Catégories</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prod in lst_prod %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td align="left">{{prod.designation}}</td>
+                    <td>{{prod.quantite}}</td>
+                    <td>{{prod.prix_unitaire|floatformat:-2}} FCFA</td>
+                    <td align="left">{{prod.categorie}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

@@ -1,0 +1,61 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Modification d'un service{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Services</h2>
+        </div>
+        <div class="container-fluid">
+            <div>
+                <div class="row gy-4">
+                    <div class="col-lg-7">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;" enctype="multipart/form-data">
+                            <header class="section-header">
+                                <h1 class="text-center"><i class="ri-service-line"></i></h1>
+                                <p class="text-center stitre">Modifier le service <b>{{serv.nom}}</b></p>
+                            </header>
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="col-md-12">
+                                  {{form.nom}}
+                                  {% for error in form.nom.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.categorie}}
+                                  {% for error in form.categorie.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.point_vente}}
+                                  {% for error in form.point_vente.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="w-100">Modifier le service</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+             
+        </div>
+    </section>
+  </div>
+</div>
+{% endblock body %}
+    

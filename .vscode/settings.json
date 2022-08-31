@@ -1,0 +1,4 @@
+{
+    "diffEditor.ignoreTrimWhitespace": false,
+    "python.pythonPath": "ramea\\Scripts\\python.exe"
+}

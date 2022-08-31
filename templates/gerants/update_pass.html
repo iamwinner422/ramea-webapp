@@ -1,0 +1,71 @@
+{% extends "dashboard_user/base.html" %}
+{% load static %}
+{% block title %}Modification du mot de passe{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard_user/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard_user/inclusions/header.html" %}
+
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Mes informations</h2>
+        </div>
+        <div class="container-fluid">
+            <div>
+                <div class="row gy-4">
+                    <div class="col-lg-7">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;">
+                            <header class="section-header">
+                                <p class="s-titre text-center">Modifier le mot de passe de {{user.username}}</p>
+                            </header>
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="row gy-4">
+                                    <div class="col-md-12">
+                                        {{form.old_password}}
+                                        {% for error in form.old_password.errors %}
+                                            <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{form.new_password1}}
+                                        {% for error in form.new_password1.errors %}
+                                            <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-12">
+                                        {{form.new_password2}}
+                                        {% for error in form.new_password2.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        <button type="submit" class="w-100">Modifier le mot de passe</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+             
+        </div>
+    </section>
+    <script>
+        var form_fields = document.getElementsByTagName('input')
+        form_fields[1].placeholder='Ancien mot de passe';
+        form_fields[2].placeholder='Nouveau mot de passe';
+        form_fields[3].placeholder='Confirmer le nouveau mot de passe';
+        for (var field in form_fields){	
+            form_fields[field].className += 'form-control'
+        }
+    </script>
+  </div>
+</div>
+{% endblock body %}
+    

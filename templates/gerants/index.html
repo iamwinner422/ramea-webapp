@@ -1,0 +1,157 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Gérants{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+    
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Vendeurs</h2>
+          <br>
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group me-2">
+                  <a href="{% url 'export_pdf_gerant' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                  <a href="{% url 'export_xls_gerant' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <div class="container-fluid">
+                <form action="" method="get" class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Rechercher" aria-label="Recherche" name="query">&nbsp;&nbsp;
+                  <button class="btn btn-search" type="submit">Rechercher</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-fluid">
+          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Liste</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Nouveau</a>
+            </li>
+          </ul>
+          <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+              <div class="container-fluid">
+                <header class="section-header">
+                  <p class="stitre text-uppercase" style="font-size: 25px;">Mes Vendeurs</p>
+                </header>
+                {% if lst_gerant %}
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                  {% for gerant in lst_gerant %}
+                    <div class="col-lg-3 col-6">
+                      <div class="card">
+                        <img src="{% static 'assets/img/gerant.png' %}" alt="{{gerant.user.first_name}} {{gerant.user.last_name}}" class="card-img-top img-fluid">
+                        
+                        <div class="card-body">
+                          <h6 class="prod-cat text-muted">{{gerant.point_vente}}</h6>
+                          <h5 class="card-title">{{gerant.user.first_name}} {{gerant.user.last_name}}</h5>
+                          <p class="prod-infos">{{gerant.telephone}}</p>
+                          <div class="" align="center">
+                            <a href="{% url 'details_gerant' gerant.id %}" class=""><i class="bi bi-info-circle info"></i></a>&nbsp;
+                            <a href="{% url 'update_point_gerant' gerant.id %}" class=""><i class="bi bi-slash-circle edit"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                {% else %}
+                  <br>
+                  <p class="alert alert-info text-center">Aucun vendeur disponible pour le moment.</p>
+                {% endif %}
+              </div>
+            </div>
+            <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+              <div class="">
+                <div class="row gy-4">
+                    <div class="col-lg-9">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;" enctype="multipart/form-data">
+                            <header class="section-header">
+                                <p class="text-center stitre">Ajouter un vendeur</p>
+                            </header> 
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="col-md-6 ">
+                                    {{form.last_name}}
+                                    {% for error in form.last_name.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-6 ">
+                                    {{form.first_name}}
+                                    {% for error in form.first_name.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-6">
+                                    {{form.username}}
+                                    {% for error in form.username.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-6">
+                                    {{profile_form.telephone}}
+                                    {% for error in profile_form.telephone.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                    {{profile_form.point_vente}}
+                                    {% for error in form.point_vente %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-6 ">
+                                    {{form.password1}}
+                                    {% for error in form.password1.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-6 ">
+                                    {{form.password2}}
+                                    {% for error in form.password2.errors %}
+                                        <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="w-100">Ajouter le gérant</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+</div>
+<script>
+  var form_fields = document.getElementsByTagName('input')
+  form_fields[2].placeholder='Nom';
+  form_fields[3].placeholder='Prénoms';
+  form_fields[4].placeholder='Nom d\'utilisateur';
+  form_fields[5].placeholder='Téléphone';
+  form_fields[6].placeholder = 'Mot de passe';
+  form_fields[7].placeholder = 'Confirmer le mot de passe';
+  for (var field in form_fields){	
+      form_fields[field].className += 'form-control'
+  }
+</script>
+
+{% endblock body %}
+    

@@ -1,0 +1,1 @@
+web gunicorn ramea.wsgi:application --log-file -

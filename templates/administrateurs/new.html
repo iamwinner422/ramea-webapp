@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ajouter un administateur{% endblock title %}
+
+{% block body %}
+<section id="hero" class="hero d-flex align-items-center contact" style="padding-top: 12%;">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-6">
+                <form action="" method="post" class="php-email-form" style="margin-top: 12%;">
+                    <header class="section-header">
+                        <p id="labelform">Ajoutez un gestionnaire des points d'affaires à {{nom_org}}</p>
+                    </header>
+                    {% csrf_token %}
+                    <div class="row gy-4">
+                        <div class="col-md-6 ">
+                            {{form.last_name}}
+                            {% for error in form.last_name.errors %}
+                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 ">
+                            {{form.first_name}}
+                            {% for error in form.first_name.errors %}
+                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {{form.username}}
+                            {% for error in form.username.errors %}
+                            <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {{profile_form.telephone}}
+                            {% for error in profile_form.telephone.errors %}
+                            <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-12 ">
+                            {{form.email}}
+                            {% for error in form.email.errors %}
+                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 ">
+                            {{form.password1}}
+                            {% for error in form.password1.errors %}
+                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 ">
+                            {{form.password2}}
+                            {% for error in form.password2.errors %}
+                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="w-100">Ajoutez le gestionnaire</button>
+                        </div>
+                        <div>
+                            <p class="text-muted description text-center" style="font-size: 13px;">Le gestionnaire est le reponsable de l'organisation ou du titre équivalent</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-6 hero-img" data-aos="zoom-out" data-aos-delay="200" style="margin-top: 17%;">
+                <img src="{% static 'assets/img/3.png' %}" class="img-fluid" alt="Admin">
+            </div>
+        </div>
+        <br>
+    </div>
+</section>
+<script>
+    var form_fields = document.getElementsByTagName('input')
+    form_fields[1].placeholder='Nom';
+    form_fields[2].placeholder='Prénoms';
+    form_fields[3].placeholder='Nom d\'utilisateur';
+    form_fields[4].placeholder='Téléphone';
+    form_fields[5].placeholder='Adresse e-mail';
+    form_fields[6].placeholder = 'Mot de passe';
+    form_fields[7].placeholder = 'Confirmer le mot de passe';
+    for (var field in form_fields){	
+        form_fields[field].className += 'form-control'
+    }
+</script>
+{% endblock body %}
+
+

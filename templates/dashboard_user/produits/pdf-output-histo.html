@@ -1,0 +1,44 @@
+{% extends 'reports/base.html' %}
+
+{% block title %}Historique du stock{% endblock title %}
+
+
+{% block body %}
+<div class="header">
+    <p class="nom-org">{{pt.nom}}<p>
+    <p class="mail-org">Adresse: {{pt.adresse}}</p>
+    {% if pt.telephone %}
+        <p class="tel-org">Tel: {{pt.telephone}}</p>
+    {% endif %}
+    <hr>
+</div>
+<div class="page">
+    <div class="container" align="center">
+        <table>
+            <h3 class="title">Historique du stock</h3>
+            <thead>
+                <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col" align="left">Désignation</th>
+                    <th scope="col">Qté ajoutée</th>
+                    <th scope="col">Qté en stock</th>
+                    <th scope="col">Date</th>
+                    <th scope="col" align="left">Gérant</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for histo in lst_histo %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td align="left">{{histo.produit.designation}}</td>
+                    <td>{{histo.qte_ajoutee}}</td>
+                    <td>{{histo.produit.quantite}}</td>
+                    <td>{{histo.date_ajout_new}}</td>
+                    <td align="left">{{histo.gerant.user.username}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}

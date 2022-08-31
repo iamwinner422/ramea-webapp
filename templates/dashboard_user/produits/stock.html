@@ -1,0 +1,104 @@
+{% extends "dashboard_user/base.html" %}
+{% load static %}
+{% block title %}Entrée en stock{% endblock title %}
+
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard_user/inclusions/sidebar.html" %}
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard_user/inclusions/header.html" %}
+    
+    <section class="component pb-5">
+      <div class="section-header pb-5">
+        <h2 class="titre-section">Entrée en stock</h2>
+    </div>
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-3" style="max-width: 540px;">
+                        <div class="row g-0">
+                          <div class="col-md-4">
+                            
+                            {% if prod.image %}
+                                <img src="{{prod.image.url}}" class="img-fluid img-dispo" alt="{{prod.designation}}">
+                            {% else %}
+                                <img src="{% static 'assets/img/default.png' %}" alt="{{prod.designation}}" class="img-fluid">
+                            {% endif %}
+                                
+                          </div>
+                          <div class="col-md-8">
+                            <div class="card-body">
+                              <h2 class="card-title-2">{{prod.designation}}</h2>
+                              <p class="prod-cat-2">Quantité en stock: <b>{{prod.quantite}}</b></p>
+                            </div>
+                          </div>
+                        </div>
+                    </div>  
+                </div>
+                <div class="col-lg-6">
+                    <form action="" method="post" class="php-email-form" style="padding-top: 12%;">
+                        {% csrf_token %}
+                        <div class="row gy-4">
+                            <div class="col-md-12">
+                              {{form.quantite}}
+                              {% for error in form.quantite.errors %}
+                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                              {% endfor %}
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="w-100">Ajouter la quantité</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <br><br>
+        <header class="section-header">
+            <p class="stitre" style="font-size: 25px;">Historique du stock pour <b class="text-uppercase">{{prod.designation}}</b></p>
+        </header>
+        <div class="container-fluid">
+            <br>
+            
+            {% if lst_histo_prod %}
+            <table class="table table-responsive">
+                <thead class="thead">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Quantité ajoutée</th>
+                        <th scope="col">Quantité en stock</th>
+                        <th scope="col">Date d'ajout</th>
+                        <th scope="col">Par</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for histo in  lst_histo_prod%}
+                      <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td>{{histo.qte_ajoutee}}</td>
+                        <td>{{histo.produit.quantite}}</td>
+                        <td>{{histo.date_ajout}}</td>
+                        <td>{{histo.gerant}}</td>
+                      </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <br>
+            <p class="alert alert-info text-center">Aucune historique disponible pour le moment.</p>
+            {% endif %}
+                
+        </div>
+    </div>
+  </section>
+  </div>
+</div>
+{% endblock body %}
+    

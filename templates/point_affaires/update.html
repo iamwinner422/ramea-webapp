@@ -1,0 +1,64 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block title %}Modification d'un point{% endblock title %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Sidebar  -->
+  {% include "dashboard/inclusions/sidebar.html" %}
+
+  <!-- Page Content  -->
+  <div id="content">
+    {% include "dashboard/inclusions/header.html" %}
+
+    <section class="component pb-5">
+        <div class="section-header pb-5">
+          <h2 class="titre-section">Points de vente</h2>
+        </div>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="row gy-4">
+                    <div class="col-lg-7">
+                        <form action="" method="post" class="php-email-form" style="padding-top: 12%;">
+                            <header class="section-header">
+                                <h1 class="text-center"><i class="ri-store-2-line"></i></h1>
+                                <p class="text-center stitre">Modifier le point <b>{{point.nom}}</b></p>
+                            </header>
+                            {% csrf_token %}
+                            <div class="row gy-4">
+                                <div class="col-md-12">
+                                  {{form.nom}}
+                                  {% for error in form.nom.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.telephone_point}}
+                                  {% for error in form.telephone_point.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 ">
+                                  {{form.adresse}}
+                                  {% for error in form.adresse.errors %}
+                                    <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                  {% endfor %}
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <button type="submit" class="w-100">Modifier le point</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!--<div class="col-lg-4 h-100 align-self-center">
+                      <img src="{% static 'assets/img/5.png' %}" alt="store" class="img-fluid">
+                    </div>-->
+                </div>
+            </div>
+             
+        </div>
+    </section>
+  </div>
+</div>
+{% endblock body %}
+    

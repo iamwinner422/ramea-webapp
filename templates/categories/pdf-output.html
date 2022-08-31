@@ -1,0 +1,40 @@
+{% extends 'reports/base.html' %}
+
+{% block title %}Liste des catégories{% endblock title %}
+
+
+{% block body %}
+<div class="header">
+    <p class="nom-org">{{org.nom}}<p>
+    <p class="mail-org">{{org.mail}}</p>
+    {% if org.telephone_s %}
+        <p class="tel-org">{{org.telephone_p}} / {{org.telephone_s}}</p>
+    {% else %}
+        <p class="tel-org">{{org.telephone_p}}</p>
+    {% endif %}
+    <hr>
+</div>
+<div class="page">
+    <div class="container" align="center">
+        <table>
+            <h3 class="title">Liste des catégories</h3>
+            <thead>
+                <tr>
+                    <th scope="col" class="num">#</th>
+                    <th scope="col">Nom de la catégorie</th>
+                    <th scope="col">Type de la catégorie</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cat in lst_cat %}
+                <tr>
+                    <td scope="row">{{forloop.counter}}</td>
+                    <td>{{cat.nom}}</td>
+                    <td>{{cat.typecategorie}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}
