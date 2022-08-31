@@ -29,4 +29,4 @@ def logout_panel(request):
 
 
 def index(request):
-    pass
+    return render(request, 'dashboard/layouts/index.html')
