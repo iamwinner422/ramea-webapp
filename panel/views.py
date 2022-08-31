@@ -5,6 +5,9 @@ from django.contrib.auth import login, authenticate, logout
 
 
 # Create your views here.
+from requestings.models import Requestings
+
+
 def login_panel(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -29,4 +32,11 @@ def logout_panel(request):
 
 
 def index(request):
-    return render(request, 'panel/index.html')
+    # RECUPERATION DES INFOS APERCU
+    nb_dmd = Requestings.objects.all().count()
+    lst_dmd = Requestings.objects.all().order_by('-id')
+    context = {
+        'nb_dmd': nb_dmd,
+        'lst_dmd': lst_dmd,
+    }
+    return render(request, 'panel/index.html', context)
