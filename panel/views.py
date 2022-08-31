@@ -20,7 +20,7 @@ def login_panel(request):
         else:
             messages.info(request, "Nom d'utilisateur ou mot de passe incorrect!")
 
-    return render(request, 'panel/index.html')
+    return render(request, 'panel/login.html')
 
 
 def logout_panel(request):
