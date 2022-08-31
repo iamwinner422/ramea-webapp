@@ -48,6 +48,7 @@ urlpatterns = [
     path('panel/clients/', include('client_panel.urls')),
     path('panel/ventes/', include('ventes_panel.urls')),
     path('panel/prestations/', include('prestations_panel.urls')),
+    path('admin/panel/', include('panel.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
