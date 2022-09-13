@@ -13,10 +13,10 @@ def index_org(request):
     if request.method == 'POST':
         form = FormOrganisation(request.POST)
         if form.is_valid():
-            #nom_org = form.fields.get('nom_org')
+            # nom_org = form.fields.get('nom_org')
             form.save()
-            id_org = form.instance.id #RECUPERATION DE L'ID
-            #nom_org = form.instance.nom #RECUPRATION DU NOM
+            id_org = form.instance.id # RECUPERATION DE L'ID
+            # nom_org = form.instance.nom #RECUPRATION DU NOM
             return redirect('new_admin', id=id_org)
     else:
         form = FormOrganisation()
