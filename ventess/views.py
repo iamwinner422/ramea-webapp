@@ -22,36 +22,35 @@ from weasyprint import HTML
 import tempfile
 
 
-
 @login_required(login_url='login_gerant')
 def index_vente(request):
     id_pt_vente = request.session['point_vente_id']
-    pt_vente =  PointsAffaires.objects.get(id=id_pt_vente)
-
+    pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
 
     lst_vte = Ventes.objects.order_by('-id').filter(point_vente=pt_vente)
     today = date.today()
-    #lst_vte = Ventes.objects
-    lst_vte_j = Ventes.objects.order_by('-id').filter(point_vente=pt_vente, date_vente__year=today.year, date_vente__month=today.month, date_vente__day=today.day)#DU JOUR
-    lst_vte_m = Ventes.objects.order_by('-id').filter(point_vente=pt_vente, date_vente__year=today.year, date_vente__month=today.month)#DU MOIS
-    lst_vte_a = Ventes.objects.order_by('-id').filter(point_vente=pt_vente, date_vente__year=today.year)#DE L'ANNEE
-    
+    # lst_vte = Ventes.objects
+    lst_vte_j = Ventes.objects.order_by('-id').filter(point_vente=pt_vente, date_vente__year=today.year,
+                                                      date_vente__month=today.month,
+                                                      date_vente__day=today.day)  # DU JOUR
+    lst_vte_m = Ventes.objects.order_by('-id').filter(point_vente=pt_vente, date_vente__year=today.year,
+                                                      date_vente__month=today.month)  # DU MOIS
+    lst_vte_a = Ventes.objects.order_by('-id').filter(point_vente=pt_vente, date_vente__year=today.year)  # DE L'ANNEE
+
     context = {
-        'point_vente':pt_vente,
-        'lst_vte':lst_vte,
-        'lst_vte_j':lst_vte_j,
-        'lst_vte_m':lst_vte_m,
-        'lst_vte_a':lst_vte_a,
+        'point_vente': pt_vente,
+        'lst_vte': lst_vte,
+        'lst_vte_j': lst_vte_j,
+        'lst_vte_m': lst_vte_m,
+        'lst_vte_a': lst_vte_a,
     }
     return render(request, 'dashboard_user/ventes/index.html', context)
-
-
 
 
 @login_required(login_url='login_gerant')
 def new_vente(request):
     id_pt_vente = request.session['point_vente_id']
-    pt_vente =  PointsAffaires.objects.get(id=id_pt_vente)
+    pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
 
     if request.method == 'POST':
         form = FormProdVente(request, request=request)
@@ -61,33 +60,37 @@ def new_vente(request):
         formP = FormProduitVente()
 
     context = {
-        'point_vente':pt_vente,
+        'point_vente': pt_vente,
         'form': form,
         'formP': formP,
     }
     return render(request, 'dashboard_user/ventes/new.html', context)
 
+
 @login_required(login_url='login_gerant')
 def details_vente(request, id):
     id_pt_vente = request.session['point_vente_id']
-    pt_vente =  PointsAffaires.objects.get(id=id_pt_vente)
+    pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
 
     vente = get_object_or_404(Ventes, point_vente=pt_vente, id=id)
-    #lst_prod = ProduitVente.objects.filter(vente=vente)
-    lst_prod = Produits.objects.filter(point_vente=pt_vente, ventes=vente).values('designation','produitvente__qte_cmdee', 'prix_unitaire').order_by('designation')
+    # lst_prod = ProduitVente.objects.filter(vente=vente)
+    lst_prod = Produits.objects.filter(point_vente=pt_vente, ventes=vente).values('designation',
+                                                                                  'produitvente__qte_cmdee',
+                                                                                  'prix_unitaire').order_by(
+        'designation')
 
-
-    context = { 
+    context = {
         'point_vente': pt_vente,
         'vente': vente,
-        'lst_prod':lst_prod
+        'lst_prod': lst_prod
     }
     return render(request, 'dashboard_user/ventes/details.html', context)
+
 
 @login_required(login_url='login_gerant')
 def nouvelle_vente(request):
     id_pt_vente = request.session['point_vente_id']
-    pt_vente =  PointsAffaires.objects.get(id=id_pt_vente)
+    pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
     id_gerant = request.session['gerant_id']
     gerant = get_object_or_404(Utilisateurs, id=id_gerant)
     org_id = gerant.organisation_id
@@ -96,44 +99,46 @@ def nouvelle_vente(request):
     if request.method == "POST":
         if request.is_ajax():
             id_client = request.POST['id_client']
-            lst_prod = json.loads(request.POST.get('panier')) 
+            lst_prod = json.loads(request.POST.get('panier'))
             net_ccial = request.POST['net_commercial']
             taux_remise = request.POST['taux_remise']
             montant_taxe = request.POST['montant_taxe']
-            montant_reduction =request.POST['montant_reduction']
+            montant_reduction = request.POST['montant_reduction']
             montant_brut = request.POST['montant_brut']
             montant_net = request.POST['montant_net']
 
-            #CREATION DE LA VENTE
-            neww_vente = Ventes(montant_brut=montant_brut, montant_net=montant_net, taxe=montant_taxe, remise=montant_reduction, taux_remise=taux_remise, client_id=id_client, gerant_id=id_gerant, point_vente_id=id_pt_vente, net_ccial=net_ccial, org_id=org_id)
+            # CREATION DE LA VENTE
+            neww_vente = Ventes(montant_brut=montant_brut, montant_net=montant_net, taxe=montant_taxe,
+                                remise=montant_reduction, taux_remise=taux_remise, client_id=id_client,
+                                gerant_id=id_gerant, point_vente_id=id_pt_vente, net_ccial=net_ccial, org_id=org_id)
             neww_vente.save()
 
-            #print(f"ICI C4EST PARIS I:{lst_prod}")    
+            # print(f"ICI C4EST PARIS I:{lst_prod}")
             for elm in lst_prod:
                 prodvente = ProduitVente(qte_cmdee=elm['qte_cmdee'], produit_id=elm['id'], vente=neww_vente)
-                #print(f"ICI C4EST PARIS:{elm}")
-                #CREATION DE L'HISTORIQUE
+                # print(f"ICI C4EST PARIS:{elm}")
+                # CREATION DE L'HISTORIQUE
                 prodvente.save()
 
-                HistoProdVte.objects.create(produit_id=elm['id'], qte=elm['qte_cmdee'], point=pt_vente, gerant_id=id_gerant)
-            
-            
+                HistoProdVte.objects.create(produit_id=elm['id'], qte=elm['qte_cmdee'], point=pt_vente,
+                                            gerant_id=id_gerant)
+
             return HttpResponse(success)
 
 
-#INFO DU PRODUIT
+# INFO DU PRODUIT
 @login_required(login_url='login_gerant')
-def getInfoProd(request,id):
+def getInfoProd(request, id):
     id_pt_vente = request.session['point_vente_id']
-    pt_vente =  PointsAffaires.objects.get(id=id_pt_vente)
+    pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
     if request.method == "GET":
-       if request.is_ajax():
-            #id_prod = request.GET.get("produit")
-            #id_pt = request.GET.get("pt")
+        if request.is_ajax():
+            # id_prod = request.GET.get("produit")
+            # id_pt = request.GET.get("pt")
             produit = get_object_or_404(Produits, id=id)
-            qte = get_object_or_404(QuantitePoint, produit=produit, point=pt_vente) 
-            #print(id)  
-            #data = serialize("json", [produit], fields=('prix_unitaire', 'designation'))
+            qte = get_object_or_404(QuantitePoint, produit=produit, point=pt_vente)
+            # print(id)
+            # data = serialize("json", [produit], fields=('prix_unitaire', 'designation'))
             data_prod = serialize("json", [produit])
             dt = simplejson.loads(data_prod)
             data_prod = dt[0]['fields']
@@ -143,20 +148,21 @@ def getInfoProd(request,id):
             data = [data_prod, data_qte]
             return JsonResponse(data, safe=False, content_type='application/json')
 
-#DEDUCTION DE LA QTE CMDEE DU STOCK
+
+# DEDUCTION DE LA QTE CMDEE DU STOCK
 @login_required(login_url='login_gerant')
 def susProdQte(request, id):
     id_pt_vente = request.session['point_vente_id']
-    pt_vente =  PointsAffaires.objects.get(id=id_pt_vente)
+    pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
     success = "ok"
     if request.method == "GET":
         if request.is_ajax():
-            produit = get_object_or_404(Produits, id=id)#RECUPERATION DU PRODUIT
-            qte_cmdee = request.GET['qte']#QTE COMMANDEE
-            
-            qte = get_object_or_404(QuantitePoint, produit=produit, point=pt_vente) ##RECUPERTATION
+            produit = get_object_or_404(Produits, id=id)  # RECUPERATION DU PRODUIT
+            qte_cmdee = request.GET['qte']  # QTE COMMANDEE
 
-            qte.qte_stock -= int(qte_cmdee) #DEDUCTION
+            qte = get_object_or_404(QuantitePoint, produit=produit, point=pt_vente)  ##RECUPERTATION
+
+            qte.qte_stock -= int(qte_cmdee)  # DEDUCTION
             qte.save()
             return HttpResponse(success)
 
@@ -164,16 +170,16 @@ def susProdQte(request, id):
 @login_required(login_url='login_gerant')
 def addProdQte(request, id):
     id_pt_vente = request.session['point_vente_id']
-    pt_vente =  PointsAffaires.objects.get(id=id_pt_vente)
+    pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
     success = "ok"
     if request.method == "GET":
         if request.is_ajax():
-            produit = get_object_or_404(Produits, id=id)#RECUPERATION DU PRODUIT
-            qte_cmdee = request.GET['qte']#QTE COMMANDEE
-            
-            qte = get_object_or_404(QuantitePoint, produit=produit, point=pt_vente) ##RECUPERTATION
+            produit = get_object_or_404(Produits, id=id)  # RECUPERATION DU PRODUIT
+            qte_cmdee = request.GET['qte']  # QTE COMMANDEE
 
-            qte.qte_stock += int(qte_cmdee) #DEDUCTION
+            qte = get_object_or_404(QuantitePoint, produit=produit, point=pt_vente)  ##RECUPERTATION
+
+            qte.qte_stock += int(qte_cmdee)  # DEDUCTION
             qte.save()
             return HttpResponse(success)
 
@@ -188,12 +194,12 @@ def link_callback(uri, rel):
         if not isinstance(result, (list, tuple)):
             result = [result]
             result = list(os.path.realpath(path) for path in result)
-            path=result[0]
+            path = result[0]
         else:
-            sUrl = settings.STATIC_URL        # Typically /static/
-            sRoot = settings.STATIC_ROOT      # Typically /home/userX/project_static/
-            mUrl = settings.MEDIA_URL         # Typically /media/
-            mRoot = settings.MEDIA_ROOT       # Typically /home/userX/project_static/media/
+            sUrl = settings.STATIC_URL  # Typically /static/
+            sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+            mUrl = settings.MEDIA_URL  # Typically /media/
+            mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
 
             if uri.startswith(mUrl):
                 path = os.path.join(mRoot, uri.replace(mUrl, ""))
@@ -209,27 +215,29 @@ def link_callback(uri, rel):
             )
         return path
 
+
 @login_required(login_url='login_gerant')
 def export_pdf(request, id):
     id_pt_vente = request.session['point_vente_id']
-    pt_vente =  PointsAffaires.objects.get(id=id_pt_vente)
+    pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
 
     vte = get_object_or_404(Ventes, id=id)
-    lst_prod = Produits.objects.filter(point_vente=pt_vente, ventes=vte).values('designation','produitvente__qte_cmdee', 'prix_unitaire').order_by('designation')
-    
+    lst_prod = Produits.objects.filter(point_vente=pt_vente, ventes=vte).values('designation',
+                                                                                'produitvente__qte_cmdee',
+                                                                                'prix_unitaire').order_by('designation')
 
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="facture_' + str(vte.pk) +'.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="facture_' + str(vte.pk) + '.pdf"'
     response['Content-Transfer-Encoding'] = 'binary'
 
     #   template_path = 'dashboard_user/ventes/facture.html'
-    
+
     # find the template and render it.
     context = {
-        'pt':pt_vente,
-        'vte':vte,
-        'lst_prod':lst_prod,
+        'pt': pt_vente,
+        'vte': vte,
+        'lst_prod': lst_prod,
     }
     html_string = render_to_string('dashboard_user/ventes/facture.html', context)
     html = HTML(string=html_string, base_url=request.build_absolute_uri())
@@ -239,17 +247,16 @@ def export_pdf(request, id):
         output.write(result)
         output.flush()
 
-        #output=open(output.name, 'rb')
+        # output=open(output.name, 'rb')
         output.seek(0)
         response.write(output.read())
 
-    #template = get_template(template_path)
-    #html = template.render(context)
-
+    # template = get_template(template_path)
+    # html = template.render(context)
 
     # create a pdf
-    #pisa_status = pisa.CreatePDF(html, dest=response, link_callback=link_callback)
+    # pisa_status = pisa.CreatePDF(html, dest=response, link_callback=link_callback)
     # if error then show some funy view
-    #if pisa_status.err:
+    # if pisa_status.err:
     #   return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response 
+    return response

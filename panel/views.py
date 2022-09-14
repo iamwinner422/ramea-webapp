@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.http.response import HttpResponse, JsonResponse
 from django.contrib.auth import login, authenticate, logout
-
+from organisations.models import Organisations
 # Create your views here.
 from requestings.models import Requestings
 
@@ -45,7 +45,6 @@ def index(request):
 
 @login_required(login_url='login_panel')
 def details(request, id):
-
     # RECUPERATION DE LA DEMANDE
     demande = get_object_or_404(Requestings, id=id)
 
@@ -57,4 +56,20 @@ def details(request, id):
 
 @login_required(login_url='login_panel')
 def valider(request, id):
-    pass
+    success = 401
+    if request.method == "POST":
+        if request.is_ajax():
+
+            # RECUPERATION DE LA DEMANDE
+            demande = get_object_or_404(Requestings, id=id)
+
+            if Organisations.objects.filter(mail=demande.mail).exists():
+                success = 201
+            else:
+
+                # CREATION DE L'ORGANISATION
+                org = Organisations.objects.create(nom=demande.nom, telephone_p=demande.telephone_p, mail=demande.mail,
+                                                   telephone_s=demande.telephone_s)
+                org.save()
+                success = 200
+            return HttpResponse(success)

@@ -47,6 +47,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-6">
+                        <div class="error">
+                            <div class="alert" id="alert"></div>
+                        </div>
                         <div class="container-fluid table-responsive">
                             <div class="table-responsive">
                                 <table class="table table-borderless">
@@ -89,26 +92,38 @@
         <script src="{% static 'assets/js/jquery.slim.min.js' %}"></script>
         <script src="{% static 'assets/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
         <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
-
+        <script type="text/javascript" src="{% static 'assets/js/jquery-3.5.1.min.js'%}"></script>
         <script type="text/javascript">
-          $(document).ready(function () {
-              $("#sidebar").mCustomScrollbar({
-                  theme: "minimal"
-              });
+            $('#btn-valider').click(function (e){
+                e.preventDefault();
+                $.ajax({
+                    url: "{% url 'valider_demande' demande.id%}",
+                    method: "POST",
+                    data: {
+                        demande: '{{demande.id}}',
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success: function (data){
+                        if (data === "201"){
+                            $('#alert').addClass('alert-danger');
+                            $('#alert').text('Une organisation avec ces informations existe déjà.')
+                        }else if(data === "200"){
+                            $('#alert').addClass('alert-danger');
+                            $('#alert').text('Une organisation avec ces informations existe déjà.')
+                        }else{
+                            $('#alert').addClass('alert-danger');
+                            $('#alert').text('Erreur.')
+                        }
+                        //console.log(data)
+                    },
+                    error: function (data){
+                        $('#alert').addClass('alert-danger');
+                        $('#alert').text('Erreur.')
+                        console.log(data)
+                    }
 
-              $('#sidebarCollapse').on('click', function () {
-                  $('#sidebar, #content').toggleClass('active');
-                  $('.collapse.in').toggleClass('in');
-                  $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-              });
-              $('#btn-valider').click(function (e){
-                  e.preventDefault();
-                  $.ajax({
-                      url: "{% url 'valider_demande' demande.id%}",
-
-                  })
-              });
-          });
+                });
+            });
         </script>
   </body>
 </html>
