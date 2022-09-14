@@ -53,3 +53,8 @@ def details(request, id):
         'demande': demande,
     }
     return render(request, 'panel/details.html', context)
+
+
+@login_required(login_url='login_panel')
+def valider(request, id):
+    pass

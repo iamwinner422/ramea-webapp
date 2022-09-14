@@ -76,7 +76,7 @@
                                     </tr>
                                 </table>
                                 <br>
-                                <a href="" class="btn btn-primary w-100">Valider</a>
+                                <a href="#valider" class="btn btn-primary w-100" id="btn-valider">Valider</a>
                             </div>
                         </div>
                     </div>
@@ -100,6 +100,13 @@
                   $('#sidebar, #content').toggleClass('active');
                   $('.collapse.in').toggleClass('in');
                   $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+              });
+              $('#btn-valider').click(function (e){
+                  e.preventDefault();
+                  $.ajax({
+                      url: "{% url 'valider_demande' demande.id%}",
+
+                  })
               });
           });
         </script>
