@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Ramea CRM " name="description">
     <meta content="CRM, Gestion" name="keywords">
-    <title>Panel - Ramea</title>
+    <title>Détails</title>
     <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet" type="text/css">
@@ -39,65 +39,45 @@
         <div id="content">
             <section id="counts" class="counts">
                 <div class="container" data-aos="fade-up">
-                    <h2 class="titre">Aperçu</h2>
-                    <div class="row gy-4">
-                        <div class="col-lg-3 col-md-6">
-                            <div class="count-box">
-                                <i class="bi bi-file-earmark lico" style="color: #4154f1;"></i>
-                                <div>
-                                    {% if nb_dmd %}
-                                    <span>{{nb_dmd}}</span>
-                                    {% if nb_dmd <= 1 %}
-                                      <p>Demande</p>
-                                    {% else %}
-                                      <p>Demandes</p>
-                                    {% endif %}
-                                  {% else %}
-                                    <span>--</span>
-                                    <p>Demande</p>
-                                  {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <h2 class="titre">Demande de {{demande.nom}}</h2>
                 </div>
             </section>
             <br>
             <br>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="container-fluid table-responsive">
-                            {% if lst_dmd %}
-                            <table class="table table-striped">
-                                <thead class="thead">
+                            <div class="table-responsive">
+                                <table class="table table-borderless">
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Raison social</th>
-                                        <th scope="col">Téléphone P.</th>
-                                        <th scope="col">Adresse e-mail</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="colg" colspan="2"></th>
+                                        <th>Raison sociale: </th>
+                                        <td>{{demande.nom}}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                {% for dmd in lst_dmd %}
+                                    <tr><td></td></tr>
                                     <tr>
-                                        <th scope="row">{{forloop.counter}}</th>
-                                        <td>{{dmd.nom}}</td>
-                                        <td>{{dmd.telephone_p}}</td>
-                                        <td>{{dmd.mail}}</td>
-                                        <td>{{dmd.date_add|date:"d/m/Y"}}</td>
-                                        <td><a href="{% url 'details_demande' dmd.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
-                                        <td><a href="" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                        <th>Numéro de téléphone principal:</th>
+                                        <td>{{demande.telephone_p}}</td>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            {% else %}
+                                    <tr><td></td></tr>
+                                    <tr>
+                                        <th>Numéro de téléphone secondaire:</th>
+                                        <td>{{demande.telephone_s}}</td>
+                                    </tr>
+                                    <tr><td></td></tr>
+                                    <tr>
+                                        <th>Adresse email:</th>
+                                        <td>{{demande.mail}}</td>
+                                    </tr>
+                                    <tr><td></td></tr>
+                                    <tr>
+                                        <th>Autre:</th>
+                                        <td>{{demande.other}}</td>
+                                    </tr>
+                                </table>
                                 <br>
-                                <p class="alert alert-info text-center">Aucune demande pour le moment.</p>
-                            {% endif %}
+                                <a href="" class="btn btn-primary w-100">Valider</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -105,11 +85,6 @@
         </div>
 
     </div>
-
-
-
-
-
         <script src="{% static 'assets/js/popper.min.js' %}"></script>
         <script src="{% static 'assets/js/jquery.slim.min.js' %}"></script>
         <script src="{% static 'assets/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>

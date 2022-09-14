@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
-
 
 # Create your views here.
 from requestings.models import Requestings
@@ -31,6 +31,7 @@ def logout_panel(request):
     return redirect('logout_panel')
 
 
+@login_required(login_url='login_panel')
 def index(request):
     # RECUPERATION DES INFOS APERCU
     nb_dmd = Requestings.objects.all().count()
@@ -40,3 +41,15 @@ def index(request):
         'lst_dmd': lst_dmd,
     }
     return render(request, 'panel/index.html', context)
+
+
+@login_required(login_url='login_panel')
+def details(request, id):
+
+    # RECUPERATION DE LA DEMANDE
+    demande = get_object_or_404(Requestings, id=id)
+
+    context = {
+        'demande': demande,
+    }
+    return render(request, 'panel/details.html', context)
