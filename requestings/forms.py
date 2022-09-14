@@ -3,20 +3,20 @@ from .models import Requestings
 from django import forms
 
 
-class FormOrganisation(forms.ModelForm):
+class FormDemande(forms.ModelForm):
     nom = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         "placeholder": "Nom ou Raison sociale",
         'maxlength': '100',
     }), error_messages={"required": "Saisissez le nom ou la raison sociale."})
 
-    telephone_p = forms.IntegerField(widget=forms.TextInput(attrs={
+    telephone_p = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         "placeholder": "Téléphone principal",
         'maxlength': '8',
     }), error_messages={"required": "Saisissez le téléphone", 'invalid': 'Le téléphone saisi est incorrect.'})
 
-    telephone_s = forms.IntegerField(widget=forms.TextInput(attrs={
+    telephone_s = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
         "placeholder": "Téléphone secondaire",
         'maxlength': '8',
@@ -31,7 +31,7 @@ class FormOrganisation(forms.ModelForm):
         'class': 'form-control',
         "placeholder": "Parlez-nous de vous...",
         'rows': '7',
-    }))
+    }), required=False)
     class Meta:
         model = Requestings
         fields = '__all__'
@@ -42,12 +42,12 @@ class FormOrganisation(forms.ModelForm):
     # VERIFICATION DU NUMERO DE TELEPHONE
     def clean_telephone_p(self, *args, **kwargs):
         telephone_p = str(self.cleaned_data.get("telephone_p"))
-        if len(telephone_p) != 8 or telephone_p.isnumeric == False:
-            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect 1!")
-        elif len(telephone_p) == 8 and telephone_p.isnumeric == False:
-            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect! 2")
-        elif len(telephone_p) != 8 or telephone_p.isnumeric == True:
-            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect! 3")
+        if len(telephone_p) != 8 or telephone_p.isdigit == False:
+            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect!")
+        elif len(telephone_p) == 8 and telephone_p.isdigit == False:
+            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect!")
+        elif len(telephone_p) != 8 or telephone_p.isdigit == True:
+            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect!")
         else:
             return telephone_p
 
