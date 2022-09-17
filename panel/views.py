@@ -39,9 +39,13 @@ def index(request):
     # RECUPERATION DES INFOS APERCU
     nb_dmd = Requestings.objects.all().count()
     lst_dmd = Requestings.objects.all().order_by('-id')
+    lst_dmd_v = Requestings.objects.filter(valide=True).order_by('-id')
+    nb_dmd_v = Requestings.objects.filter(valide=True).count()
     context = {
         'nb_dmd': nb_dmd,
         'lst_dmd': lst_dmd,
+        'lst_dmd_v': lst_dmd_v,
+        'nb_dmd_v': nb_dmd_v,
     }
     return render(request, 'panel/index.html', context)
 
