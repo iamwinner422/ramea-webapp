@@ -108,7 +108,7 @@
                                         <td>{{dmd.mail}}</td>
                                         <td>{{dmd.date_add|date:"d/m/Y"}}</td>
                                         <td><a href="{% url 'details_demande' dmd.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
-                                        <td><a href="" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSup"></i></a></td>
+                                        <td><a href="{% url 'delete_demande' dmd.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSup"></i></a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -140,7 +140,7 @@
                                         <td>{{dmd.nom}}</td>
                                         <td>{{dmd.telephone_p}}</td>
                                         <td>{{dmd.mail}}</td>
-                                        <td><a href="" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSup2"></i></a></td>
+                                        <td><a href="{% url 'delete_demande' dmd.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSup2"></i></a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
