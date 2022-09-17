@@ -92,11 +92,11 @@
                                 <thead class="thead">
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Raison social</th>
-                                        <th scope="col">Téléphone P.</th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">Téléphone</th>
                                         <th scope="col">Adresse e-mail</th>
                                         <th scope="col">Date</th>
-                                        <th scope="colg" colspan="2"></th>
+                                        <th scope="col" colspan="2"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -108,7 +108,7 @@
                                         <td>{{dmd.mail}}</td>
                                         <td>{{dmd.date_add|date:"d/m/Y"}}</td>
                                         <td><a href="{% url 'details_demande' dmd.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
-                                        <td><a href="" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                        <td><a href="" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSup"></i></a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -127,11 +127,10 @@
                                 <thead class="thead">
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Raison social</th>
-                                        <th scope="col">Téléphone P.</th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">Téléphone</th>
                                         <th scope="col">Adresse e-mail</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="colg" colspan="2"></th>
+                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -141,9 +140,7 @@
                                         <td>{{dmd.nom}}</td>
                                         <td>{{dmd.telephone_p}}</td>
                                         <td>{{dmd.mail}}</td>
-                                        <td>{{dmd.date_add|date:"d/m/Y"}}</td>
-                                        <td><a href="{% url 'details_demande' dmd.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
-                                        <td><a href="" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                        <td><a href="" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSup2"></i></a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
