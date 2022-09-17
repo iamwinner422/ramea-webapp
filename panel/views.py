@@ -37,8 +37,8 @@ def logout_panel(request):
 @login_required(login_url='login_panel')
 def index(request):
     # RECUPERATION DES INFOS APERCU
-    nb_dmd = Requestings.objects.filter(valide=True).count()
-    lst_dmd = Requestings.objects.filter(valide=True).order_by('-id')
+    nb_dmd = Requestings.objects.filter(valide=False).count()
+    lst_dmd = Requestings.objects.filter(valide=False).order_by('-id')
     lst_dmd_v = Requestings.objects.filter(valide=True).order_by('-id')
     nb_dmd_v = Requestings.objects.filter(valide=True).count()
     context = {

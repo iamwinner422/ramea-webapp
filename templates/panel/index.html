@@ -48,16 +48,34 @@
                                     {% if nb_dmd %}
                                     <span>{{nb_dmd}}</span>
                                     {% if nb_dmd <= 1 %}
-                                      <p>Demande</p>
+                                      <p>Demande en attente</p>
                                     {% else %}
-                                      <p>Demandes</p>
+                                      <p>Demandes en attente</p>
                                     {% endif %}
                                   {% else %}
                                     <span>--</span>
-                                    <p>Demande</p>
+                                    <p>Demande en attente</p>
                                   {% endif %}
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="count-box">
+                                <i class="bi bi-file-earmark lico" style="color: #ee6c20;"></i>
+                                <div>
+                                {% if nb_dmd_v %}
+                                    <span>{{nb_dmd_v}}</span>
+                                {% if nb_dmd_v <= 1 %}
+                                    <p>Demande validée</p>
+                                {% else %}
+                                    <p>Demandes validées</p>
+                                {% endif %}
+                                {% else %}
+                                    <span>--</span>
+                                    <p>Demande validée</p>
+                                {% endif %}
+                            </div>
+                          </div>
                         </div>
                     </div>
                 </div>
@@ -66,8 +84,9 @@
             <br>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <div class="container-fluid table-responsive">
+                    <div class="col-lg-6">
+                        <div class="container table-responsive">
+                            <h4 class="mb-3">Demandes en attente</h4>
                             {% if lst_dmd %}
                             <table class="table table-striped">
                                 <thead class="thead">
@@ -82,6 +101,41 @@
                                 </thead>
                                 <tbody>
                                 {% for dmd in lst_dmd %}
+                                    <tr>
+                                        <th scope="row">{{forloop.counter}}</th>
+                                        <td>{{dmd.nom}}</td>
+                                        <td>{{dmd.telephone_p}}</td>
+                                        <td>{{dmd.mail}}</td>
+                                        <td>{{dmd.date_add|date:"d/m/Y"}}</td>
+                                        <td><a href="{% url 'details_demande' dmd.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                                        <td><a href="" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                                <br>
+                                <p class="alert alert-info text-center">Aucune demande pour le moment.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="container table-responsive">
+                            <h4 class="mb-3">Demandes validées</h4>
+                            {% if lst_dmd_v %}
+                            <table class="table table-striped">
+                                <thead class="thead">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Raison social</th>
+                                        <th scope="col">Téléphone P.</th>
+                                        <th scope="col">Adresse e-mail</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="colg" colspan="2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for dmd in lst_dmd_v %}
                                     <tr>
                                         <th scope="row">{{forloop.counter}}</th>
                                         <td>{{dmd.nom}}</td>
