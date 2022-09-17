@@ -62,6 +62,13 @@ def details(request, id):
 
 
 @login_required(login_url='login_panel')
+def delete(request, id):
+    demande = get_object_or_404(Requestings, id=id)
+    demande.delete()
+    return redirect('index_panel')
+
+
+@login_required(login_url='login_panel')
 def valider(request, id):
     success = 401
     if request.method == "POST":
@@ -79,8 +86,8 @@ def valider(request, id):
                                                    telephone_s=demande.telephone_s)
                 org.save()
                 subject, from_email, to = 'Inscription sur Ramea', 'hello@ramea.com', demande.mail
-                #settings.EMAIL_HOST_USER
-                xoxo ="Ici maguie"
+                # settings.EMAIL_HOST_USER
+                xoxo = "Ici maguie"
                 content = """<html>
                                 <head>
                                     <meta charset="UTF-8">
@@ -104,7 +111,9 @@ def valider(request, id):
                                                                         <h2 style="color:#012970;">Bonjour, """ + demande.nom + """!</h2>
                                                                         <p>Nous vous informons que votre demande d'inscription sur notre plateforme a été approuvée. Veuillez cliquez sur le clien dessous pour compléter votre inscription.</p>
                                                                         <br>
-                                                                        <center><a style="text-align:center; color:white; background-color:#4154f1;" href='http://"""+ request.META['HTTP_HOST']+"""/administrateurs/add/"""+str(org.id)+"""/"""+str(demande.id)+"""' target="_blank" class="btn">Terminer l'inscription</a></center>
+                                                                        <center><a style="text-align:center; color:white; background-color:#4154f1;" href='http://""" + \
+                          request.META['HTTP_HOST'] + """/administrateurs/add/""" + str(org.id) + """/""" + str(
+                    demande.id) + """' target="_blank" class="btn">Terminer l'inscription</a></center>
                                                                     </td>
                                                                 </tr>
                                                                 <style>
