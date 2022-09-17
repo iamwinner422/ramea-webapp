@@ -96,6 +96,8 @@
         <script type="text/javascript">
             $('#btn-valider').click(function (e){
                 e.preventDefault();
+                document.querySelector('#btn-valider').disabled = true;/*DESACTICATION DU BUTTON*/
+                $('#btn-valider').text( "En attente...");
                 $.ajax({
                     url: "{% url 'valider_demande' demande.id%}",
                     method: "POST",
@@ -104,12 +106,15 @@
                         csrfmiddlewaretoken: '{{ csrf_token }}',
                     },
                     success: function (data){
+                        document.querySelector('#btn-valider').disabled = true; /*REACTIVATION DU BUTTON*/
+                        $('#btn-valider').text("");
+                        $('#btn-valider').append("Valider");
                         if (data === "201"){
                             $('#alert').addClass('alert-danger');
                             $('#alert').text('Une organisation avec ces informations existe déjà.')
                         }else if(data === "200"){
-                            $('#alert').addClass('alert-danger');
-                            $('#alert').text('Une organisation avec ces informations existe déjà.')
+                            $('#alert').addClass('alert-success');
+                            $('#alert').text('Inscription validée et mail de validation envoyé.')
                         }else{
                             $('#alert').addClass('alert-danger');
                             $('#alert').text('Erreur.')
@@ -117,6 +122,10 @@
                         //console.log(data)
                     },
                     error: function (data){
+                        $('#btn-valider').prop( "disabled", false ); /*REACTIVATION DU BUTTON*/
+                        $('#btn-valider').text("");
+                        $('#btn-valider').append("Valider");
+
                         $('#alert').addClass('alert-danger');
                         $('#alert').text('Erreur.')
                         console.log(data)
