@@ -30,7 +30,7 @@ class FormDemande(forms.ModelForm):
     other = forms.CharField(widget=forms.Textarea(attrs={
         'class': 'form-control',
         "placeholder": "Parlez-nous de vous...",
-        'rows': '7',
+        'rows': '5',
     }), required=False)
     class Meta:
         model = Requestings
