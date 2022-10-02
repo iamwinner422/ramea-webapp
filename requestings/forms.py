@@ -1,7 +1,8 @@
 from django.db.models import fields
 from .models import Requestings
 from django import forms
-
+import os
+from django.core.exceptions import ValidationError
 
 class FormDemande(forms.ModelForm):
     nom = forms.CharField(widget=forms.TextInput(attrs={
@@ -64,3 +65,13 @@ class FormDemande(forms.ModelForm):
             raise forms.ValidationError("Le numéro de téléphone saisi est incorrect!")
         else:
             return telephone_s
+
+    #validation du fichier choisi
+    def clean_file(self, *args, **kwargs):
+        file = str(self.cleaned_data.get("file"))
+        ext = os.path.splitext(file)[1]  # [0] returns path+filename
+        valid_extensions = ['.pdf', '.jpeg', '.jpg', '.png']
+        if not ext.lower() in valid_extensions:
+            raise forms.ValidationError('Le fichier choisi n\'est pas supporté.')
+        else:
+            return file
