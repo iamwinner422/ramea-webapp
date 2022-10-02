@@ -53,10 +53,10 @@
                             {% endfor %}
                         </div>
                         <div class="col-md-12 ">
-                            <div class="form-group">
-                                <label class="form-label d-block">Choisissez un document légal</label>
-                                <input type="file" name="file" id="file">
-                            </div>
+                            {{form.file}}
+                            {% for error in form.file.errors %}
+                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                            {% endfor %}
                         </div>
                         <div class="col-md-12 text-center">
                             <button type="submit" class="w-100">Valider</button>

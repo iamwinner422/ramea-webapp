@@ -32,6 +32,8 @@ class FormDemande(forms.ModelForm):
         "placeholder": "Parlez-nous de vous...",
         'rows': '5',
     }), required=False)
+
+    file = forms.FileInput()
     class Meta:
         model = Requestings
         fields = '__all__'
