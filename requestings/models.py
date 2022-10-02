@@ -8,5 +8,6 @@ class Requestings(models.Model):
     telephone_s = models.CharField(null=True, max_length=8, blank=True)
     mail = models.CharField(max_length=255)
     other = models.TextField(null=True, blank=True)
+    file = models.FileField(upload_to='requesting_docs/')
     valide = models.BooleanField(default=False)
     date_add = models.DateTimeField(auto_now_add=True)
