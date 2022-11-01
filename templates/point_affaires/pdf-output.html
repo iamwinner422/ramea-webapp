@@ -6,11 +6,11 @@
 {% block body %}
 <div class="header">
     <p class="nom-org">{{org.nom}}<p>
-    <p class="mail-org"><span style="font-weight: lighter !important; color: #333; font-size: 15px;!important;">E-mail:</span>{{org.mail}}</p>
+    <p class="mail-org"><span style="font-weight: lighter !important; color: #333; font-size: 12px;!important;">E-mail:</span>{{org.mail}}</p>
     {% if org.telephone_s %}
-        <p class="tel-org"><span style="font-weight: lighter !important; color: #333; font-size: 15px;!important;">Tél:</span> {{org.telephone_p}} / {{org.telephone_s}}</p>
+        <p class="tel-org"><span style="font-weight: lighter !important; color: #333; font-size: 12px;!important;">Tél:</span> {{org.telephone_p}} / {{org.telephone_s}}</p>
     {% else %}
-        <p class="tel-org"><span style="font-weight: lighter !important; color: #333; font-size: 15px;!important;">Tél:</span> {{org.telephone_p}}</p>
+        <p class="tel-org"><span style="font-weight: lighter !important; color: #333; font-size: 12px;!important;">Tél:</span> {{org.telephone_p}}</p>
     {% endif %}
     <hr>
 </div>
