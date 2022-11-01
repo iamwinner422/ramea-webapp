@@ -66,8 +66,8 @@ def new_admin_demande(request, id, id_dmd):
                 leuser = form.save()
                 Administrateurs.objects.create(user=leuser, telephone=tel, organisation_id=id)
 
-                valide = True #CHANGEMENT A TRUE
-                valide.save()
+                dmd.valide = True  # CHANGEMENT A TRUE
+                dmd.save()
                 return redirect('login_admin')
         context = {
             'form': form,
@@ -78,8 +78,6 @@ def new_admin_demande(request, id, id_dmd):
         return render(request, 'administrateurs/new.html', context)
     else:
         return HttpResponse("Le lien a expiré.")
-
-
 
 
 @login_required(login_url='login_admin')
