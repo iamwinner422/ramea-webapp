@@ -41,22 +41,27 @@ def index(request):
     #NOUVEAU POINT
     if request.method == 'POST':
         form = FormNewPoint(request.POST)
-        
-        form_gerant = CreateUserForm(request.POST)
-        profile_form = UserProfilFormNew(request.POST)
 
-        if form.is_valid() and form_gerant.is_valid() and profile_form.is_valid():
+        if form.is_valid():
             #INFORMATIONS DU POINT DE VENTE
             lnom = request.POST.get('nom')
             tel = request.POST.get('telephone_point')
             adr = request.POST.get('adresse')
             point = PointsAffaires(nom=lnom, telephone_point=tel, admin_id=id_admin, org_id=id_org, adresse=adr)
             point.save() #POINT CREE
- 
-            #INFORMATION SUR LE PREMIER GERANT
-            tele = request.POST.get('telephone')
-            leuser = form_gerant.save() #UTILISATEUR PAR DEFAUT
-            Utilisateurs.objects.create(user=leuser, telephone=tele, admin_id=id_admin, organisation_id=id_org, point_vente=point)
+
+            #SI LE USER VEUT AJOUTER UN VENDEUR
+            add_vendeur = int(request.POST.get('add_vendor'))
+            if add_vendeur == 1:
+                form_gerant = CreateUserForm(request.POST)
+                profile_form = UserProfilFormNew(request.POST)
+
+                if form_gerant.is_valid() and profile_form.is_valid():
+                    # INFORMATION SUR LE PREMIER GERANT
+                    tele = request.POST.get('telephone')
+                    leuser = form_gerant.save()  # UTILISATEUR PAR DEFAUT
+                    Utilisateurs.objects.create(user=leuser, telephone=tele, admin_id=id_admin, organisation_id=id_org, point_vente=point)
+
             return redirect('index_points')
     else:
         form = FormNewPoint()

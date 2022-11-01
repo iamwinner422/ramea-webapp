@@ -341,7 +341,7 @@ de {{pt.nom}}{% endblock title %} {% block body %}
                       <th scope="row">{{forloop.counter}}</th>
                       <td>{{histo.produit.designation}}</td>
                       <td>{{histo.qte}}</td>
-                      <td>{{histo.admin}}</td>
+                      <td><a href="{% url 'details_admin' histo.admin.pk %}" class="liens">{{histo.admin}}</a></td>
                     </tr>
                     {% endfor %}
                   </tbody>
