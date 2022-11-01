@@ -142,7 +142,7 @@ def export_xls(request):
     id_org = request.session['admin_org']
 
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="liste_des_catégories.xls"'
+    response['Content-Disposition'] = 'attachment; filename="liste_des_catégories.xlsx"'
     """
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Catégories') # this will make a sheet named Users Data

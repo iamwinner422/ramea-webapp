@@ -6,11 +6,11 @@
 {% block body %}
 <div class="header">
     <p class="nom-org">{{org.nom}}<p>
-    <p class="mail-org">{{org.mail}}</p>
+    <p class="mail-org"><span style="font-weight: lighter !important; color: #333; font-size: 12px;!important;">E-mail:</span> {{org.mail}}</p>
     {% if org.telephone_s %}
-        <p class="tel-org">{{org.telephone_p}} / {{org.telephone_s}}</p>
+        <p class="tel-org"><span style="font-weight: lighter !important; color: #333; font-size: 12px;!important;">Téléphone:</span> {{org.telephone_p}} / {{org.telephone_s}}</p>
     {% else %}
-        <p class="tel-org">{{org.telephone_p}}</p>
+        <p class="tel-org"><span style="font-weight: lighter !important; color: #333; font-size: 12px;!important;">Téléphone:</span> {{org.telephone_p}}</p>
     {% endif %}
     <hr>
 </div>
@@ -21,16 +21,16 @@
             <thead>
                 <tr>
                     <th scope="col" class="num">#</th>
-                    <th scope="col">Nom de la catégorie</th>
-                    <th scope="col">Type de la catégorie</th>
+                    <th scope="col" align="left">Nom de la catégorie</th>
+                    <th scope="col" align="left">Type de la catégorie</th>
                 </tr>
             </thead>
             <tbody>
                 {% for cat in lst_cat %}
                 <tr>
                     <td scope="row">{{forloop.counter}}</td>
-                    <td>{{cat.nom}}</td>
-                    <td>{{cat.typecategorie}}</td>
+                    <td align="left">{{cat.nom}}</td>
+                    <td align="left">{{cat.typecategorie}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
