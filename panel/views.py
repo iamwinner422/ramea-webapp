@@ -1,14 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http.response import HttpResponse, JsonResponse
+from django.http.response import HttpResponse, JsonResponse, Http404
 from django.contrib.auth import login, authenticate, logout
 from organisations.models import Organisations
 from django.conf import settings
 # Create your views here.
 from requestings.models import Requestings
-
 from django.core.mail import send_mail
+import os
 
 
 def login_panel(request):
@@ -54,9 +54,12 @@ def index(request):
 def details(request, id):
     # RECUPERATION DE LA DEMANDE
     demande = get_object_or_404(Requestings, id=id)
-
+    # RECUPERATION DU FICHIER UPLOADE
+    file = str(demande.file)
+    ext = os.path.splitext(file)[1]
     context = {
         'demande': demande,
+        'ext': ext,
     }
     return render(request, 'panel/details.html', context)
 
@@ -66,6 +69,19 @@ def delete(request, id):
     demande = get_object_or_404(Requestings, id=id)
     demande.delete()
     return redirect('index_panel')
+
+
+@login_required(login_url='login_panel')
+def download_file(request, id):
+    demande = get_object_or_404(Requestings, id=id)
+    # RECUPERATION DU FICHIER UPLOADE
+
+    file_path = os.path.join(settings.MEDIA_ROOT, str(demande.file))
+    print(demande.file)
+    response = HttpResponse(content_type='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename=' + str(demande.file)
+    # response['X-Sendfile'] = str(file_path)
+    return response
 
 
 @login_required(login_url='login_panel')
@@ -112,7 +128,7 @@ def valider(request, id):
                                                                         <p>Nous vous informons que votre demande d'inscription sur notre plateforme a été approuvée. Veuillez cliquez sur le clien dessous pour compléter votre inscription.</p>
                                                                         <br>
                                                                         <center><a style="text-align:center; color:white; background-color:#4154f1;" href='http://""" + \
-                          request.META['HTTP_HOST'] + """/administrateurs/add/""" + str(org.id) + """/""" + str(
+                          request.META['HTTP_HOST'] + """/gestionnaires/add/""" + str(org.id) + """/""" + str(
                     demande.id) + """' target="_blank" class="btn">Terminer l'inscription</a></center>
                                                                     </td>
                                                                 </tr>

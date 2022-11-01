@@ -9,8 +9,7 @@ from django.db.models import F, Sum, Count
 from django.urls import reverse
 from ventess.models import ProduitVente, Ventes
 
-
-#from histo_prod.models import HistoriqueProd
+# from histo_prod.models import HistoriqueProd
 
 import os
 from django.conf import settings
@@ -18,22 +17,22 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
-#import xlwt
 
 
+# import xlwt
 
 
 # Create your views here.
 @login_required(login_url='login_admin')
 def index_produits(request):
     id_org = request.session['admin_org']
-    id_admin =  request.session['admin_id']
+    id_admin = request.session['admin_id']
     org = get_object_or_404(Organisations, id=id_org)
- 
+
     if request.method == 'POST':
         form = FormProduit(request.POST, request.FILES, request=request)
-        #FORMQUANTITE
-        formQtePoint = FormQuantitePoint(request.POST) 
+        # QUANTITATIVE
+        formQtePoint = FormQuantitePoint(request.POST)
 
         if form.is_valid() and formQtePoint.is_valid():
             design = request.POST.get('designation')
@@ -41,15 +40,15 @@ def index_produits(request):
             qte = request.POST.get('qte_stock')
             cat = request.POST.get('categorie')
             img = request.FILES.get('image')
-            #pt_vente = request.POST.getlist('point_vente')
-            #pt_vente = form.cleaned_data['point_vente']
-            prod = Produits(designation=design, prix_unitaire=prix, admin_id=id_admin, categorie_id=cat, image=img, org_id=id_org)
+            # pt_vente = request.POST.getlist('point_vente')
+            # pt_vente = form.cleaned_data['point_vente']
+            prod = Produits(designation=design, prix_unitaire=prix, admin_id=id_admin, categorie_id=cat, image=img,
+                            org_id=id_org)
             prod.save()
-            
+
             for pt in request.POST.getlist('point_vente'):
                 qte_stock = QuantitePoint.objects.create(qte_stock=qte, point_id=int(pt), produit=prod)
 
-            
             return redirect('index_produits')
     else:
         form = FormProduit(request=request)
@@ -58,7 +57,10 @@ def index_produits(request):
     #################################
     if 'query' in request.GET:
         search = request.GET['query']
-        lst_prod = Produits.objects.filter(models.Q(designation__icontains=search, org_id=id_org) | models.Q(prix_unitaire__icontains=search,org_id=id_org) | models.Q(categorie__nom__icontains=search, org_id=id_org))
+        lst_prod = Produits.objects.filter(
+            models.Q(designation__icontains=search, org_id=id_org) | models.Q(prix_unitaire__icontains=search,
+                                                                              org_id=id_org) | models.Q(
+                categorie__nom__icontains=search, org_id=id_org))
     else:
         lst_prod = Produits.objects.order_by('-id').filter(org_id=id_org)
 
@@ -67,11 +69,11 @@ def index_produits(request):
 
     context = {
         'org': org,
-        'form':form, 
-        #'formAffect': formAffect,
+        'form': form,
+        # 'formAffect': formAffect,
         'lst_prod': lst_prod,
-        'lst_histo_prod':lst_histo_prod,
-        'formQtePoint':formQtePoint,
+        'lst_histo_prod': lst_histo_prod,
+        'formQtePoint': formQtePoint,
     }
 
     return render(request, 'produits/index.html', context)
@@ -98,13 +100,12 @@ def update_prod(request, id):
         form = FormProduit(instance=prod, request=request)
 
     context = {
-        'form':form,
-        'org':org,
-        'prod':prod,
+        'form': form,
+        'org': org,
+        'prod': prod,
     }
 
     return render(request, 'produits/update.html', context)
-
 
 
 @login_required(login_url='login_admin')
@@ -116,7 +117,7 @@ def update_qte(request, id):
     point_id = request.session['point_prod_id']
     point = get_object_or_404(PointsAffaires, id=point_id)
     qte_stock_point = QuantitePoint.objects.get(point=point, produit=prod)
-    
+
     if request.method == 'POST':
         form = FormQuantitePoint(request.POST, instance=qte_stock_point)
         if form.is_valid():
@@ -127,18 +128,19 @@ def update_qte(request, id):
 
     context = {
         'org': org,
-        'prod':prod,
-        'point':point,
-        'form':form,
+        'prod': prod,
+        'point': point,
+        'form': form,
     }
     return render(request, 'produits/update_qte.html', context)
+
 
 @login_required(login_url='login_admin')
 def details_produit(request, id):
     id_org = request.session['admin_org']
     org = get_object_or_404(Organisations, id=id_org)
 
-    #RECUPERATION DU PRODUIT
+    # RECUPERATION DU PRODUIT
     produit = get_object_or_404(Produits, id=id)
     request.session['id_produit'] = produit.pk
     lst_vte = Ventes.objects.filter(produit=produit, org=org)
@@ -146,9 +148,9 @@ def details_produit(request, id):
 
     context = {
         'org': org,
-        'prod':produit,
-        'qte_vendue':qte_vendue,
-        'lst_vte':lst_vte,
+        'prod': produit,
+        'qte_vendue': qte_vendue,
+        'lst_vte': lst_vte,
 
     }
 
@@ -159,7 +161,7 @@ def details_produit(request, id):
 def update_stock(request, id):
     id_org = request.session['admin_org']
     org = get_object_or_404(Organisations, id=id_org)
-    id_admin =  request.session['admin_id']
+    id_admin = request.session['admin_id']
     prod = get_object_or_404(Produits, id=id)
 
     if request.method == 'POST':
@@ -168,7 +170,7 @@ def update_stock(request, id):
             qte_add = request.POST.get('qte')
             pt_vente = request.POST.get('point')
             pt = PointsAffaires.objects.get(id=pt_vente)
-            
+
             HistoProd.objects.create(produit=prod, qte=qte_add, point=pt, admin_id=id_admin)
             qte_stock_point = QuantitePoint.objects.get(point=pt, produit=prod)
             qte_stock_point.qte_stock = F('qte_stock') + int(qte_add)
@@ -182,14 +184,12 @@ def update_stock(request, id):
     lst_histo_prod = HistoProd.objects.filter(produit=prod).order_by('-id')
 
     context = {
-        'org':org,
-        'prod':prod,
-        'form':form,
+        'org': org,
+        'prod': prod,
+        'form': form,
         'lst_histo_prod': lst_histo_prod,
-    } 
+    }
     return render(request, 'produits/stock.html', context)
-
-
 
 
 def link_callback(uri, rel):
@@ -202,12 +202,12 @@ def link_callback(uri, rel):
         if not isinstance(result, (list, tuple)):
             result = [result]
             result = list(os.path.realpath(path) for path in result)
-            path=result[0]
+            path = result[0]
         else:
-            sUrl = settings.STATIC_URL        # Typically /static/
-            sRoot = settings.STATIC_ROOT      # Typically /home/userX/project_static/
-            mUrl = settings.MEDIA_URL         # Typically /media/
-            mRoot = settings.MEDIA_ROOT       # Typically /home/userX/project_static/media/
+            sUrl = settings.STATIC_URL  # Typically /static/
+            sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+            mUrl = settings.MEDIA_URL  # Typically /media/
+            mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
 
             if uri.startswith(mUrl):
                 path = os.path.join(mRoot, uri.replace(mUrl, ""))
@@ -224,14 +224,6 @@ def link_callback(uri, rel):
         return path
 
 
-
-
-
-
-
-
-
-
 @login_required(login_url='login_admin')
 def export_pdf(request):
     id_org = request.session['admin_org']
@@ -239,10 +231,10 @@ def export_pdf(request):
     lst_prod = Produits.objects.order_by('designation').filter(org_id=id_org)
 
     template_path = 'produits/pdf-output.html'
-    context = {'org': org, 'lst_prod':lst_prod}
+    context = {'org': org, 'lst_prod': lst_prod}
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="liste_des_services.pdf"'
+    # response['Content-Disposition'] = 'attachment; filename="liste_des_services.pdf"'
     response['Content-Disposition'] = 'attachment; filename="liste_des_produits.pdf"'
     # find the template and render it.
     template = get_template(template_path)
@@ -250,13 +242,11 @@ def export_pdf(request):
 
     # create a pdf
     pisa_status = pisa.CreatePDF(
-       html, dest=response, link_callback=link_callback)
+        html, dest=response, link_callback=link_callback)
     # if error then show some funy view
     if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
-
-
 
 
 @login_required(login_url='login_admin')
@@ -299,14 +289,14 @@ def export_pdf_histo(request):
     id_org = request.session['admin_org']
     org = get_object_or_404(Organisations, id=id_org)
     lst_histo = HistoProd.objects.filter(produit__org_id=id_org).order_by('-id')
-    lst_histo = lst_histo.extra(select={'date_ajout_new': "to_char(date_ajout, 'DD/MM/YYYY')"}) 
-    #lst_prod = lst_prod.values_list('produit__designation', 'qte_ajoutee', 'produit__quantite', 'date_ajout_new', 'gerant__user__username')
+    lst_histo = lst_histo.extra(select={'date_ajout_new': "to_char(date_ajout, 'DD/MM/YYYY')"})
+    # lst_prod = lst_prod.values_list('produit__designation', 'qte_ajoutee', 'produit__quantite', 'date_ajout_new', 'gerant__user__username')
 
     template_path = 'produits/pdf-output-histo.html'
-    context = {'org': org, 'lst_histo':lst_histo}
+    context = {'org': org, 'lst_histo': lst_histo}
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    #response['Content-Disposition'] = 'attachment; filename="liste_des_services.pdf"'
+    # response['Content-Disposition'] = 'attachment; filename="liste_des_services.pdf"'
     response['Content-Disposition'] = 'attachment; filename="historique_du_stock.pdf"'
     # find the template and render it.
     template = get_template(template_path)
@@ -314,10 +304,10 @@ def export_pdf_histo(request):
 
     # create a pdf
     pisa_status = pisa.CreatePDF(
-       html, dest=response, link_callback=link_callback)
+        html, dest=response, link_callback=link_callback)
     # if error then show some funy view
     if pisa_status.err:
-       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 
 
