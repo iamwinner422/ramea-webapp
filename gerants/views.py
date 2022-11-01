@@ -239,7 +239,7 @@ def export_pdf(request):
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
     #response['Content-Disposition'] = 'attachment; filename="liste_des_services.pdf"'
-    response['Content-Disposition'] = 'attachment; filename="liste_des_gérants.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="liste_des_vendeurs.pdf"'
     # find the template and render it.
     template = get_template(template_path)
     html = template.render(context)
