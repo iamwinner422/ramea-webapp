@@ -18,8 +18,10 @@
             <div class="col-lg-6 col-md-6">
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2">
-                  <a href="{% url 'export_pdf_prod' %}" class="btn btn-sm btn-outline-danger">PDF</a>
-                  <a href="{% url 'export_xls_prod' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                    {% if lst_prod %}
+                    <a href="{% url 'export_pdf_prod' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                    <a href="{% url 'export_xls_prod' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                    {% endif %}
                 </div>
               </div>
             </div>

@@ -19,8 +19,10 @@
             <div class="col-lg-6 col-md-6">
               <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group me-2">
+                  {% if lst_clt %}
                   <a href="{% url 'export_pdf_panel' %}" class="btn btn-sm btn-outline-danger">PDF</a>
                   <a href="{% url 'export_xls_panel' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                  {% endif %}
                 </div>
               </div>
             </div>

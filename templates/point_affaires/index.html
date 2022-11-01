@@ -15,14 +15,17 @@
           <h2 class="titre-section">Points de vente</h2>
           <br>
           <div class="row">
-            <div class="col-lg-6 col-md-6">
-              <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group me-2">
-                  <a href="{% url 'export_pdf_point' %}" class="btn btn-sm btn-outline-danger">PDF</a>
-                  <a href="{% url 'export_xls_point' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                <div class="col-lg-6 col-md-6">
+                  <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        {% if lst_point %}
+                        <a href="{% url 'export_pdf_point' %}" class="btn btn-sm btn-outline-danger">PDF</a>
+                        <a href="{% url 'export_xls_point' %}" class="btn btn-sm btn-outline-success">XLS</a>
+                        {% endif %}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+
             <div class="col-lg-6 col-md-6">
               <div class="container-fluid">
                 <form action="" method="get" class="d-flex">
