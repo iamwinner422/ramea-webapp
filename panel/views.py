@@ -31,7 +31,7 @@ def login_panel(request):
 
 def logout_panel(request):
     logout(request)
-    return redirect('logout_panel')
+    return redirect('login_panel')
 
 
 @login_required(login_url='login_panel')
