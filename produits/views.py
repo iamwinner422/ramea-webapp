@@ -8,7 +8,8 @@ from organisations.models import Organisations
 from django.db.models import F, Sum, Count
 from django.urls import reverse
 from ventess.models import ProduitVente, Ventes
-
+import datetime
+import json
 # from histo_prod.models import HistoriqueProd
 
 import os
@@ -48,6 +49,9 @@ def index_produits(request):
 
             for pt in request.POST.getlist('point_vente'):
                 qte_stock = QuantitePoint.objects.create(qte_stock=qte, point_id=int(pt), produit=prod)
+
+                # HISTORIQUE
+                HistoProd.objects.create(produit=prod, qte=qte, point_id=int(pt), admin_id=id_admin)
 
             return redirect('index_produits')
     else:
@@ -140,17 +144,41 @@ def details_produit(request, id):
     id_org = request.session['admin_org']
     org = get_object_or_404(Organisations, id=id_org)
 
+    lbl_histo = []
+    data_histo = []
+
+
     # RECUPERATION DU PRODUIT
     produit = get_object_or_404(Produits, id=id)
     request.session['id_produit'] = produit.pk
     lst_vte = Ventes.objects.filter(produit=produit, org=org)
     qte_vendue = ProduitVente.objects.filter(produit=produit, vente__org=org).aggregate(qte=Sum('qte_cmdee')).get('qte')
 
+    #######LISTE DES ENTREES EN STOCK POUR CE PRODUIT
+    lst_histo_prod = HistoProd.objects.filter(produit=produit).order_by('-id')
+
+
+    def datetime_handler(x):
+        if isinstance(x, datetime.datetime):
+            #return x.__str__()
+            return "{}/{}/{}".format(x.day, x.month, x.year)
+        raise TypeError("Erreur!")
+
+    for hst in lst_histo_prod:
+        lbl_histo.append(hst.date_ajout)
+        data_histo.append(hst.qte)
+
+    lbl_histo_j = json.dumps(lbl_histo, default=datetime_handler)
+    data_histo_j = json.dumps(data_histo)
+
     context = {
         'org': org,
         'prod': produit,
         'qte_vendue': qte_vendue,
         'lst_vte': lst_vte,
+        'lst_histo_prod' : lst_histo_prod,
+        'lbl_histo': lbl_histo_j,
+        'data_histo': data_histo_j,
 
     }
 

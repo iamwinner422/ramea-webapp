@@ -108,7 +108,112 @@
                                 {% endif %}
                             </div>
                        </div>
-
+                        <div class="col-lg-6 col-md-6 mb-4">
+                          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                              <a class="nav-link active" id="pills-lst-tab" data-toggle="pill" href="#pills-lst" role="tab" aria-controls="pills-lst" aria-selected="false"><i class="bi bi-list"></i></a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link" id="pills-chart-tab" data-toggle="pill" href="#pills-chart" role="tab" aria-controls="pills-chart" aria-selected="false"><i class="bi bi-pie-chart"></i></a>
+                            </li>
+                          </ul>
+                          <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active mb-4" id="pills-lst" role="tabpanel" aria-labelledby="pills-lst-tab">
+                              <div class="component">
+                                <header class="section-header">
+                                <h4 class="text-right stitre" style="color: #555;">Historique de ce produit</h4>
+                            </header><br>
+                            <div class="containeurs">
+                                  <br>
+                                  {% if lst_histo_prod %}
+                                  <table class="table table-responsive">
+                                      <tbody>
+                                          {% for histo in  lst_histo_prod %}
+                                             {% load app_filter %}
+                                            <tr>
+                                              <th scope="row">{{forloop.counter}}</th>
+                                              <td>{{histo.produit.designation}}</td>
+                                              <td>{{histo.qte}}</td>
+                                              <td>{{histo.date_ajout|date:"d/m/Y"}}</td>
+                                              <td><a href="{% url 'details_point' histo.point.pk %}" class="liens">{{histo.point}}</a></td>
+                                            </tr>
+                                          {% endfor %}
+                                      </tbody>
+                                  </table>
+                                  {% else %}
+                                  <br>
+                                  <p class="alert alert-info text-center">Aucune historique pour le moment.</p>
+                                  {% endif %}
+                            </div>
+                              </div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">
+                              <div class="component">
+                                <header class="section-header">
+                                    <h4 class="text-right stitre" style="color: #555;">Historique de ce produit</h4>
+                                </header><br>
+                                  {% if lst_histo_prod %}
+                                    <canvas id="chartHisto" width="100%" height="100%"></canvas>
+                                    <script src="{% static 'assets/js/chart.min.js' %}"></script>
+                                    <script>
+                                        var lbl = {{lbl_histo|safe}};
+                                        var data = {{data_histo|safe}};
+                                        var ctx = document.getElementById("chartHisto").getContext("2d");
+                                        var myChart = new Chart(ctx, {
+                                          type: "bar",
+                                          data: {
+                                            labels: lbl,
+                                            datasets: [
+                                              {
+                                                label: "Quantité",
+                                                data: data,
+                                                backgroundColor: [
+                                                  "rgba(255, 99, 132, 0.2)",
+                                                  "rgba(54, 162, 235, 0.2)",
+                                                  "rgba(255, 206, 86, 0.2)",
+                                                  "rgba(75, 192, 192, 0.2)",
+                                                  "rgba(153, 102, 255, 0.2)",
+                                                  "rgba(255, 159, 64, 0.2)",
+                                                ],
+                                                borderColor: [
+                                                  "rgba(255, 99, 132, 1)",
+                                                  "rgba(54, 162, 235, 1)",
+                                                  "rgba(255, 206, 86, 1)",
+                                                  "rgba(75, 192, 192, 1)",
+                                                  "rgba(153, 102, 255, 1)",
+                                                  "rgba(255, 159, 64, 1)",
+                                                ],
+                                                borderWidth: 1,
+                                              },
+                                            ],
+                                          },
+                                          options: {
+                                            responsive: true,
+                                            plugins: {
+                                              legend: {
+                                                position: 'bottom',
+                                              },
+                                              title: {
+                                                display: true,
+                                                  text: 'Quantités',
+                                              }
+                                            },
+                                            scales: {
+                                              y: {
+                                                beginAtZero: true,
+                                              },
+                                            },
+                                          },
+                                        });
+                              </script>
+                                   {% else %}
+                                      <br>
+                                      <p class="alert alert-info text-center">Aucune historique pour le moment.</p>
+                                  {% endif %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                     </div>
                 </div>
             </div>
