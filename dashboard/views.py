@@ -30,7 +30,7 @@ def index(request):
     nb_serv = Services.objects.filter(org_id=admin_profile.organisation_id).count()
     nb_vte = Ventes.objects.filter(org_id=admin_profile.organisation_id).count()
     nb_prest = Prestations.objects.filter(org_id=admin_profile.organisation_id).count()
-
+    nb_clt = Clients.objects.filter(org_id=admin_profile.organisation_id).count()
     #TOP DES CLIENTS
     top_clt_vente = Clients.objects.filter(org=org, ventes__org=org).values('id','nom', 'prenoms', 'point_vente__nom').annotate(montant=Sum('ventes__montant_net')).order_by('-montant', 'nom')[:10] #PAR MONTANT DE L'ACHAT
 
@@ -88,5 +88,6 @@ def index(request):
         'top_vendeur_m_p':top_vendeur_m_p,
         'top_serv_m':top_serv_m,
         'top_serv_j':top_serv_j,
+        'nb_clt':nb_clt,
     }
     return render(request, 'dashboard/layouts/index.html', context)
