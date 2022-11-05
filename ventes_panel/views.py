@@ -10,7 +10,8 @@ from django.contrib.staticfiles import finders
 from django.template.loader import get_template, render_to_string
 from django.conf import settings
 import os
-
+import datetime
+import json
 from weasyprint import HTML
 import tempfile
 
@@ -29,13 +30,35 @@ def index_vente(request):
     lst_vte_j = Ventes.objects.order_by('-id').filter(org=org, date_vente__year=today.year, date_vente__month=today.month, date_vente__day=today.day)#DU JOUR
     lst_vte_m = Ventes.objects.order_by('-id').filter(org=org, date_vente__year=today.year, date_vente__month=today.month)#DU MOIS
     lst_vte_a = Ventes.objects.order_by('-id').filter(org=org, date_vente__year=today.year)#DE L'ANNEE
-    
+
+    ######################################################################
+    # CHART
+    ######################################################################
+    # QTE DES PRODUITS
+    lbl_vte = []
+    data_vte = []
+
+    for vte in lst_vte:
+        lbl_vte.append(vte.date_vente)
+        data_vte.append(vte.montant_net)
+
+    def datetime_handler(x):
+        if isinstance(x, datetime.datetime):
+            # return x.__str__()
+            return "{}/{}/{}".format(x.day, x.month, x.year)
+        raise TypeError("Erreur!")
+
+    lbl_vte_j = json.dumps(lbl_vte, default=datetime_handler)
+    data_vte_j = json.dumps(data_vte)
+
     context = {
         'org':org,
         'lst_vte':lst_vte,
         'lst_vte_j':lst_vte_j,
         'lst_vte_m':lst_vte_m,
         'lst_vte_a':lst_vte_a,
+        'lbl_vte':lbl_vte_j,
+        'data_vte':data_vte_j,
     }
     return render(request, 'ventes/index.html', context)
 
