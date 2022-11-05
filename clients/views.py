@@ -51,9 +51,11 @@ def index(request):
     if 'query' in request.GET:
         search = request.GET['query']
         lst_clt = Clients.objects.filter(models.Q(nom__icontains=search, point_vente_id=id_pt_vente) | models.Q(prenoms__icontains=search, point_vente_id=id_pt_vente) | models.Q(telephone_p__icontains=search, point_vente_id=id_pt_vente) | models.Q(adr_phisique__icontains=search, point_vente_id=id_pt_vente))
+        lst_clt_o = Clients.objects.filter(models.Q(nom__icontains=search, org_id=org_id) | models.Q(prenoms__icontains=search, org_id=org_id) | models.Q(telephone_p__icontains=search, org_id=org_id) | models.Q(adr_phisique__icontains=search, org_id=org_id), ~models.Q(point_vente_id=id_pt_vente))
     else:
         lst_clt = Clients.objects.filter(point_vente_id=id_pt_vente).order_by('-id')
-    
+        lst_clt_o = Clients.objects.filter(~models.Q(point_vente_id=id_pt_vente), org_id=org_id).order_by('-id')
+
      #TOP DES CLIENTS
     top_clt_nb = Clients.objects.filter(point_vente=pt_vente, ventes__point_vente=pt_vente).values('id','nom', 'prenoms').annotate(nb=Count('ventes')).order_by('-nb')##PAR NOMBRE D'ACHAT
     top_clt_montant = Clients.objects.filter(point_vente=pt_vente, ventes__point_vente=pt_vente).values('id','nom', 'prenoms').annotate(montant=Sum('ventes__montant_net')).order_by('-montant')#PAR MONTANT DE L'ACHAT
@@ -64,6 +66,7 @@ def index(request):
         'lst_clt':lst_clt,
         'top_clt_montant':top_clt_montant,
         'top_clt_nb':top_clt_nb,
+        'lst_clt_o':lst_clt_o,
     }
     return render(request, 'clients/index.html', context)
 
