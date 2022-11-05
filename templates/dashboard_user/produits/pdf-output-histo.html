@@ -6,9 +6,9 @@
 {% block body %}
 <div class="header">
     <p class="nom-org">{{pt.nom}}<p>
-    <p class="mail-org">Adresse: {{pt.adresse}}</p>
+    <p class="mail-org"><span style="font-weight: lighter !important; color: #333; font-size: 12px;!important;">Adresse:</span> {{pt.adresse}}</p>
     {% if pt.telephone %}
-        <p class="tel-org">Tel: {{pt.telephone}}</p>
+        <p class="tel-org"><span style="font-weight: lighter !important; color: #333; font-size: 12px;!important;">Tél:</span> {{pt.telephone}}</p>
     {% endif %}
     <hr>
 </div>
