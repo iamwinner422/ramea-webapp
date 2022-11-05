@@ -147,7 +147,6 @@ de {{pt.nom}}{% endblock title %} {% block body %}
                 </section>
               </div>
             </div>
-
             <div class="col-lg-6 col-md-6">
               <header class="section-header">
                 <h4 class="text-right stitre" style="color: #555">
@@ -163,7 +162,7 @@ de {{pt.nom}}{% endblock title %} {% block body %}
                     <tr>
                       <th scope="row">{{forloop.counter}}</th>
                       <td>{{prod.designation|truncatewords:1}}</td>
-                      <td>{{pt.nom|filter_prod:prod.id}}</td> 
+                      <td>{{pt.nom|filter_prod:prod.id}}</td>
                       <td>{{prod.prix_unitaire|floatformat:-2}}</td>
                       <td>
                         <a
@@ -198,7 +197,85 @@ de {{pt.nom}}{% endblock title %} {% block body %}
                 {% endif %}
               </div>
             </div>
-
+            <div class="col-lg-6 col-md-6">
+              <header class="section-header">
+                <h4 class="text-right stitre" style="color: #555">
+                  Produits les plus vendus
+                </h4>
+              </header>
+              <br>
+              <div class="container containeurs">
+                {% if most_sell %}
+                <table class="table table-responsive">
+                  <tbody>
+                  {% for val in most_sell %}
+                    <tr>
+                      <th scope="row">{{forloop.counter}}</th>
+                      <td>{{val.designation}}</td>
+                      <td align="right">{{val.qte}}</td>
+                      <td>
+                        <a
+                          href="{% url 'details_prod' val.id %}"
+                          title="Détails de {{prod.designation}}"
+                          ><i class="bi bi-info-circle info"></i
+                        ></a>
+                      </td>
+                      <td>
+                        <a
+                          href="{% url 'update_qte' val.id %}"
+                          title="Modifier la quantité"
+                          ><i class="bi bi-pencil-square edit"></i
+                        ></a>
+                      </td>
+                      <td>
+                        <a
+                          href="{% url 'retirer_produit' pt.id val.id %}"
+                          title="Retirer du point de vente"
+                          ><i class="bi bi-x-circle delete"></i
+                        ></a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+                    {% else %}
+                <br />
+                <p class="alert alert-info text-center">
+                  Aucun classement disponible pour le moment.
+                </p>
+                {% endif %}
+              </div>
+            </div>
+             <div class="col-lg-6 col-md-6">
+              <br/>
+              <header class="section-header">
+                <h4 class="text-right stitre" style="color: #555">Ventes</h4>
+              </header>
+              <div class="container containeurs">
+                {% if lst_vte %}
+                <table class="table table-responsive">
+                  <tbody>
+                    {% for vte in lst_vte %}
+                      <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        {% if vte.client == None %}
+                          <td>Client Supprimé</td>
+                        {% else %}
+                          <td>{{vte.client}}</td>
+                        {% endif %}
+                        <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                        <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                        <td><a href="{% url 'retirer_vente' pt.id vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% else %}
+                  <br/>
+                  <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                {% endif %}
+              </div>
+            </div>
             <div class="col-lg-6 col-md-6">
               <br />
               <header class="section-header">
@@ -357,36 +434,6 @@ de {{pt.nom}}{% endblock title %} {% block body %}
             <div class="col-lg-6 col-md-6">
               <br/>
               <header class="section-header">
-                <h4 class="text-right stitre" style="color: #555">Ventes</h4>
-              </header>
-              <div class="container containeurs">
-                {% if lst_vte %}
-                <table class="table table-responsive">
-                  <tbody>
-                    {% for vte in lst_vte %}
-                      <tr>
-                        <th scope="row">{{forloop.counter}}</th>
-                        {% if vte.client == None %}
-                          <td>Client Supprimé</td>
-                        {% else %}
-                          <td>{{vte.client}}</td>
-                        {% endif %}
-                        <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
-                        <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
-                        <td><a href="{% url 'retirer_vente' pt.id vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-                {% else %}
-                  <br/>
-                  <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
-                {% endif %}
-              </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-              <br/>
-              <header class="section-header">
                 <h4 class="text-right stitre" style="color: #555">Stock (Sorties)</h4>
               </header>
               <div class="container containeurs">
@@ -441,6 +488,7 @@ de {{pt.nom}}{% endblock title %} {% block body %}
                 {% endif %}
               </div>
             </div>
+            <br>
             <hr/>
           </div>
         </div>
@@ -646,6 +694,9 @@ de {{pt.nom}}{% endblock title %} {% block body %}
             </div>
         
             <div class="col-lg-6 col-md-6 mt-4">
+              <header class="section-header">
+                    <p class="text-right stitre text-muted">Top des clients par nombre d'achat</p>
+                    </header>
               <ul class="nav nav-pills mb-3" id="pills-tab1" role="tablist">
                 <li class="nav-item">
                   <a class="nav-link active" id="pills-mois-tab1" data-toggle="pill" href="#pills-mois1" role="tab" aria-controls="pills-mois1" aria-selected="false">Mois</a>
@@ -781,6 +832,9 @@ de {{pt.nom}}{% endblock title %} {% block body %}
             </div>
 
             <div class="col-lg-6 col-md-6 mt-4">
+              <header class="section-header">
+                    <p class="text-right stitre text-muted">Top des clients par montant d'achat</p>
+                    </header>
               <ul class="nav nav-pills mb-3" id="pills-tab2" role="tablist">
                 <li class="nav-item">
                   <a class="nav-link active" id="pills-mois-tab2" data-toggle="pill" href="#pills-mois2" role="tab" aria-controls="pills-mois2" aria-selected="false">Mois</a>
@@ -792,6 +846,7 @@ de {{pt.nom}}{% endblock title %} {% block body %}
               <div class="tab-content" id="pills-tabContent1">
                 <div class="tab-pane fade show active mb-4" id="pills-mois2" role="tabpanel" aria-labelledby="pills-mois-tab2">
                   <div class="component">
+
                     {% if top_clt_mt_m %}
                       <canvas id="topCltMTM" width="100%" height="100%"></canvas>
                       <script>

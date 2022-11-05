@@ -158,6 +158,9 @@ def details_point(request, id):
     #STOCK SORTIE
     lst_histo_s = HistoProdVte.objects.filter(point=point).order_by('-id')
 
+    # PRODUITS LES PLUS VENDUS
+    most_sell = Produits.objects.filter(point_vente=point, ventes__point_vente=point).values('designation', 'id').annotate(qte=Sum('produitvente__qte_cmdee')).order_by('-qte')[:10]
+
     ######################################################################
     #CHART
     ######################################################################
@@ -287,6 +290,7 @@ def details_point(request, id):
         'data_top_clt_mt_m':data_top_clt_mt_m_j,
         'data_top_clt_mt_a':data_top_clt_mt_a_j,
         'lbl_top_clt_mt_a':lbl_top_clt_mt_a_j,
+        'most_sell':most_sell,
 
         
     }
