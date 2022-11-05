@@ -223,8 +223,17 @@ def login_admin(request):
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect('dashboard_index')
+            # RECUPERATION DU model UTILISATEUR POUR LA VALIDATION
+            try:
+                admin = Administrateurs.objects.get(user=user)
+            except Administrateurs.DoesNotExist:
+                admin = None
+
+            if admin is not None:
+                login(request, user)
+                return redirect('dashboard_index')
+            else:
+                messages.info(request, "Erreur! Vous n'êtes pas autorisé à vous connecter.")
         else:
             messages.info(request, "Nom d'utilisateur ou mot de passe incorrect!")
 

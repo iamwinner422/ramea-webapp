@@ -183,8 +183,17 @@ def login_gerant(request):
         #CHANGEMENT DE CHEMIN POUR LA REDIRECTION
         #SI LE USER
         if user is not None:
-            login(request, user)
-            return redirect('user_dashboard_index')
+            # RECUPERATION DU model UTILISATEUR POUR LA VALIDATION
+            try:
+                vendeur = Utilisateurs.objects.get(user=user)
+            except Utilisateurs.DoesNotExist:
+                vendeur = None
+
+            if vendeur is not None:
+                login(request, user)
+                return redirect('user_dashboard_index')
+            else:
+                messages.info(request, "Erreur! Vous n'êtes pas autorisé à vous connecter.")
         else:
             messages.info(request, "Nom d'utilisateur ou mot de passe incorrect!")
 
