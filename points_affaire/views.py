@@ -146,17 +146,25 @@ def details_point(request, id):
 
     #HISTOSTOCK
     lst_histo = HistoProd.objects.filter(point=point).order_by('-id')
+    lst_histo_d = HistoProd.objects.filter(point=point, date_ajout__year=today.year, date_ajout__month=today.month, date_ajout__day=today.day).order_by('-id') #DU JOUR
 
     #VENTES
     lst_vte = Ventes.objects.filter(org_id=id_org, point_vente=point).order_by('-id')
     nb_vte = Ventes.objects.filter(org_id=id_org, point_vente=point).count()
 
+    # VENTES du jour
+    lst_vte_d = Ventes.objects.filter(org_id=id_org, point_vente=point, date_vente__year=today.year, date_vente__month=today.month, date_vente__day=today.day).order_by('-id')
+
     #PRESTATIONS
     lst_prest = Prestations.objects.filter(org_id=id_org, point_vente=point).order_by('date_prestation')
     nb_prest =  Prestations.objects.filter(org_id=id_org, point_vente=point).count()
 
+    # PRESTATIONS du jour
+    lst_prest_d = Prestations.objects.filter(org_id=id_org, point_vente=point, date_prestation__year=today.year, date_prestation__month=today.month, date_prestation__day=today.day).order_by('date_prestation')
+
     #STOCK SORTIE
     lst_histo_s = HistoProdVte.objects.filter(point=point).order_by('-id')
+    lst_histo_s_d = HistoProdVte.objects.filter(point=point, date_vente__year=today.year, date_vente__month=today.month, date_vente__day=today.day).order_by('-id') # du jour
 
     # PRODUITS LES PLUS VENDUS
     most_sell = Produits.objects.filter(point_vente=point, ventes__point_vente=point).values('designation', 'id').annotate(qte=Sum('produitvente__qte_cmdee')).order_by('-qte')[:10]
@@ -291,8 +299,10 @@ def details_point(request, id):
         'data_top_clt_mt_a':data_top_clt_mt_a_j,
         'lbl_top_clt_mt_a':lbl_top_clt_mt_a_j,
         'most_sell':most_sell,
-
-        
+        'lst_vte_d':lst_vte_d,
+        'lst_histo_d':lst_histo_d,
+        'lst_histo_s_d': lst_histo_s_d,
+        'lst_prest_d': lst_prest_d,
     }
     return render(request, 'point_affaires/details.html', context)
 

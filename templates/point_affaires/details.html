@@ -247,34 +247,71 @@ de {{pt.nom}}{% endblock title %} {% block body %}
               </div>
             </div>
              <div class="col-lg-6 col-md-6">
-              <br/>
-              <header class="section-header">
+               <header class="section-header">
                 <h4 class="text-right stitre" style="color: #555">Ventes</h4>
               </header>
-              <div class="container containeurs">
-                {% if lst_vte %}
-                <table class="table table-responsive">
-                  <tbody>
-                    {% for vte in lst_vte %}
-                      <tr>
-                        <th scope="row">{{forloop.counter}}</th>
-                        {% if vte.client == None %}
-                          <td>Client Supprimé</td>
-                        {% else %}
-                          <td>{{vte.client}}</td>
-                        {% endif %}
-                        <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
-                        <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
-                        <td><a href="{% url 'retirer_vente' pt.id vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-                {% else %}
-                  <br/>
-                  <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
-                {% endif %}
-              </div>
+               <ul class="nav nav-pills mb-3" id="pills-tab-2" role="tablist">
+                 <li class="nav-item">
+                   <a class="nav-link active" id="pills-day-tab" data-toggle="pill" href="#pills-day" role="tab" aria-controls="pills-day" aria-selected="true">Ajourd'hui</a>
+                 </li>
+                 <li class="nav-item">
+                   <a class="nav-link" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="false">Tout</a>
+                 </li>
+               </ul>
+               <div class="tab-content" id="pills-tabContent-2">
+                 <div class="tab-pane fade show active mb-4" id="pills-day" role="tabpanel" aria-labelledby="pills-day-tab">
+                   <div class="container containeurs">
+                      {% if lst_vte_d %}
+                      <table class="table table-responsive">
+                        <tbody>
+                          {% for vte in lst_vte_d %}
+                            <tr>
+                              <th scope="row">{{forloop.counter}}</th>
+                              {% if vte.client == None %}
+                                <td>Client Supprimé</td>
+                              {% else %}
+                                <td>{{vte.client}}</td>
+                              {% endif %}
+                              <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                              <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                              <td><a href="{% url 'retirer_vente' pt.id vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                        <br/>
+                        <p class="alert alert-info text-center">Aucune vente disponible aujourd'hui.</p>
+                      {% endif %}
+                    </div>
+                 </div>
+                 <div class="tab-pane fade" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+                    <div class="container containeurs">
+                      {% if lst_vte %}
+                      <table class="table table-responsive">
+                        <tbody>
+                          {% for vte in lst_vte %}
+                            <tr>
+                              <th scope="row">{{forloop.counter}}</th>
+                              {% if vte.client == None %}
+                                <td>Client Supprimé</td>
+                              {% else %}
+                                <td>{{vte.client}}</td>
+                              {% endif %}
+                              <td>{{vte.montant_net|floatformat:-2}} FCFA</td>
+                              <td><a href="{% url 'details_vente' vte.point_vente.id vte.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                              <td><a href="{% url 'retirer_vente' pt.id vte.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                        <br/>
+                        <p class="alert alert-info text-center">Aucune vente disponible pour le moment.</p>
+                      {% endif %}
+                    </div>
+                </div>
+               </div>
             </div>
             <div class="col-lg-6 col-md-6">
               <br />
@@ -409,26 +446,61 @@ de {{pt.nom}}{% endblock title %} {% block body %}
               <header class="section-header">
                 <h4 class="text-right stitre" style="color: #555">Stock (Entrées)</h4>
               </header>
-              <div class="container containeurs">
-                {% if lst_histo %}
-                <table class="table table-responsive">
-                  <tbody>
-                    {% for histo in lst_histo %}
-                    <tr>
-                      <th scope="row">{{forloop.counter}}</th>
-                      <td>{{histo.produit.designation}}</td>
-                      <td>{{histo.qte}}</td>
-                      <td><a href="{% url 'details_admin' histo.admin.pk %}" class="liens">{{histo.admin}}</a></td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-                {% else %}
-                <br />
-                <p class="alert alert-info text-center">
-                  Aucune historique disponible pour le moment.
-                </p>
-                {% endif %}
+              <ul class="nav nav-pills mb-3" id="pills-tab-3" role="tablist">
+                 <li class="nav-item">
+                   <a class="nav-link active" id="pills-entreed-tab" data-toggle="pill" href="#pills-entreed" role="tab" aria-controls="pills-entreed" aria-selected="true">Ajourd'hui</a>
+                 </li>
+                 <li class="nav-item">
+                   <a class="nav-link" id="pills-entreeall-tab" data-toggle="pill" href="#pills-entreeall" role="tab" aria-controls="pills-entreeall" aria-selected="false">Tout</a>
+                 </li>
+               </ul>
+              <div class="tab-content" id="pills-tabContent-3">
+                  <div class="tab-pane fade show active mb-4" id="pills-entreed" role="tabpanel" aria-labelledby="pills-entreed-tab">
+                     <div class="container containeurs">
+                      {% if lst_histo_d %}
+                      <table class="table table-responsive">
+                        <tbody>
+                          {% for histo in lst_histo_d %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{histo.produit.designation}}</td>
+                            <td>{{histo.qte}}</td>
+                            <td><a href="{% url 'details_admin' histo.admin.pk %}" class="liens">{{histo.admin}}</a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                      <br />
+                      <p class="alert alert-info text-center">
+                        Aucune historique disponible pour le moment.
+                      </p>
+                      {% endif %}
+                    </div>
+                 </div>
+                  <div class="tab-pane fade" id="pills-entreeall" role="tabpanel" aria-labelledby="pills-entreeall-tab">
+                  <div class="container containeurs">
+                      {% if lst_histo %}
+                      <table class="table table-responsive">
+                        <tbody>
+                          {% for histo in lst_histo %}
+                          <tr>
+                            <th scope="row">{{forloop.counter}}</th>
+                            <td>{{histo.produit.designation}}</td>
+                            <td>{{histo.qte}}</td>
+                            <td><a href="{% url 'details_admin' histo.admin.pk %}" class="liens">{{histo.admin}}</a></td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                      {% else %}
+                      <br />
+                      <p class="alert alert-info text-center">
+                        Aucune historique disponible pour le moment.
+                      </p>
+                      {% endif %}
+                    </div>
+                </div>
               </div>
             </div>
             <div class="col-lg-6 col-md-6">
@@ -436,7 +508,38 @@ de {{pt.nom}}{% endblock title %} {% block body %}
               <header class="section-header">
                 <h4 class="text-right stitre" style="color: #555">Stock (Sorties)</h4>
               </header>
-              <div class="container containeurs">
+              <ul class="nav nav-pills mb-3" id="pills-tab-4" role="tablist">
+                 <li class="nav-item">
+                   <a class="nav-link active" id="pills-sortie-tab" data-toggle="pill" href="#pills-sortie" role="tab" aria-controls="pills-sortie" aria-selected="true">Ajourd'hui</a>
+                 </li>
+                 <li class="nav-item">
+                   <a class="nav-link" id="pills-sortieall-tab" data-toggle="pill" href="#pills-sortieall" role="tab" aria-controls="pills-sortieeall" aria-selected="false">Tout</a>
+                 </li>
+               </ul>
+              <div class="tab-content" id="pills-tabContent-4">
+                <div class="tab-pane fade show active mb-4" id="pills-sortie" role="tabpanel" aria-labelledby="pills-sortie-tab">
+                    {% if lst_histo_s_d %}
+                    <table class="table table-responsive">
+                      <tbody>
+                        {% for histo in lst_histo_s_d %}
+                        <tr>
+                          <th scope="row">{{forloop.counter}}</th>
+                          <td>{{histo.produit.designation}}</td>
+                          <td>{{histo.qte}}</td>
+                          <td>{{histo.date_ajout|date:'d/m/Y'}}</td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                    {% else %}
+                    <br />
+                    <p class="alert alert-info text-center">
+                      Aucune historique disponible pour le moment.
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="tab-pane fade" id="pills-sortieall" role="tabpanel" aria-labelledby="pills-sortieall-tab">
+                  <div class="container containeurs">
                 {% if lst_histo_s %}
                 <table class="table table-responsive">
                   <tbody>
@@ -457,16 +560,54 @@ de {{pt.nom}}{% endblock title %} {% block body %}
                 </p>
                 {% endif %}
               </div>
+                </div>
+              </div>
             </div>
             <div class="col-lg-6 col-md-6">
               <br/>
               <header class="section-header">
                 <h4 class="text-right stitre" style="color: #555">Prestations</h4>
               </header>
-              <div class="container containeurs">
+              <ul class="nav nav-pills mb-3" id="pills-tab-5" role="tablist">
+                 <li class="nav-item">
+                   <a class="nav-link active" id="pills-prestd-tab" data-toggle="pill" href="#pills-prestd" role="tab" aria-controls="pills-prestd" aria-selected="true">Ajourd'hui</a>
+                 </li>
+                 <li class="nav-item">
+                   <a class="nav-link" id="pills-prestall-tab" data-toggle="pill" href="#pills-prestall" role="tab" aria-controls="pills-prestall" aria-selected="false">Tout</a>
+                 </li>
+               </ul>
+              <div class="tab-content" id="pills-tabContent-5">
+                <div class="tab-pane fade show active mb-4" id="pills-prestd" role="tabpanel" aria-labelledby="pills-prestd-tab">
+                    <div class="container containeurs">
+                {% if lst_prest_d %}
+                <table class="table table-responsive">
+                  <tbody>
+                    {% for prest in lst_prest_d %}
+                    <tr>
+                      <th scope="row">{{forloop.counter}}</th>
+                      {% if prest.client == None %}
+                        <td>Client Supprimé</td>
+                      {% else %}
+                        <td>{{prest.client}}</td>
+                      {% endif %}
+                      <td>{{prest.total_prestation|floatformat:-2}} FCFA</td>
+                      <td><a href="{% url 'details_prestation_pnl' pt.id prest.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
+                      <td><a href="{% url 'retirer_prestation' pt.id prest.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                {% else %}
+                <br />
+                <p class="alert alert-info text-center">Aucune prestation disponible pour le moment.</p>
+                {% endif %}
+              </div>
+                </div>
+                <div class="tab-pane fade" id="pills-prestall" role="tabpanel" aria-labelledby="pills-prestall-tab">
+                  <div class="container containeurs">
                 {% if lst_prest %}
                 <table class="table table-responsive">
-                  <tbody>  
+                  <tbody>
                     {% for prest in lst_prest %}
                     <tr>
                       <th scope="row">{{forloop.counter}}</th>
@@ -479,13 +620,15 @@ de {{pt.nom}}{% endblock title %} {% block body %}
                       <td><a href="{% url 'details_prestation_pnl' pt.id prest.id %}" title="Détails"><i class="bi bi-info-circle info"></i></a></td>
                       <td><a href="{% url 'retirer_prestation' pt.id prest.id %}" title="Supprimer définitivement"><i class="bi bi-x-circle delete" id="btnSupVte"></i></a></td>
                     </tr>
-                    {% endfor %}           
+                    {% endfor %}
                   </tbody>
                 </table>
                 {% else %}
                 <br />
                 <p class="alert alert-info text-center">Aucune prestation disponible pour le moment.</p>
                 {% endif %}
+              </div>
+                </div>
               </div>
             </div>
             <br>
