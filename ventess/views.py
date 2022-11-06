@@ -108,9 +108,9 @@ def nouvelle_vente(request):
 
 
             # SI LE USER VEUT AJOUTER UN client
-            add_client = int(request.POST.get('add_client'))
+            add_clt = int(request.POST['add_client'])
 
-            if add_client == 1:
+            if add_clt == 1:
 
                 nom = request.POST.get('nom')
                 pnoms = request.POST.get('prenoms')
@@ -130,7 +130,7 @@ def nouvelle_vente(request):
                 else:
                     messages.info(request, "Veuillez remplir tous les champs")
 
-            elif add_client == 0:
+            elif add_clt == 0:
                 id_client = request.POST['id_client']
 
             lst_prod = json.loads(request.POST.get('panier'))

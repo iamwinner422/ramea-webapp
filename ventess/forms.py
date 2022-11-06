@@ -59,6 +59,7 @@ class FormProduitVente(forms.ModelForm):
         'placeholder': 'Qté à commander',
         'id': 'qte_cmdee',
         'disabled': 'disabled',
+        'min': '1',
     }), error_messages={'invalid':'La quantité saisie est incorrecte.', 'required':'Saissiez la quantité.'})
 
     class Meta:

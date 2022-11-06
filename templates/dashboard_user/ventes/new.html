@@ -59,7 +59,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-12 text-center">
-                                                <button type="button" class="w-100" name="ajoutProd">Ajouter le produit</button>
+                                                <button type="button" class="w-100" name="ajoutProd">Ajouter au panier</button>
                                             </div>
                                         </div>
                                     </form>
@@ -187,8 +187,8 @@
 <script>
     $(function () {
         /*si le user choisi oui ou non*/
-        $('input[name=add_vendor]').change(function (){
-            if ($('input[name=add_vendor]:checked').val() === "1"){
+        $('input[name=add_client]').change(function (){
+            if ($('input[name=add_client]:checked').val() === "1"){
                 $("#block-client").show();
                 $('select[name=client]').prop('required',true); // obligatoire
                 $('select[name=client]').prop('disabled',true); // desactivation du select
@@ -524,6 +524,7 @@
                         montant_brut: montant_brut,
                         montant_net: montant_net,
                         taux_taxe: 18,
+                        add_client: $('input[name=add_client]:checked').val(),
                         net_commercial: net_commercial,
                         montant_taxe: montant_taxe,
                         montant_reduction: montant_reduction,
@@ -535,7 +536,8 @@
                         document.location.replace("{% url 'index_ventes' %}")
                     },
                     error: function(response) {
-                        console.log("Something went wrong awoo ");
+                        console.log(response)
+                        //console.log("Something went wrong awoo ");
                     },
                 });
             } else {
