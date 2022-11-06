@@ -134,7 +134,7 @@
                                 </div>
                                 <br>
                                 <div class="col-lg-12">
-                                    <label for="" class="form-label">Nouveau client?</label>
+                                    <label for="" class="form-label">Ajouter un nouveau client rapidement?</label>
                                    <div class="px-2">
                                        <input type="radio" name="add_vendor" id="no" value="0" checked class="ck">
                                        <label for="no">Non</label>&nbsp;&nbsp;&nbsp;
@@ -159,9 +159,12 @@
         /*si le user choisi oui ou non*/
         $('input[name=add_vendor]').change(function (){
             if ($('input[name=add_vendor]:checked').val() === "1"){
-                $('select[name=client]').prop('required',true);
+                $('select[name=client]').prop('required',true); // obligatoire
+                $('select[name=client]').prop('disabled',true); // desactivation du select
             }else{
                  $('select[name=client]').prop('required',false);
+                 $('select[name=client]').prop('disabled',false); //activation du select
+
             }
         });
     });

@@ -32,12 +32,12 @@ class FormClient(forms.ModelForm):
     adr_mail = forms.EmailField(label='', widget=EmailInput(attrs={
         'placeholder':'Adresse e-mail',
         'class':'form-control',
-    }), error_messages={'invalid':'L\'adresse saisi est incorrect!', 'required':'Saisissez l\'adresse e-mail'})
+    }), required=False, error_messages={'invalid':'L\'adresse saisi est incorrect!'})
 
     adr_phisique = forms.CharField(label='', widget=TextInput(attrs={
         'placeholder':'Adresse',
         'class':'form-control',
-    }), error_messages={'required':'Saisissez l\'adresse'})
+    }), required=False)
 
     image = forms.ImageField(label='Votre photo', widget=forms.FileInput(attrs={
         'class':'form-control'
