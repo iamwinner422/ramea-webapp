@@ -157,7 +157,7 @@ def nouvelle_vente(request):
                 HistoProdVte.objects.create(produit_id=elm['id'], qte=elm['qte_cmdee'], point=pt_vente,
                                             gerant_id=id_gerant)
             #lurl = '/dashboard/ventes/print/' + str(vente_id)
-            return HttpResponse(success)
+            return HttpResponse(vente_id)
 
 
 # INFO DU PRODUIT

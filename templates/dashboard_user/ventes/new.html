@@ -550,7 +550,7 @@
                 },
                 success: function(data) {
                     //console.log(data);
-                    document.location.replace("{% url 'index_ventes' %}")
+                    document.location.replace("/dashboard/ventes/details/"+data+"/")
                 },
                 error: function(response) {
                     console.log(response)

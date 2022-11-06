@@ -221,7 +221,9 @@
                     <div class="col-4">
                         <p>Client,</p>
                         <h3>{{vte.client}}</h3>
+                        {% if vte.client.adr_phisique %}
                         <p class="address"> {{vte.client.adr_phisique}}</p>
+                        {% endif %}
                         {% if vte.client.telephone_s %}
                             <div class="txn mt-2">Tel: (228) {{vte.client.telephone_p}} / {{vte.client.telephone_s}}</div>
                         {% else %}
@@ -246,7 +248,7 @@
                     <tr>
                         <td>Designation</td>
                         <td>Quantité</td>
-                        <td>Prix</td>
+                        <td>Prix U.</td>
                         <td>Total</td>
                     </tr>
                 </thead>
