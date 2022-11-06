@@ -35,8 +35,16 @@
                     <td align="left">{{clt.nom}}</td>
                     <td align="left">{{clt.prenoms}}</td>
                     <td>{{clt.telephone_p}}</td>
-                    <td align="left">{{clt.adr_mail}}</td>
-                    <td align="left">{{clt.adr_phisique}}</td>
+                    {% if clt.adr_mail != "None" %}
+                        <td align="left">--</td>
+                    {% else %}
+                        <td align="left">{{clt.adr_mail}}</td>
+                    {% endif %}
+                    {% if clt.adr_phisique != "None" %}
+                        <td align="left">--</td>
+                    {% else %}
+                        <td align="left">{{clt.adr_phisique}}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
