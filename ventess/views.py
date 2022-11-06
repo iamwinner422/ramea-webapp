@@ -68,7 +68,7 @@ def new_vente(request):
         'point_vente': pt_vente,
         'form': form,
         'formP': formP,
-        'form_clt':formClt,
+        'form_clt': formClt,
     }
     return render(request, 'dashboard_user/ventes/new.html', context)
 
@@ -106,7 +106,6 @@ def nouvelle_vente(request):
     if request.method == "POST":
         if request.is_ajax():
 
-
             # SI LE USER VEUT AJOUTER UN client
             add_clt = int(request.POST['add_client'])
 
@@ -116,7 +115,7 @@ def nouvelle_vente(request):
                 pnoms = request.POST['prenoms']
                 tel_p = request.POST['telephone_p']
                 # VERIFICATION DES ELEMENT
-                if nom != "" and pnoms !="" and tel_p !="":
+                if nom != "" and pnoms != "" and tel_p != "":
                     if len(tel_p) != 8 and tel_p.isdigit == False:
                         messages.info(request, "Le numéro de téléphone saisi est incorrect!")
                     elif len(tel_p) == 8 and tel_p.isdigit == False:
@@ -124,7 +123,8 @@ def nouvelle_vente(request):
                     elif len(tel_p) != 8 and tel_p.isdigit == True:
                         messages.info(request, "Le numéro de téléphone saisi est incorrect!")
                     else:
-                        client = Clients.objects.create(nom=nom, prenoms=pnoms, telephone_p=tel_p, point_vente=pt_vente, gerant=gerant, org_id=org_id)
+                        client = Clients.objects.create(nom=nom, prenoms=pnoms, telephone_p=tel_p, point_vente=pt_vente,
+                                                        gerant=gerant, org_id=org_id)
                         client.save()
                         id_client = client.id
                 else:
@@ -143,7 +143,10 @@ def nouvelle_vente(request):
             montant_net = request.POST['montant_net']
 
             # CREATION DE LA VENTE
-            neww_vente = Ventes(montant_brut=montant_brut, montant_net=montant_net, taxe=montant_taxe, taux_taxe=taux_taxe, remise=montant_reduction, taux_remise=taux_remise, client_id=id_client, gerant_id=id_gerant, point_vente_id=id_pt_vente, net_ccial=net_ccial, org_id=org_id)
+            neww_vente = Ventes(montant_brut=montant_brut, montant_net=montant_net, taxe=montant_taxe,
+                                taux_taxe=taux_taxe, remise=montant_reduction, taux_remise=taux_remise,
+                                client_id=id_client, gerant_id=id_gerant, point_vente_id=id_pt_vente,
+                                net_ccial=net_ccial, org_id=org_id)
             neww_vente.save()
             vente_id = neww_vente.id
             # print(f"ICI C4EST PARIS I:{lst_prod}")
@@ -155,7 +158,7 @@ def nouvelle_vente(request):
 
                 HistoProdVte.objects.create(produit_id=elm['id'], qte=elm['qte_cmdee'], point=pt_vente,
                                             gerant_id=id_gerant)
-            #lurl = '/dashboard/ventes/print/' + str(vente_id)
+            # lurl = '/dashboard/ventes/print/' + str(vente_id)
             return HttpResponse(vente_id)
 
 
@@ -261,7 +264,7 @@ def export_pdf(request, id):
 
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="facture_vente_' + str(vte.pk) + '.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="facture_vente_' + str(vte.pk)+'_' + str(date.today()) + '.pdf"'
     response['Content-Transfer-Encoding'] = 'binary'
 
     #   template_path = 'dashboard_user/ventes/facture.html'

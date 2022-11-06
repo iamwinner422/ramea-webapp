@@ -134,7 +134,7 @@ def export_pdf(request, id):
 
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="facture_' + str(vte.pk) +'.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="facture_' + str(vte.pk)+'_' + str(date.today()) +'.pdf"'
     response['Content-Transfer-Encoding'] = 'binary'
 
     # find the template and render it.
