@@ -83,6 +83,11 @@
                             <header class="section-header">
                                 <p class="text-center stitre">Ajouter une catégorie</p>
                             </header>
+                            <div class="col-md-12 text-center">
+                                {% for msg in messages %}
+                                  <p class="alert alert-danger">{{msg}}</p>
+                                {% endfor %}
+                            </div>
                             {% csrf_token %}
                             <div class="row gy-4">
                                 <div class="col-md-12">

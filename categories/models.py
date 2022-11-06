@@ -10,7 +10,7 @@ class TypeCategorie(models.Model):
         return self.nom
 
 class Categories(models.Model):
-    nom = models.CharField(max_length=55, unique='True', error_messages={'unique':'La catégorie existe déjà.'})
+    nom = models.CharField(max_length=55)
     typecategorie = models.ForeignKey(TypeCategorie, on_delete=models.DO_NOTHING)
     org = models.ForeignKey(Organisations, on_delete=CASCADE)
     admin = models.ForeignKey(Administrateurs, on_delete=models.DO_NOTHING)

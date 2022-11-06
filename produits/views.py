@@ -47,7 +47,7 @@ def index_produits(request):
             # pt_vente = form.cleaned_data['point_vente']
             # verification de la designation
             un_prod = Produits.objects.filter(designation=design, org=org)
-            print(un_prod)
+            # print(un_prod)
             if un_prod is None or un_prod == "":
                 prod = Produits(designation=design, prix_unitaire=prix, admin_id=id_admin, categorie_id=cat, image=img,
                             org_id=id_org)
@@ -61,7 +61,7 @@ def index_produits(request):
 
                 return redirect('index_produits')
             else:
-                messages.info(request, "Erreur! Le produit existe déja.")
+                messages.info(request, "Erreur! Le produit existe déjà.")
     else:
         form = FormProduit(request=request)
         formQtePoint = FormQuantitePoint()

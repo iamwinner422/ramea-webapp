@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db import models
 import categories
 from django.shortcuts import redirect, render, get_object_or_404
@@ -27,9 +28,15 @@ def index(request):
         if form.is_valid():
             lenom = request.POST.get('nom')
             typecat = request.POST.get('typecategorie')
-            cat = Categories(nom=lenom, typecategorie_id=typecat, org_id=id_org, admin_id=id_admin)
-            cat.save()
-            return redirect('index_categories')
+
+            # verification
+            une_cat = Categories.objects.filter(designation=lenom, org=org)
+            if une_cat is None or une_cat == "":
+                cat = Categories(nom=lenom, typecategorie_id=typecat, org_id=id_org, admin_id=id_admin)
+                cat.save()
+                return redirect('index_categories')
+            else:
+                messages.info(request, "Erreur! La catégorie existe déjà.")
 
     else:
         form = FormCategorie()
