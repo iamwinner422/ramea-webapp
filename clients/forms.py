@@ -48,9 +48,13 @@ class FormClient(forms.ModelForm):
         fields = ['nom', 'prenoms', 'telephone_p', 'telephone_s', 'adr_mail', 'adr_phisique', 'image']
 
     def clean_telephone_p(self, *args, **kwargs):
-        telephone_p = str(self.cleaned_data.get('telephone_p'))
-        if len(telephone_p) != 8:
-            raise forms.ValidationError('Le numéro de téléphone saisi est incorrect.')
+        telephone_p = str(self.cleaned_data.get("telephone_p"))
+        if len(telephone_p) != 8 and telephone_p.isdigit == False:
+            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect!")
+        elif len(telephone_p) == 8 and telephone_p.isdigit == False:
+            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect!")
+        elif len(telephone_p) != 8 and telephone_p.isdigit == True:
+            raise forms.ValidationError("Le numéro de téléphone saisi est incorrect!")
         else:
             return telephone_p
 

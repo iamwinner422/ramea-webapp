@@ -2,12 +2,14 @@ from django.http.response import HttpResponse, JsonResponse
 from produits.models import Produits, QuantitePoint
 from ventess.forms import FormProdVente, FormProduitVente
 from clients.forms import FormClient
+from clients.models import Clients
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from points_affaire.models import PointsAffaires
 from ventess.models import HistoProdVte, ProduitVente, Ventes
 from django.db.models import F
 from django.db import models
+from django.contrib import messages
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 from django.template.loader import get_template, render_to_string
@@ -93,6 +95,7 @@ def details_vente(request, id):
 
 @login_required(login_url='login_gerant')
 def nouvelle_vente(request):
+    global id_client
     id_pt_vente = request.session['point_vente_id']
     pt_vente = PointsAffaires.objects.get(id=id_pt_vente)
     id_gerant = request.session['gerant_id']
@@ -102,7 +105,34 @@ def nouvelle_vente(request):
     success = "Vente ajoutée!"
     if request.method == "POST":
         if request.is_ajax():
-            id_client = request.POST['id_client']
+
+
+            # SI LE USER VEUT AJOUTER UN client
+            add_client = int(request.POST.get('add_client'))
+
+            if add_client == 1:
+
+                nom = request.POST.get('nom')
+                pnoms = request.POST.get('prenoms')
+                tel_p = request.POST.get('telephone_p')
+                # VERIFICATION DES ELEMENT
+                if nom != "" and pnoms !="" and tel_p !="":
+                    if len(tel_p) != 8 and tel_p.isdigit == False:
+                        messages.info(request, "Le numéro de téléphone saisi est incorrect!")
+                    elif len(tel_p) == 8 and tel_p.isdigit == False:
+                        messages.info(request, "Le numéro de téléphone saisi est incorrect!")
+                    elif len(tel_p) != 8 and tel_p.isdigit == True:
+                        messages.info(request, "Le numéro de téléphone saisi est incorrect!")
+                    else:
+                        client = Clients.objects.create(nom=nom, prenoms=pnoms, telephone_p=tel_p)
+                        client.save()
+                        id_client = client.id
+                else:
+                    messages.info(request, "Veuillez remplir tous les champs")
+
+            elif add_client == 0:
+                id_client = request.POST['id_client']
+
             lst_prod = json.loads(request.POST.get('panier'))
             net_ccial = request.POST['net_commercial']
             taux_remise = request.POST['taux_remise']

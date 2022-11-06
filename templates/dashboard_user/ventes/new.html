@@ -136,9 +136,9 @@
                                 <div class="col-lg-12">
                                     <label for="" class="form-label">Ajouter un nouveau client rapidement?</label>
                                    <div class="px-2">
-                                       <input type="radio" name="add_vendor" id="no" value="0" checked class="ck">
+                                       <input type="radio" name="add_client" id="no" value="0" checked class="ck">
                                        <label for="no">Non</label>&nbsp;&nbsp;&nbsp;
-                                       <input type="radio" name="add_vendor" id="yes" value="1" class="ck">
+                                       <input type="radio" name="add_client" id="yes" value="1" class="ck">
                                        <label for="yes">Oui</label>
                                    </div>
                                 </div>
@@ -147,6 +147,11 @@
                                       <p class="stitre">Nouveau client</p>
                                     </header>
                                     <div class="row gy-4">
+                                        <div class="col-md-12 text-center">
+                                            {% for msg in messages %}
+                                              <p class="alert alert-danger">{{msg}}</p>
+                                            {% endfor %}
+                                        </div>
                                             <div class="col-md-6">
                                               {{form_clt.nom}}
                                               {% for error in form.nom.errors %}
