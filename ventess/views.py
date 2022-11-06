@@ -1,6 +1,7 @@
 from django.http.response import HttpResponse, JsonResponse
 from produits.models import Produits, QuantitePoint
 from ventess.forms import FormProdVente, FormProduitVente
+from clients.forms import FormClient
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from points_affaire.models import PointsAffaires
@@ -55,14 +56,17 @@ def new_vente(request):
     if request.method == 'POST':
         form = FormProdVente(request, request=request)
         formP = FormProduitVente(request)
+        formClt = FormClient(request)
     else:
         form = FormProdVente(request=request)
         formP = FormProduitVente()
+        formClt = FormClient()
 
     context = {
         'point_vente': pt_vente,
         'form': form,
         'formP': formP,
+        'form_clt':formClt,
     }
     return render(request, 'dashboard_user/ventes/new.html', context)
 

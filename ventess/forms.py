@@ -30,12 +30,13 @@ class FormProdVente(forms.ModelForm):
         super(FormProdVente, self).__init__(*args, **kwargs)
         gerant = Utilisateurs.objects.get(user=self.request.user)
         point_vente_gerant = gerant.point_vente_id
+        org_id = gerant.organisation_id
         point = get_object_or_404(PointsAffaires, id=point_vente_gerant)
         self.fields['produit'].empty_label = "Sélectionnez un produit"
         self.fields['produit'].queryset = Produits.objects.filter(point_vente=point).order_by('designation')
 
         self.fields['client'].empty_label = "Sélectionnez un client"
-        self.fields['client'].queryset = Clients.objects.filter(point_vente=point).order_by('nom')
+        self.fields['client'].queryset = Clients.objects.filter(org_id=org_id).order_by('nom')
 
     produit = forms.ModelChoiceField(queryset=None, label='', widget=forms.Select(attrs={
         'class':'form-select select',
