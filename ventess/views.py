@@ -262,7 +262,7 @@ def export_pdf(request, id):
 
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="facture_' + str(vte.pk) + '.pdf"'
+    response['Content-Disposition'] = 'attachment; filename="facture_vente_' + str(vte.pk) + '.pdf"'
     response['Content-Transfer-Encoding'] = 'binary'
 
     #   template_path = 'dashboard_user/ventes/facture.html'

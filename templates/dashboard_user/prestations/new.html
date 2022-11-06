@@ -72,10 +72,50 @@
                             <form action="" method="" class="php-email-form" style="padding-top: 12%" id="formClient">
                                 <h3 class="text-muted">Clients</h3>
                                 <div class="row">
-                                    <div class="col-lg-12 mt-3">
+                                    <div class="col-lg-12 mt-3 mb-3">
                                         {{form.client}} {% for error in form.client.errors %}
                                         <span class="text-danger" style=" font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span> {% endfor %}
                                     </div>
+                                    <br>
+                                <div class="col-lg-12">
+                                    <label for="" class="form-label">Ajouter un nouveau client rapidement?</label>
+                                   <div class="px-2">
+                                       <input type="radio" name="add_client" id="no" value="0" checked class="ck">
+                                       <label for="no">Non</label>&nbsp;&nbsp;&nbsp;
+                                       <input type="radio" name="add_client" id="yes" value="1" class="ck">
+                                       <label for="yes">Oui</label>
+                                   </div>
+                                </div>
+                                <div id="block-client" class="col-lg-12" style="transition: all 0.6s 0.1s ease-in-out; display: none">
+                                    <header class="section-header"><br>
+                                      <p class="stitre">Nouveau client</p>
+                                    </header>
+                                    <div class="row gy-4">
+                                        <div class="col-md-12 text-center">
+                                            {% for msg in messages %}
+                                              <p class="alert alert-danger">{{msg}}</p>
+                                            {% endfor %}
+                                        </div>
+                                            <div class="col-md-6">
+                                              {{form_clt.nom}}
+                                              {% for error in form.nom.errors %}
+                                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                              {% endfor %}
+                                            </div>
+                                            <div class="col-md-6">
+                                              {{form_clt.prenoms}}
+                                              {% for error in form.prenoms.errors %}
+                                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                              {% endfor %}
+                                            </div>
+                                            <div class="col-md-6">
+                                              {{form_clt.telephone_p}}
+                                              {% for error in form.telephone_p.errors %}
+                                                <span class="text-danger" style="font-size: 13px; font-weight: lighter; margin-top: 7px; margin-left: 13px;">{{error}}</span>
+                                              {% endfor %}
+                                            </div>
+                                        </div>
+                                </div>
                                 </div>
                                 <div class="mt-5">
                                     <button type="button" class="btn btn-primary w-100" id="btn-valider" name="btn-valider" style="height: 50px;">Valider</button>
@@ -97,6 +137,23 @@
     </div>
 </div>
 <script type="text/javascript" src="{% static 'assets/js/jquery-3.5.1.min.js'%}"></script>
+<script>
+    $(function () {
+        /*si le user choisi oui ou non*/
+        $('input[name=add_client]').change(function (){
+            if ($('input[name=add_client]:checked').val() === "1"){
+                $("#block-client").show();
+                $('select[name=client]').prop('required',true); // obligatoire
+                $('select[name=client]').prop('disabled',true); // desactivation du select
+            }else{
+                $("#block-client").hide();
+                 $('select[name=client]').prop('required',false);
+                 $('select[name=client]').prop('disabled',false); //activation du select
+
+            }
+        });
+    });
+</script>
 <script type="text/javascript">
     var total_prest = 0;
     var serv_id = 0;
@@ -206,30 +263,48 @@
         if (lst_serv.length > 0) {
             //VERIFICATION SI UN CLIENT EST SELECTIONNE
             var client = document.getElementById("selectClient").value;
-            if (client != "") {
-                e.preventDefault();
-                nList = JSON.stringify(lst_serv);
 
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "nouvelle_prestation" %}',
-                    data: {
-                        liste: nList,
-                        id_client: client,
-                        total_prest: total_prest,
-                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                    },
-                    success: function(data) {
-                        //console.log(data);
-                        document.location.replace("{% url 'index_prestations' %}")
-                    },
-                    error: function(response) {
-                        console.log("Something went wrong awoo ");
-                    },
-                });
-            }else{
-                alert("Veuillez sélectionner un client.")
+            if ($('input[name=add_client]:checked').val() === "1"){
+                e.preventDefault();
+
+                var nom = $('input[name=nom]').val();
+                var pnom = $('input[name=prenoms]').val();
+                var tel = $('input[name=telephone_p]').val();
+                if (nom === "" || pnom ==="" || tel ===""){
+                    alert('Veuillez saisir les informations du client');
+                }
+            }else if($('input[name=add_client]:checked').val() === "0"){
+                if (client === "") {
+                    alert("Veuillez sélectionner un client");
+                }
             }
+
+
+            nList = JSON.stringify(lst_serv);
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "nouvelle_prestation" %}',
+                data: {
+                    liste: nList,
+                    id_client: client,
+                    nom: nom,
+                    prenoms: pnom,
+                    add_client: $('input[name=add_client]:checked').val(),
+                    telephone_p: tel,
+                    total_prest: total_prest,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function(data) {
+                    //console.log(data);
+                    //document.location.replace("{% url 'index_prestations' %}")
+                    document.location.replace("/dashboard/prestations/details/"+data+"/")
+                },
+                error: function(response) {
+                    alert('Une erreur est survenue');
+                    console.log("Something went wrong awoo ");
+                },
+            });
         }else {
             alert("Aucun service dans la liste. Réesayer!")
         }

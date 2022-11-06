@@ -550,9 +550,10 @@
                 },
                 success: function(data) {
                     //console.log(data);
-                    document.location.replace("/dashboard/ventes/details/"+data+"/")
+                    document.location.replace("/dashboard/ventes/details/"+data+"/");
                 },
                 error: function(response) {
+                    alert("Une erreur est survenue");
                     console.log(response)
                     //console.log("Something went wrong awoo ");
                 },
