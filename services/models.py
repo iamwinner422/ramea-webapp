@@ -7,7 +7,7 @@ from categories.models import Categories
 
 # Create your models here.
 class Services(models.Model):
-    nom = models.CharField(max_length=35, unique=True, error_messages={'unique':'Le service existe déjà.'})
+    nom = models.CharField(max_length=35)
     categorie = models.ForeignKey(Categories, null=True, blank=True, on_delete=models.SET_NULL)
     point_vente = models.ManyToManyField(PointsAffaires)
     date_add = models.DateTimeField(auto_now_add=True)

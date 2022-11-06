@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.db import models
 from categories.models import Categories
 from services.forms import FormServices
@@ -30,8 +31,13 @@ def index(request):
         if form.is_valid():
             lnom = request.POST.get('nom')
             cat = request.POST.get('categorie')
-            Services.objects.create(nom=lnom, categorie_id=cat, org_id=id_org, admin_id=id_admin)
-            return redirect('index_services')
+            #verification
+            un_serv = Services.objects.create(nom=lnom, org=org)
+            if un_serv is None or un_serv == "":
+                Services.objects.create(nom=lnom, categorie_id=cat, org_id=id_org, admin_id=id_admin)
+                return redirect('index_services')
+            else:
+                messages.info(request, "Erreur! Le service existe déjà.")
     else:
         form = FormServices(request=request)
 

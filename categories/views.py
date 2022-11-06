@@ -30,7 +30,7 @@ def index(request):
             typecat = request.POST.get('typecategorie')
 
             # verification
-            une_cat = Categories.objects.filter(designation=lenom, org=org)
+            une_cat = Categories.objects.filter(nom=lenom, org=org)
             if une_cat is None or une_cat == "":
                 cat = Categories(nom=lenom, typecategorie_id=typecat, org_id=id_org, admin_id=id_admin)
                 cat.save()
