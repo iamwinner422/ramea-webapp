@@ -136,15 +136,14 @@ def nouvelle_vente(request):
             lst_prod = json.loads(request.POST.get('panier'))
             net_ccial = request.POST['net_commercial']
             taux_remise = request.POST['taux_remise']
+            taux_taxe = request.POST['taux_taxe']
             montant_taxe = request.POST['montant_taxe']
             montant_reduction = request.POST['montant_reduction']
             montant_brut = request.POST['montant_brut']
             montant_net = request.POST['montant_net']
 
             # CREATION DE LA VENTE
-            neww_vente = Ventes(montant_brut=montant_brut, montant_net=montant_net, taxe=montant_taxe,
-                                remise=montant_reduction, taux_remise=taux_remise, client_id=id_client,
-                                gerant_id=id_gerant, point_vente_id=id_pt_vente, net_ccial=net_ccial, org_id=org_id)
+            neww_vente = Ventes(montant_brut=montant_brut, montant_net=montant_net, taxe=montant_taxe, taux_taxe=taux_taxe, remise=montant_reduction, taux_remise=taux_remise, client_id=id_client, gerant_id=id_gerant, point_vente_id=id_pt_vente, net_ccial=net_ccial, org_id=org_id)
             neww_vente.save()
             vente_id = neww_vente.id
             # print(f"ICI C4EST PARIS I:{lst_prod}")

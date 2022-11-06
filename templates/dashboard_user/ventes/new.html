@@ -105,6 +105,16 @@
                                             </div>
                                         </div>
                                         <h2 id="net_commercial" class="card-title mt-4 mb-4" style="text-align: left; font-size: 16px; font-weight: 700;">Net Commercial: 0 FCFA</h2>
+                                        <div class="col-lg-12">
+                                            <label for="" class="form-label"><b>Appliquer la taxe?</b></label>
+                                           <div class="px-2">
+                                               <input type="radio" name="add_taxe" id="no_t" value="0" class="ck">
+                                               <label for="no_t">Non</label>&nbsp;&nbsp;&nbsp;
+                                               <input type="radio" name="add_taxe" id="yes_t" value="1" class="ck" checked>
+                                               <label for="yes_t">Oui</label>
+                                           </div>
+                                            <br>
+                                        </div>
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-5">
@@ -115,6 +125,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <h2 id="montant_net" class="card-title mt-4 mb-4" style="text-align: left; font-size: 16px; font-weight: 700;">Net à Payer: 0 FCFA</h2>
                                     </form>
                                 </div>
@@ -134,7 +145,7 @@
                                 </div>
                                 <br>
                                 <div class="col-lg-12">
-                                    <label for="" class="form-label">Ajouter un nouveau client rapidement?</label>
+                                    <label for="" class="form-label"><b>Ajouter un nouveau client rapidement?</b></label>
                                    <div class="px-2">
                                        <input type="radio" name="add_client" id="no" value="0" checked class="ck">
                                        <label for="no">Non</label>&nbsp;&nbsp;&nbsp;
@@ -199,6 +210,7 @@
 
             }
         });
+
     });
 </script>
 <script>
@@ -213,7 +225,28 @@
     var montant_taxe = 0;
     var montant_net = 0;
     var id = 0;
+    var taux_taxe = 0;
     var tReductionN = 0;
+
+    $('input[name=add_taxe]').change(function (){
+        if ($('input[name=add_taxe]:checked').val() === "0"){
+            montant_taxe = 0;
+            taux_taxe = 0;
+            document.getElementById('montant_taxe').innerHTML = "Montant " + montant_taxe + " FCFA";
+            montant_net = montant_brut + montant_taxe;
+            document.getElementById('montant_net').innerHTML = "Net à Payer: " + montant_net + " FCFA";
+        }else{
+            taux_taxe = 18;
+            montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+            //montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+            document.getElementById('montant_taxe').innerHTML = "Montant " + montant_taxe + " FCFA";
+            montant_net = montant_brut + montant_taxe;
+            document.getElementById('montant_net').innerHTML = "Net à Payer: " + montant_net + " FCFA";
+        }
+    });
+
+
+
     $("#formProd select[name='produit']").on("change", function() {
         var prix = document.getElementById("prixProd");
         var qte = document.getElementById("qteProd");
@@ -327,7 +360,16 @@
                         console.log("Something went wrong awoo ");
                     },
                 });
-                montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+
+                //CHANGEMENT DE LA TAXE
+                if ($('input[name=add_taxe]:checked').val() === "0"){
+                    montant_taxe = 0;
+                    taux_taxe = 0;
+                }else{
+                    taux_taxe = 18;
+                    montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                }
+
                 document.getElementById('montant_taxe').innerHTML = "Montant " + montant_taxe + " FCFA";
                 //MONTANT NET
                 montant_net = montant_brut + montant_taxe;
@@ -364,7 +406,14 @@
                                 document.getElementById("montant_brut").innerHTML = "Montant brut: " + montant_brut + " FCFA";
                                 document.getElementById('net_commercial').innerHTML = "Net Commercial: " + montant_brut + " FCFA";
 
-                                montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                                if ($('input[name=add_taxe]:checked').val() === "0"){
+                                    montant_taxe = 0;
+                                    taux_taxe = 0;
+                                }else{
+                                    taux_taxe = 18;
+                                    montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                                }
+                                //montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
                                 document.getElementById('montant_taxe').innerHTML = "Montant " + montant_taxe + " FCFA";
 
                                 montant_net = montant_brut + montant_taxe;
@@ -474,7 +523,15 @@
                 document.getElementById('net_commercial').innerHTML = "Net Commercial: " + net_commercial + " FCFA";
                 //TAXE
                 montant_taxe = 0;
-                montant_taxe = parseFloat((net_commercial * 18) / 100); //CALCUL DE LA TVA
+
+                if ($('input[name=add_taxe]:checked').val() === "0"){
+                    montant_taxe = 0;
+                    taux_taxe = 0;
+                }else{
+                    taux_taxe = 18;
+                    montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                }
+                //montant_taxe = parseFloat((net_commercial * 18) / 100); //CALCUL DE LA TVA
                 montant_net = net_commercial + montant_taxe //NET A PAYER 
                 document.getElementById('montant_net').innerHTML = "Net à Payer: " + montant_net + " FCFA";
                 document.getElementById('montant_taxe').innerHTML = "Montant: " + montant_taxe + " FCFA";
@@ -483,7 +540,14 @@
                 document.getElementById('net_commercial').innerHTML = "Net Commercial: " + montant_brut + " FCFA";
                 //CALCUL DE LA NOUVELLE TAXE
                 montant_taxe = 0;
-                montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                if ($('input[name=add_taxe]:checked').val() === "0"){
+                    montant_taxe = 0;
+                    taux_taxe = 0;
+                }else{
+                    taux_taxe = 18;
+                    montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+                }
+                //montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
                 document.getElementById('montant_taxe').innerHTML = "Montant: " + montant_taxe + " FCFA";
                 //NOUVEAU MONTANT NET
                 montant_net = montant_brut + montant_taxe;
@@ -494,7 +558,14 @@
             document.getElementById('net_commercial').innerHTML = "Net Commercial: " + montant_brut + " FCFA";
 
             montant_taxe = 0;
-            montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+            if ($('input[name=add_taxe]:checked').val() === "0"){
+                montant_taxe = 0;
+                taux_taxe = 0;
+            }else{
+                taux_taxe = 18;
+                montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
+            }
+            //montant_taxe = parseFloat((montant_brut * 18) / 100); //CALCUL DE LA TVA
             document.getElementById('montant_taxe').innerHTML = "Montant: " + montant_taxe + " FCFA";
 
             montant_net = montant_brut + montant_taxe;
@@ -540,7 +611,7 @@
                     telephone_p: tel,
                     montant_brut: montant_brut,
                     montant_net: montant_net,
-                    taux_taxe: 18,
+                    taux_taxe: taux_taxe,
                     add_client: $('input[name=add_client]:checked').val(),
                     net_commercial: net_commercial,
                     montant_taxe: montant_taxe,
