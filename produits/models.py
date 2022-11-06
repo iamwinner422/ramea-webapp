@@ -11,7 +11,7 @@ from administrateurs.models import Administrateurs
 
 
 class Produits(models.Model):
-    designation = models.CharField(max_length=100, unique=True, error_messages={'unique':'Le produit saisi existe déjà.'})
+    designation = models.CharField(max_length=100)
     #quantite = models.IntegerField()
     prix_unitaire = models.FloatField()
     date_add = models.DateTimeField(auto_now_add=True)

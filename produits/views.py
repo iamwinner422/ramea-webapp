@@ -1,3 +1,5 @@
+from django.contrib import messages
+
 from points_affaire.models import PointsAffaires
 from django.db import models
 from produits.models import HistoProd, Produits, QuantitePoint
@@ -43,17 +45,23 @@ def index_produits(request):
             img = request.FILES.get('image')
             # pt_vente = request.POST.getlist('point_vente')
             # pt_vente = form.cleaned_data['point_vente']
-            prod = Produits(designation=design, prix_unitaire=prix, admin_id=id_admin, categorie_id=cat, image=img,
+            # verification de la designation
+            un_prod = Produits.objects.filter(designation=design, org=org)
+            print(un_prod)
+            if un_prod is None or un_prod == "":
+                prod = Produits(designation=design, prix_unitaire=prix, admin_id=id_admin, categorie_id=cat, image=img,
                             org_id=id_org)
-            prod.save()
+                prod.save()
 
-            for pt in request.POST.getlist('point_vente'):
-                qte_stock = QuantitePoint.objects.create(qte_stock=qte, point_id=int(pt), produit=prod)
+                for pt in request.POST.getlist('point_vente'):
+                    qte_stock = QuantitePoint.objects.create(qte_stock=qte, point_id=int(pt), produit=prod)
 
-                # HISTORIQUE
-                HistoProd.objects.create(produit=prod, qte=qte, point_id=int(pt), admin_id=id_admin)
+                    # HISTORIQUE
+                    HistoProd.objects.create(produit=prod, qte=qte, point_id=int(pt), admin_id=id_admin)
 
-            return redirect('index_produits')
+                return redirect('index_produits')
+            else:
+                messages.info(request, "Erreur! Le produit existe déja.")
     else:
         form = FormProduit(request=request)
         formQtePoint = FormQuantitePoint()
