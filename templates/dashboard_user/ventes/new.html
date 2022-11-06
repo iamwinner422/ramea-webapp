@@ -97,7 +97,7 @@
                                         <div class="col-md-12">
                                             <div class="row">
                                                 <div class="col-5">
-                                                    <input type="number" name="taux_reduction" id="taux_reduction" placeholder="Réduction" class="form-control" />
+                                                    <input type="number" min="1" name="taux_reduction" id="taux_reduction" placeholder="Réduction en %" class="form-control" />
                                                 </div>
                                                 <div class="col-7">
                                                     <p class="card-title" style="text-align: left" id="montant_reduction">Montant: 0 FCFA</p>
@@ -509,42 +509,57 @@
         if (lst_prod.length > 0) {
             //VERIFICATION SI UN CLIENT EST SELECTIONNE
             //console.log(lst_prod.length);
+
             var client = document.getElementById("selectClient").value;
-            if (client != "") {
+
+            if ($('input[name=add_client]:checked').val() === "1"){
                 e.preventDefault();
 
-                nList = JSON.stringify(lst_prod);
-
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "nouvelle_vte" %}',
-                    data: {
-                        panier: nList,
-                        id_client: client,
-                        montant_brut: montant_brut,
-                        montant_net: montant_net,
-                        taux_taxe: 18,
-                        add_client: $('input[name=add_client]:checked').val(),
-                        net_commercial: net_commercial,
-                        montant_taxe: montant_taxe,
-                        montant_reduction: montant_reduction,
-                        taux_remise: tReductionN,
-                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-                    },
-                    success: function(data) {
-                        //console.log(data);
-                        document.location.replace("{% url 'index_ventes' %}")
-                    },
-                    error: function(response) {
-                        console.log(response)
-                        //console.log("Something went wrong awoo ");
-                    },
-                });
-            } else {
-                alert("Veuillez sélectionner un client")
+                var nom = $('input[name=nom]').val();
+                var pnom = $('input[name=prenoms]').val();
+                var tel = $('input[name=telephone_p]').val();
+                if (nom === "" || pnom ==="" || tel ===""){
+                    alert('Veuillez saisir les informations du client');
+                }
+            }else if($('input[name=add_client]:checked').val() === "0"){
+                if (client === "") {
+                    alert("Veuillez sélectionner un client");
+                }
             }
+
+            nList = JSON.stringify(lst_prod);
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "nouvelle_vte" %}',
+                data: {
+                    panier: nList,
+                    id_client: client,
+                    nom: nom,
+                    prenoms: pnom,
+                    telephone_p: tel,
+                    montant_brut: montant_brut,
+                    montant_net: montant_net,
+                    taux_taxe: 18,
+                    add_client: $('input[name=add_client]:checked').val(),
+                    net_commercial: net_commercial,
+                    montant_taxe: montant_taxe,
+                    montant_reduction: montant_reduction,
+                    taux_remise: tReductionN,
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function(data) {
+                    //console.log(data);
+                    document.location.replace("{% url 'index_ventes' %}")
+                },
+                error: function(response) {
+                    console.log(response)
+                    //console.log("Something went wrong awoo ");
+                },
+            });
+
         } else {
-            alert("Aucun produit dans le panier. Réesayer!")
+            alert("Aucun produit dans le panier. Réesayer!");
         }
     });
 </script>

@@ -164,7 +164,7 @@ def details_point(request, id):
 
     #STOCK SORTIE
     lst_histo_s = HistoProdVte.objects.filter(point=point).order_by('-id')
-    lst_histo_s_d = HistoProdVte.objects.filter(point=point, date_vente__year=today.year, date_vente__month=today.month, date_vente__day=today.day).order_by('-id') # du jour
+    lst_histo_s_d = HistoProdVte.objects.filter(point=point, date_ajout__year=today.year, date_ajout__month=today.month, date_ajout__day=today.day).order_by('-id') # du jour
 
     # PRODUITS LES PLUS VENDUS
     most_sell = Produits.objects.filter(point_vente=point, ventes__point_vente=point).values('designation', 'id').annotate(qte=Sum('produitvente__qte_cmdee')).order_by('-qte')[:10]

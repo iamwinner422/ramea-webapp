@@ -222,17 +222,17 @@
                     <a class="nav-link" id="pills-mois1-tab" data-toggle="pill" href="#pills-mois1" role="tab" aria-controls="pills-mois1" aria-selected="false">Mois</a>
                   </li>
                 </ul>
-                <div class="tab-content containeurs" id="pills-tabContent">
+                <div class="tab-content containeurs" id="pills-tabContent1">
                   <div class="tab-pane fade show active mb-4" id="pills-day1" role="tabpanel" aria-labelledby="pills-day1-tab">
                     <div class="">
-                      {% if most_sell_d %}
+                      {% if most_sell_j %}
                       <table class="table table-responsive table-striped">
                         <tbody>
-                          {% for prod in most_sell_d %}
+                          {% for prod in most_sell_j %}
                             <tr>
                               <th scope="row">{{forloop.counter}}</th>
                               <td>{{prod.designation}}</td>
-                              <td>{{prod.ventes__point_vente|truncatechars:15}}</td>
+                              <td>{{prod.ventes__point_vente__nom|truncatechars:15}}</td>
                               <td>{{prod.qte}}</td>
                               <td><a href="{% url 'details_prod' prod.id %}"title="Détails de {{prod.designation}}"><i class="bi bi-info-circle info"></i></a></td>
                             </tr>

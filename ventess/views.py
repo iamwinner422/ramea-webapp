@@ -3,7 +3,7 @@ from produits.models import Produits, QuantitePoint
 from ventess.forms import FormProdVente, FormProduitVente
 from clients.forms import FormClient
 from clients.models import Clients
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from points_affaire.models import PointsAffaires
 from ventess.models import HistoProdVte, ProduitVente, Ventes
@@ -112,9 +112,9 @@ def nouvelle_vente(request):
 
             if add_clt == 1:
 
-                nom = request.POST.get('nom')
-                pnoms = request.POST.get('prenoms')
-                tel_p = request.POST.get('telephone_p')
+                nom = request.POST['nom']
+                pnoms = request.POST['prenoms']
+                tel_p = request.POST['telephone_p']
                 # VERIFICATION DES ELEMENT
                 if nom != "" and pnoms !="" and tel_p !="":
                     if len(tel_p) != 8 and tel_p.isdigit == False:
@@ -124,7 +124,7 @@ def nouvelle_vente(request):
                     elif len(tel_p) != 8 and tel_p.isdigit == True:
                         messages.info(request, "Le numéro de téléphone saisi est incorrect!")
                     else:
-                        client = Clients.objects.create(nom=nom, prenoms=pnoms, telephone_p=tel_p)
+                        client = Clients.objects.create(nom=nom, prenoms=pnoms, telephone_p=tel_p, point_vente=pt_vente, gerant=gerant, org_id=org_id)
                         client.save()
                         id_client = client.id
                 else:
@@ -146,7 +146,7 @@ def nouvelle_vente(request):
                                 remise=montant_reduction, taux_remise=taux_remise, client_id=id_client,
                                 gerant_id=id_gerant, point_vente_id=id_pt_vente, net_ccial=net_ccial, org_id=org_id)
             neww_vente.save()
-
+            vente_id = neww_vente.id
             # print(f"ICI C4EST PARIS I:{lst_prod}")
             for elm in lst_prod:
                 prodvente = ProduitVente(qte_cmdee=elm['qte_cmdee'], produit_id=elm['id'], vente=neww_vente)
@@ -156,7 +156,7 @@ def nouvelle_vente(request):
 
                 HistoProdVte.objects.create(produit_id=elm['id'], qte=elm['qte_cmdee'], point=pt_vente,
                                             gerant_id=id_gerant)
-
+            #lurl = '/dashboard/ventes/print/' + str(vente_id)
             return HttpResponse(success)
 
 
