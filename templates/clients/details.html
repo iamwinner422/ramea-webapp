@@ -33,7 +33,11 @@
                                             {% endif %}
                                         </tr>
                                         <tr>
-                                            <td><b>E-mail</b>: {{clt.adr_mail}}</td>   
+                                            {% if clt.adr_mail != "None" %}
+                                                <td><b>E-mail</b>: --</td>
+                                            {% else %}
+                                                <td><b>E-mail</b>: {{clt.adr_mail}}</td>
+                                            {% endif %}
                                         </tr>
                                         <tr>
                                             {% if clt.telephone_s %}
@@ -49,7 +53,11 @@
                                             {% endif %}
                                         </tr>
                                         <tr>
-                                            <td><b>Adresse</b>: {{clt.adr_phisique}}</td>
+                                            {% if clt.adr_mail != "None" %}
+                                                <td><b>Adresse</b>: --</td>
+                                            {% else %}
+                                                <td><b>Adresse</b>: {{clt.adr_phisique}}</td>
+                                            {% endif %}
                                         </tr>
 
                                     </tbody>
