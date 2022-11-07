@@ -68,7 +68,7 @@ def details(request, id):
 def delete(request, id):
     demande = get_object_or_404(Requestings, id=id)
     demande.delete()
-    return redirect('index_panel')
+    return redirect('panel_index')
 
 
 @login_required(login_url='login_panel')
