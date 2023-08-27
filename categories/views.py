@@ -31,12 +31,12 @@ def index(request):
 
             # verification
             une_cat = Categories.objects.filter(nom=lenom, org=org)
-            if une_cat is None or une_cat == "":
-                cat = Categories(nom=lenom, typecategorie_id=typecat, org_id=id_org, admin_id=id_admin)
-                cat.save()
-                return redirect('index_categories')
-            else:
-                messages.info(request, "Erreur! La catégorie existe déjà.")
+            #if une_cat is None or une_cat == "":
+            cat = Categories(nom=lenom, typecategorie_id=typecat, org_id=id_org, admin_id=id_admin)
+            cat.save()
+            return redirect('index_categories')
+            #else:
+             #   messages.info(request, "Erreur! La catégorie existe déjà.")
 
     else:
         form = FormCategorie()
