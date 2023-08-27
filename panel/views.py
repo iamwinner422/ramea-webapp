@@ -101,7 +101,7 @@ def valider(request, id):
                 org = Organisations.objects.create(nom=demande.nom, telephone_p=demande.telephone_p, mail=demande.mail,
                                                    telephone_s=demande.telephone_s)
                 org.save()
-                subject, from_email, to = 'Inscription sur Ramea', 'hello@ramea.com', demande.mail
+                subject, from_email, to = 'Inscription sur Ramea', 'helloramea@outlook.com', demande.mail
                 # settings.EMAIL_HOST_USER
                 xoxo = "Ici maguie"
                 content = """<html>
