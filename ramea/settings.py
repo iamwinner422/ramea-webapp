@@ -208,7 +208,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 #EMAIL_PORT = '2525'
 # EMAIL_USE_TLS = True
 
-EMAIL_HOST = 'smtp.mailtrap.io'
-EMAIL_HOST_USER = '67bdda17e1c1c2'
-EMAIL_HOST_PASSWORD = 'c6f1517433cf4e'
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = '3bf2d8ceac4b7a'
+EMAIL_HOST_PASSWORD = '718d68357a81ee'
 EMAIL_PORT = '2525'
