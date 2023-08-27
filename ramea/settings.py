@@ -190,11 +190,11 @@ else:
 
 #DEFINITION DU CHEMINS VERS LE DOSSIER MEDIA
 
-#MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
-django_heroku.settings(locals())
+MEDIA_ROOT = BASE_DIR / 'media'
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+#django_heroku.settings(locals())
 
 #CONFIGURATION DES URL DE LOGIN
 #LOGIN_URL = 'administrateurs:login_admin'
