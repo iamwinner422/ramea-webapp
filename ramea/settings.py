@@ -204,8 +204,7 @@ EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_HOST_USER = 'helloramea@outlook.com'
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = '587'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True
 
 #EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 #EMAIL_HOST_USER = '3bf2d8ceac4b7a'
