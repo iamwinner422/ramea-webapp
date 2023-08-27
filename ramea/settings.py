@@ -31,7 +31,7 @@ mimetypes.add_type("text/css", ".css", True)
 SECRET_KEY = 'ul6_la!8+v5dmig+f_^k&82vpp(2wi@*#)#ma)0g=(tx%1(dm*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 #SI DEBUG EST EGALE A FALSE ON DOIT METTRE LES HOTES 
 
 ALLOWED_HOSTS = ['*']
@@ -177,15 +177,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-if DEBUG:
+"""if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')"""
 
 
-"""STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]"""
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 #DEFINITION DU CHEMINS VERS LE DOSSIER MEDIA
 
