@@ -20,6 +20,10 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
 mimetypes.add_type("text/css", ".css", True)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -28,7 +32,7 @@ mimetypes.add_type("text/css", ".css", True)
 SECRET_KEY = 'ul6_la!8+v5dmig+f_^k&82vpp(2wi@*#)#ma)0g=(tx%1(dm*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 #SI DEBUG EST EGALE A FALSE ON DOIT METTRE LES HOTES 
 
 ALLOWED_HOSTS = ['*']
@@ -109,6 +113,11 @@ WSGI_APPLICATION = 'ramea.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 DATABASES = {
+    'default': dj_database_url.parse(env('DATABASE_URL'))
+}
+
+"""
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ramea_db',
@@ -118,6 +127,7 @@ DATABASES = {
         
     }
 }
+"""
 """
 DATABASES = {
     'default': dj_database_url.config()
