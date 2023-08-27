@@ -183,9 +183,9 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-"""STATICFILES_DIRS = [
+STATICFILES_DIRS = [
     BASE_DIR / 'static'
-]"""
+]
 
 #DEFINITION DU CHEMINS VERS LE DOSSIER MEDIA
 
