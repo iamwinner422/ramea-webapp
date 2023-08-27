@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 from pathlib import Path
 import mimetypes #CSS
 import os
-import django_heroku
 import dj_database_url
 
 
@@ -178,7 +177,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-if DEBUG:
+if not DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 else:
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
