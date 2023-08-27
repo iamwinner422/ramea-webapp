@@ -31,7 +31,7 @@ mimetypes.add_type("text/css", ".css", True)
 SECRET_KEY = 'ul6_la!8+v5dmig+f_^k&82vpp(2wi@*#)#ma)0g=(tx%1(dm*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 #SI DEBUG EST EGALE A FALSE ON DOIT METTRE LES HOTES 
 
 ALLOWED_HOSTS = ['*']
@@ -175,10 +175,12 @@ USE_TZ = True
 #CONFIGURATION DES FICHIERS STATICS
 #PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 """STATICFILES_DIRS = [
@@ -188,7 +190,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #DEFINITION DU CHEMINS VERS LE DOSSIER MEDIA
 
 #MEDIA_ROOT = BASE_DIR / 'media'
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 #STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 #django_heroku.settings(locals())
