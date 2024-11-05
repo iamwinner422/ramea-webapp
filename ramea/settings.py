@@ -200,13 +200,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 #LOGIN_REDIRECT_URL = 'dashboard:dashboard_index'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'
-EMAIL_HOST_USER = 'helloramea@outlook.com'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = '587'
-EMAIL_USE_TLS = True
-
-#EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-#EMAIL_HOST_USER = '3bf2d8ceac4b7a'
-#EMAIL_HOST_PASSWORD = '718d68357a81ee'
-#EMAIL_PORT = '2525'
+EMAIL_PORT = env('EMAIL_PORT')
