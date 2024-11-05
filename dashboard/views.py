@@ -35,7 +35,7 @@ def index(request):
     top_clt_vente = Clients.objects.filter(org=org, ventes__org=org).values('id','nom', 'prenoms', 'point_vente__nom').annotate(montant=Sum('ventes__montant_net')).order_by('-montant', 'nom')[:10] #PAR MONTANT DE L'ACHAT
 
     #TOP DES CLIENTS 
-    #top_clt_prest = Clients.objects.filter(org=org, prestations__org=org).values('id','nom', 'prenoms', 'point_vente__nom').annotate(montant=Sum('prestations__total_prestation')).order_by('-montant', 'nom')[:10] #PAR MONTANT DE LA PRESTATION
+    top_clt_prest = Clients.objects.filter(org=org, prestations__org=org).values('id','nom', 'prenoms', 'point_vente__nom').annotate(montant=Sum('prestations__total_prestation')).order_by('-montant', 'nom')[:10] #PAR MONTANT DE LA PRESTATION
  
     #PRODUIT LES PLUS VENDUS DE TOUTE L'ORGANISATION DU JOUR
     #most_sell_j = Produits.objects.filter(org=org, ventes__org=org, ventes__date_vente__year=today.year, ventes__date_vente__month=today.month, ventes__date_vente__day=today.day).values('id','designation', 'ventes__point_vente__nom').annotate(qte=Sum('produitvente__qte_cmdee')).order_by('-qte')[:10]
@@ -78,8 +78,8 @@ def index(request):
         'nb_vte':nb_vte,
         'nb_prest':nb_prest,
         'top_clt_vente':top_clt_vente,
-        """'top_clt_prest':top_clt_prest,
-        'most_sell_j':most_sell_j,
+        'top_clt_prest':top_clt_prest,
+        """'most_sell_j':most_sell_j,
         'lst_prest':lst_prest,
         'top_pdv_m':top_pdv_m,
         'top_pdv_j':top_pdv_j,
