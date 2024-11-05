@@ -88,7 +88,7 @@ def index(request):
         'top_vendeur_m_p':top_vendeur_m_p,
         'top_serv_m':top_serv_m,
         'top_serv_j':top_serv_j,
-        'nb_clt':nb_clt,'
+        'nb_clt':nb_clt,
         """
     }
     return render(request, 'dashboard/layouts/index.html', context)
