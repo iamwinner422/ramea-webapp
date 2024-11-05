@@ -32,7 +32,7 @@ def index(request):
     nb_prest = Prestations.objects.filter(org_id=admin_profile.organisation_id).count()
     nb_clt = Clients.objects.filter(org_id=admin_profile.organisation_id).count()
     #TOP DES CLIENTS
-    #top_clt_vente = Clients.objects.filter(org=org, ventes__org=org).values('id','nom', 'prenoms', 'point_vente__nom').annotate(montant=Sum('ventes__montant_net')).order_by('-montant', 'nom')[:10] #PAR MONTANT DE L'ACHAT
+    top_clt_vente = Clients.objects.filter(org=org, ventes__org=org).values('id','nom', 'prenoms', 'point_vente__nom').annotate(montant=Sum('ventes__montant_net')).order_by('-montant', 'nom')[:10] #PAR MONTANT DE L'ACHAT
 
     #TOP DES CLIENTS 
     #top_clt_prest = Clients.objects.filter(org=org, prestations__org=org).values('id','nom', 'prenoms', 'point_vente__nom').annotate(montant=Sum('prestations__total_prestation')).order_by('-montant', 'nom')[:10] #PAR MONTANT DE LA PRESTATION
@@ -77,6 +77,18 @@ def index(request):
         'nb_serv':nb_serv,
         'nb_vte':nb_vte,
         'nb_prest':nb_prest,
-        
+        'top_clt_vente':top_clt_vente,
+        """'top_clt_prest':top_clt_prest,
+        'most_sell_j':most_sell_j,
+        'lst_prest':lst_prest,
+        'top_pdv_m':top_pdv_m,
+        'top_pdv_j':top_pdv_j,
+        'most_sell_m': most_sell_m,
+        'top_vendeur_m_s':top_vendeur_m_s,
+        'top_vendeur_m_p':top_vendeur_m_p,
+        'top_serv_m':top_serv_m,
+        'top_serv_j':top_serv_j,
+        'nb_clt':nb_clt,'
+        """
     }
     return render(request, 'dashboard/layouts/index.html', context)
